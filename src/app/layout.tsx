@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Abel, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/context/ThemeContext";
+import { Header } from "@/components/layout/Header";
+import { BackToTop } from "@/components/ui/BackToTop";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const abel = Abel({
+  weight: "400",
+  variable: "--font-abel",
   subsets: ["latin"],
 });
 
@@ -16,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "TWWW - The Way WE Wear",
   description: "Premium streetwear for gamers and anime fans.",
+  icons: {
+    icon: "/logokarta.png",
+  },
 };
 
 export default function RootLayout({
@@ -26,12 +31,14 @@ export default function RootLayout({
   return (
     <html
       lang="pl"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${abel.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <ThemeProvider>
+      <body className="min-h-full flex flex-col bg-[#383e42] text-white">
+        <Header />
+        <main className="flex-1 pt-16">
           {children}
-        </ThemeProvider>
+        </main>
+        <BackToTop />
       </body>
     </html>
   );

@@ -20,7 +20,7 @@ export default function PrivacyPolicy() {
         <h2 className="text-2xl font-bold mt-8 mb-4">3. Cel przetwarzania danych</h2>
         <ul className="list-disc list-inside text-gray-400 mb-4 space-y-2">
           <li>Realizacja zamówienia i wysyłka towaru.</li>
-          <li>Personalizacja oferty (wybór frakcji Gracz/Anime).</li>
+          <li>Personalizacja treści i ofert handlowych.</li>
           <li>Komunikacja w sprawie statusu zamówienia.</li>
           <li>Cele marketingowe (jeśli wyrażono zgodę).</li>
         </ul>
