@@ -7,10 +7,10 @@ import Link from 'next/link';
 
 // Mock products data
 const products = [
-  { id: 'hoodie-001', name: 'Oversize Hoodie "SQUAD" V1', price: '349 PLN', image: 'https://via.placeholder.com/400x500?text=Oversize+Hoodie' },
-  { id: '2', name: 'T-Shirt "WAIFU" Limited', price: '149 PLN', image: 'https://via.placeholder.com/400x500?text=T-Shirt+Anime' },
-  { id: '3', name: 'Joggers "SQUAD"', price: '249 PLN', image: 'https://via.placeholder.com/400x500?text=Joggers+Player' },
-  { id: '4', name: 'Oversize "MANGAKA"', price: '199 PLN', image: 'https://via.placeholder.com/400x500?text=Oversize+Anime' },
+  { id: 'hoodie-001', name: 'Oversize Hoodie "SQUAD" V1', price: '349 PLN', image: 'https://placehold.co/400x500?text=Oversize+Hoodie' },
+  { id: '2', name: 'T-Shirt "WAIFU" Limited', price: '149 PLN', image: 'https://placehold.co/400x500?text=T-Shirt+Anime' },
+  { id: '3', name: 'Joggers "SQUAD"', price: '249 PLN', image: 'https://placehold.co/400x500?text=Joggers+Player' },
+  { id: '4', name: 'Oversize "MANGAKA"', price: '199 PLN', image: 'https://placehold.co/400x500?text=Oversize+Anime' },
 ];
 
 export default function ShopPage() {
