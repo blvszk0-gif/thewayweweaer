@@ -35,7 +35,7 @@ export const BackToTop = () => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-40 bg-white text-[#383e42] p-4 rounded-full shadow-2xl hover:bg-purple-400 hover:text-white transition-all group"
+          className="fixed bottom-8 right-8 z-40 bg-white text-[#383e42] p-4 rounded-full shadow-2xl hover:bg-gray-200 transition-all group"
         >
           <Zap size={24} className="group-hover:scale-125 transition-transform" />
         </motion.button>

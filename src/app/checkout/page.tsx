@@ -64,7 +64,7 @@ export default function CheckoutPage() {
 
           <section className="space-y-4">
             <h2 className="text-xl font-bold">Płatność</h2>
-            <div className="p-4 border-2 border-[var(--primary,theme(colors.purple.500))] rounded-2xl bg-[var(--primary,theme(colors.purple.500))]/5">
+            <div className="p-4 border-2 border-white rounded-2xl bg-white/5">
               <p className="font-bold">Blik / Przelewy24</p>
               <p className="text-sm text-gray-500">Zostaniesz przekierowany do bezpiecznej płatności.</p>
             </div>

@@ -16,10 +16,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TWWW - The Way WE Wear",
+  title: "The Way WE Wear",
   description: "Premium streetwear for gamers and anime fans.",
   icons: {
-    icon: "/logokarta.png",
+    icon: "/favicon.ico",
   },
 };
 

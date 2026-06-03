@@ -69,11 +69,11 @@ export const Header = () => {
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="TWWW" className="h-8 w-auto" onError={(e) => {
+            <img src="/logo.png" alt="The Way WE Wear" className="h-8 w-auto" onError={(e) => {
               (e.target as HTMLImageElement).style.display = 'none';
               (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
             }} />
-            <span className="hidden font-black text-xl tracking-tighter">THE WAY <span className="text-purple-400">WE</span> WEAR</span>
+            <span className="hidden font-black text-xl tracking-tighter">The Way WE Wear</span>
           </Link>
 
           {/* Nav */}
@@ -139,7 +139,7 @@ export const Header = () => {
                 <div className="flex-1 grid grid-cols-2 gap-12">
                   {menuItems.find(i => i.name === activeMenu)?.dropdown?.map((sub) => (
                     <div key={sub.name}>
-                      <Link href={sub.href} className="text-xl font-bold hover:text-purple-400 flex items-center gap-2">
+                      <Link href={sub.href} className="text-xl font-bold hover:text-white/70 flex items-center gap-2">
                         {sub.name} <ChevronRight size={16} />
                       </Link>
                       {sub.sub && (

@@ -52,12 +52,12 @@ export default function OrderStatusPage() {
 
           <div className="bg-[#2d3236] p-6 rounded-3xl border border-white/10">
             <h3 className="font-bold mb-4 flex items-center gap-2">
-              <Truck size={18} className="text-purple-400" />
+              <Truck size={18} className="text-white/60" />
               Śledzenie kuriera
             </h3>
             <div className="relative h-12 bg-white/5 rounded-2xl overflow-hidden flex items-center px-4">
               <motion.div
-                className="absolute top-0 left-0 h-full bg-purple-500/20"
+                className="absolute top-0 left-0 h-full bg-white/10"
                 initial={{ width: '0%' }}
                 animate={{
                   width: status === 'confirmed' ? '10%' :
@@ -114,7 +114,7 @@ export default function OrderStatusPage() {
 
 const StatusIcon = ({ icon, label, active, completed }: { icon: any, label: string, active: boolean, completed: boolean }) => (
   <div className="flex flex-col items-center gap-2">
-    <div className={`p-3 rounded-full transition-all duration-500 ${active ? 'bg-purple-500 text-white shadow-[0_0_30px_rgba(168,85,247,0.5)] scale-110' : completed ? 'bg-green-500/20 text-green-500' : 'bg-white/5 text-white/20'}`}>
+    <div className={`p-3 rounded-full transition-all duration-500 ${active ? 'bg-white text-[#383e42] shadow-[0_0_30px_rgba(255,255,255,0.3)] scale-110' : completed ? 'bg-white/20 text-white' : 'bg-white/5 text-white/20'}`}>
       {React.cloneElement(icon, { size: 20 })}
     </div>
     <span className={`text-[10px] font-black uppercase tracking-widest ${active ? 'text-white' : 'text-gray-500'}`}>{label}</span>
@@ -208,10 +208,10 @@ const CatAnimation = ({ status }: { status: OrderStatus }) => {
                     animate={{ y: -64, opacity: 1 }}
                     className="absolute left-8"
                   >
-                    <img src="/cat.jpg" alt="Cat on desk" className="w-32 h-32 rounded-3xl object-cover shadow-2xl border-4 border-purple-500" />
+                    <img src="/cat.jpg" alt="Cat on desk" className="w-32 h-32 rounded-3xl object-cover shadow-2xl border-4 border-white/20" />
                   </motion.div>
                   <div className="absolute -top-16 right-8 w-16 h-12 bg-black rounded border border-white/10 flex items-center justify-center">
-                     <div className="w-10 h-8 bg-purple-500/20 rounded-sm"></div>
+                     <div className="w-10 h-8 bg-white/10 rounded-sm"></div>
                   </div>
                </div>
             </div>

@@ -1,42 +1,45 @@
-'use client';
-
 import React from 'react';
-import { motion, HTMLMotionProps } from 'framer-motion';
 
-interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'ref'> {
-  variant?: 'primary' | 'secondary' | 'outline';
-  size?: 'sm' | 'md' | 'lg';
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  loading?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({
   children,
   variant = 'primary',
   size = 'md',
+  loading,
   className = '',
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center rounded-full font-bold transition-all focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseStyles = 'inline-flex items-center justify-center rounded-xl font-bold transition-all focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variants = {
-    primary: 'bg-[var(--primary,theme(colors.purple.500))] text-white hover:opacity-90 shadow-lg',
+    primary: 'bg-white text-[#383e42] hover:bg-gray-200 shadow-lg',
     secondary: 'bg-gray-800 text-white hover:bg-gray-700',
-    outline: 'border-2 border-[var(--primary,theme(colors.purple.500))] text-[var(--primary,theme(colors.purple.500))] hover:bg-[var(--primary,theme(colors.purple.500))] hover:text-white',
+    outline: 'border-2 border-white text-white hover:bg-white hover:text-[#383e42]',
+    ghost: 'hover:bg-white/5'
   };
 
   const sizes = {
     sm: 'px-4 py-2 text-sm',
     md: 'px-6 py-3 text-base',
     lg: 'px-8 py-4 text-lg',
+    xl: 'px-10 py-5 text-xl'
   };
 
   return (
-    <motion.button
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+    <button
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+      disabled={loading || props.disabled}
       {...props}
     >
+      {loading ? (
+        <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin mr-2" />
+      ) : null}
       {children}
-    </motion.button>
+    </button>
   );
 };
