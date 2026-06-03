@@ -95,7 +95,7 @@ export default function OrderStatusPage() {
               <div className="space-y-4">
                 <div className="flex gap-4">
                   <div className="w-16 h-16 bg-white/5 rounded-xl overflow-hidden">
-                     <img src="https://via.placeholder.com/100" alt="product" className="w-full h-full object-cover" />
+                     <img src="https://placehold.co/100" alt="product" className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <p className="font-bold uppercase">Oversize Hoodie "SQUAD"</p>

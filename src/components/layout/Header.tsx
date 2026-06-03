@@ -16,7 +16,7 @@ const menuItems = [
       { name: 'Bluzy z kapturem', href: '/shop?cat=hoodie-zip' },
       { name: 'Bluzy bez kaptura', href: '/shop?cat=hoodie' }
     ],
-    image: 'https://via.placeholder.com/200x200?text=Bluzy'
+    image: 'https://placehold.co/200x200?text=Bluzy'
   },
   { name: 'Koszulki', href: '/shop' },
   { name: 'Kubki', href: '/shop' },
@@ -30,7 +30,7 @@ const menuItems = [
       ]},
       { name: 'Biżuteria', href: '/shop' }
     ],
-    image: 'https://via.placeholder.com/200x200?text=Akcesoria'
+    image: 'https://placehold.co/200x200?text=Akcesoria'
   },
   { name: 'O mnie', href: '/o-mnie' },
   { name: 'FAQ', href: '/faq' },
@@ -69,11 +69,7 @@ export const Header = () => {
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="The Way WE Wear" className="h-8 w-auto" onError={(e) => {
-              (e.target as HTMLImageElement).style.display = 'none';
-              (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
-            }} />
-            <span className="hidden font-black text-xl tracking-tighter">The Way WE Wear</span>
+            <span className="font-black text-xl tracking-tighter">The Way WE Wear</span>
           </Link>
 
           {/* Nav */}

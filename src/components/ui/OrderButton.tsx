@@ -18,7 +18,7 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
     <motion.button
       whileHover="hover"
       whileTap={{ scale: 0.98 }}
-      className={`relative overflow-hidden inline-flex items-center justify-center rounded-2xl font-black transition-all focus:outline-none py-6 text-xl bg-transparent border-2 border-white text-white ${className}`}
+      className={`relative overflow-hidden inline-flex items-center justify-center rounded-2xl font-black transition-all focus:outline-none py-6 text-xl bg-transparent border-2 border-white text-white group ${className}`}
       {...props}
     >
       {/* Background Fill Animation (File 2.PNG style) */}

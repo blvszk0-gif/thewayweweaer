@@ -35,7 +35,7 @@ export default function ProductDetailPage() {
     name: 'Oversize Hoodie "SQUAD" V1',
     price: '349 PLN',
     description: 'Najwyższej jakości bawełna 480g, haftowany napis 3D. Krój boxy, obniżone ramiona. Idealna dla graczy i fanów anime.',
-    image: 'https://via.placeholder.com/600x800?text=Oversize+Hoodie'
+    image: 'https://placehold.co/600x800?text=Oversize+Hoodie'
   };
 
   return (
