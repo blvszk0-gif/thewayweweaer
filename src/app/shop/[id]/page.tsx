@@ -54,7 +54,7 @@ export default function ProductDetailPage() {
             <span>BLUZY</span>
           </div>
           <h1 className="text-4xl font-black mb-2 uppercase tracking-tighter">{product.name}</h1>
-          <p className="text-2xl font-black text-purple-400">{product.price}</p>
+          <p className="text-2xl font-black text-white/60">{product.price}</p>
         </header>
 
         <p className="text-gray-300 leading-relaxed">
@@ -66,7 +66,7 @@ export default function ProductDetailPage() {
             <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest">Wybierz rozmiar</h3>
             <button
               onClick={() => setShowSizeChart(true)}
-              className="text-xs font-bold border-b border-white hover:text-purple-400 hover:border-purple-400 transition-colors"
+              className="text-xs font-bold border-b border-white hover:text-white/60 hover:border-white/60 transition-colors"
             >
               TABELA ROZMIARÓW
             </button>
@@ -78,7 +78,7 @@ export default function ProductDetailPage() {
                 onClick={() => { setSelectedSize(size); setUseCustomSize(false); }}
                 className={`py-3 border-2 rounded-xl font-bold transition-all ${
                   selectedSize === size && !useCustomSize
-                    ? 'border-purple-500 bg-purple-500/10 text-white'
+                    ? 'border-white bg-white/10 text-white'
                     : 'border-white/10 hover:border-white/30'
                 }`}
               >
@@ -90,7 +90,7 @@ export default function ProductDetailPage() {
           <div className="mt-4">
             <button
               onClick={() => setUseCustomSize(!useCustomSize)}
-              className="text-sm text-purple-400 font-bold hover:underline"
+              className="text-sm text-white/60 font-bold hover:underline"
             >
               Wpisz własne wymiary (Custom Fit)
             </button>
@@ -114,7 +114,7 @@ export default function ProductDetailPage() {
 
         <section>
           <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Własna grafika (Opcjonalnie)</h3>
-          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/10 rounded-2xl cursor-pointer hover:border-purple-500 transition-all">
+          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/10 rounded-2xl cursor-pointer hover:border-white/60 transition-all">
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               <Upload className="w-8 h-8 mb-3 text-gray-400" />
               <p className="text-sm text-gray-400">{graphic ? graphic.name : 'Kliknij, aby przesłać plik'}</p>
@@ -151,7 +151,7 @@ export default function ProductDetailPage() {
               exit={{ scale: 0.9, opacity: 0 }}
               className="relative bg-[#383e42] border border-white/10 rounded-3xl p-8 max-w-2xl w-full shadow-2xl"
             >
-              <button onClick={() => setShowSizeChart(false)} className="absolute top-6 right-6 hover:text-purple-400 transition-colors">
+              <button onClick={() => setShowSizeChart(false)} className="absolute top-6 right-6 hover:text-white/60 transition-colors">
                 <X size={24} />
               </button>
               <h2 className="text-2xl font-black mb-8 uppercase tracking-tighter">Tabela Rozmiarów</h2>

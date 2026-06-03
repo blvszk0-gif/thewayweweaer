@@ -18,7 +18,7 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
     <motion.button
       whileHover="hover"
       whileTap={{ scale: 0.98 }}
-      className={`relative overflow-hidden inline-flex items-center justify-center rounded-2xl font-black transition-all focus:outline-none py-6 text-xl bg-white text-[#383e42] ${className}`}
+      className={`relative overflow-hidden inline-flex items-center justify-center rounded-2xl font-black transition-all focus:outline-none py-6 text-xl bg-transparent border-2 border-white text-white ${className}`}
       {...props}
     >
       {/* Background Fill Animation (File 2.PNG style) */}
@@ -28,10 +28,10 @@ export const OrderButton: React.FC<OrderButtonProps> = ({
         }}
         initial={{ width: '0%' }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="absolute inset-0 bg-purple-500 z-0"
+        className="absolute inset-0 bg-white z-0"
       />
 
-      <span className="relative z-10 transition-colors group-hover:text-white">
+      <span className="relative z-10 transition-colors group-hover:text-[#383e42]">
         {loading ? 'PRZETWARZANIE...' : children}
       </span>
     </motion.button>

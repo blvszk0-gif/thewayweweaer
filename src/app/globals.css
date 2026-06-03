@@ -6,20 +6,14 @@
   --font-sans: var(--font-abel);
   --font-mono: var(--font-geist-mono);
 
-  --color-player-primary: #a855f7;
-  --color-player-secondary: #6b21a8;
-  --color-anime-primary: #ec4899;
-  --color-anime-secondary: #9d174d;
+  --color-primary: #ffffff;
+  --color-secondary: #888888;
 }
 
 :root {
   --background: #383e42;
   --foreground: #ffffff;
   --font-abel: 'Abel', sans-serif;
-  --player-primary: #a855f7;
-  --player-secondary: #6b21a8;
-  --anime-primary: #ec4899;
-  --anime-secondary: #9d174d;
   --primary: #ffffff;
 }
 

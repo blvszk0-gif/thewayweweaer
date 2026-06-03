@@ -13,8 +13,8 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl"
       >
-        <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 uppercase">
-          The Way <span className="text-purple-400">WE</span> Wear
+        <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8">
+          The Way WE Wear
         </h1>
         <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl mx-auto font-medium">
           Premium streetwear dla prawdziwych wyjadaczy gamingu i anime.
