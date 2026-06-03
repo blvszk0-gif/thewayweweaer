@@ -7,43 +7,34 @@ import { ShoppingBag, User, ChevronDown, ChevronRight, Globe, Search } from 'luc
 
 const menuItems = [
   { name: 'Nowości', href: '/shop' },
+  { name: 'Promocje', href: '/shop' },
+  { name: 'Stała oferta', href: '/shop' },
   {
-    name: 'Katalog',
+    name: 'Bluzy',
     href: '/shop',
     dropdown: [
-      { name: 'Bluzy', href: '/shop?cat=hoodie', sub: [
-        { name: 'Oversize', href: '/shop' },
-        { name: 'Basic', href: '/shop' },
-        { name: 'Slim', href: '/shop' },
-        { name: 'KIDS', href: '/shop' }
-      ]},
-      { name: 'Inne', href: '/shop', sub: [
-        { name: 'Koszulki', href: '/shop' },
-        { name: 'Spodnie', href: '/shop' },
-        { name: 'Akcesoria', href: '/shop' }
-      ]}
+      { name: 'Z kapturem (Zip)', href: '/shop?cat=hoodie-zip' },
+      { name: 'Bez kaptura', href: '/shop?cat=hoodie' },
+      { name: 'Oversize', href: '/shop?cat=oversize' }
     ],
-    image: 'https://placehold.co/200x200?text=Katalog'
+    image: 'https://placehold.co/200x200?text=Bluzy'
   },
+  { name: 'Koszulki', href: '/shop' },
+  { name: 'Kubki', href: '/shop' },
   {
-    name: 'Kolekcje',
+    name: 'Akcesoria',
     href: '/shop',
     dropdown: [
-      { name: 'Personalizacja', href: '/shop', sub: [
-        { name: 'Haft ze zdjęcia 📷', href: '/shop' },
-        { name: 'Własny napis 🔤', href: '/shop' },
-        { name: 'Linia konturowa (Outline) ✏️', href: '/shop' }
+      { name: 'Czapki', href: '/shop', sub: [
+        { name: 'Z daszkiem', href: '/shop' },
+        { name: 'Zimowe', href: '/shop' }
       ]},
-      { name: 'Tematyczne', href: '/shop', sub: [
-        { name: 'Matching Squad 💑', href: '/shop' },
-        { name: 'Rzymska data 📅', href: '/shop' },
-        { name: 'Znaki zodiaku ♒', href: '/shop' }
-      ]}
+      { name: 'Biżuteria', href: '/shop' }
     ],
-    image: 'https://placehold.co/200x200?text=Kolekcje'
+    image: 'https://placehold.co/200x200?text=Akcesoria'
   },
+  { name: 'O mnie', href: '/o-mnie' },
   { name: 'FAQ', href: '/faq' },
-  { name: 'O Nas', href: '/o-mnie' },
   { name: 'Kontakt', href: 'mailto:zamowieniathewaywewear@gmail.com' },
 ];
 
@@ -83,7 +74,7 @@ export const Header = () => {
           </Link>
 
           {/* Nav */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-6">
             {menuItems.map((item) => (
               <div
                 key={item.name}
@@ -91,11 +82,11 @@ export const Header = () => {
                 onMouseEnter={() => setActiveMenu(item.name)}
                 onMouseLeave={() => setActiveMenu(null)}
               >
-                <Link href={item.href} className="text-xs font-black uppercase tracking-widest hover:text-gray-400 transition-colors">
+                <Link href={item.href} className="text-[10px] font-black uppercase tracking-widest hover:text-gray-400 transition-colors">
                   {item.name}
                 </Link>
                 {item.dropdown && (
-                  <ChevronDown size={12} className="ml-1 opacity-50 group-hover:rotate-180 transition-transform" />
+                  <ChevronDown size={10} className="ml-1 opacity-50 group-hover:rotate-180 transition-transform" />
                 )}
               </div>
             ))}
@@ -103,7 +94,7 @@ export const Header = () => {
 
           {/* Right Menu */}
           <div className="flex items-center space-x-6">
-            <div className="hidden md:flex items-center bg-white/5 border border-white/10 rounded-full px-4 py-1.5 gap-2">
+            <div className="hidden xl:flex items-center bg-white/5 border border-white/10 rounded-full px-4 py-1.5 gap-2">
               <Search size={14} className="text-gray-500" />
               <input type="text" placeholder="SZUKAJ..." className="bg-transparent border-none text-[10px] font-bold focus:outline-none w-24 uppercase" />
             </div>
