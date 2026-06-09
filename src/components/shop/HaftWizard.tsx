@@ -137,7 +137,7 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                       <p className="text-xs font-bold opacity-50 uppercase px-12">Ta opcja jest dostępna tylko dla zarejestrowanych członków Squadu.</p>
                     </div>
                     <div className="space-y-4">
-                      <button onClick={() => setIsLoggedIn(true)} className="w-full bg-black text-white py-5 rounded-full font-black uppercase tracking-widest text-sm">Zaloguj się / Rejestracja</button>
+                      <button onClick={() => setIsLoggedIn(true)} className="w-full bg-black text-white py-5 rounded-full font-black uppercase tracking-widest text-sm">Logowanie / Rejestracja</button>
                       <button onClick={onClose} className="w-full py-5 font-black uppercase tracking-widest text-[10px] opacity-40">Anuluj</button>
                     </div>
                   </div>
@@ -165,7 +165,7 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
 
             {step === 5 && (
               <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center space-y-8 py-12">
-                <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto text-white">
+                <div className="w-24 h-24 bg-black rounded-full flex items-center justify-center mx-auto text-white">
                   <Check size={48} strokeWidth={3} />
                 </div>
                 <div>
