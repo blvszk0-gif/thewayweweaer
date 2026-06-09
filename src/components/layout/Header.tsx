@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, User, ShoppingBag, Heart, X, ChevronRight } from 'lucide-react';
+import { Search, User, ShoppingBag, Heart, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HaftWizard } from '../shop/HaftWizard';
 
@@ -109,7 +109,7 @@ export const Header = () => {
                     onClick={() => setExpandedKolekcje(!expandedKolekcje)}
                     className="flex items-center gap-2 hover:pl-4 transition-all italic"
                    >
-                     Kolekcje <ChevronRight size={24} className={`transition-transform ${expandedKolekcje ? 'rotate-90' : ''}`} />
+                     Kolekcje <ChevronRight size={24} className={`transition-transform ${expandedKolekcje ? 'rotate-90' : 'rotate-0'}`} />
                    </button>
                    <AnimatePresence>
                     {expandedKolekcje && (

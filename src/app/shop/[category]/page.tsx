@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -26,7 +26,7 @@ export default function CategoryPage() {
   const [displayCount, setDisplayCount] = useState(8);
   const [products, setProducts] = useState(mockProducts);
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function fetchProducts() {
       try {
         const records = await pb.collection('products').getList(1, 50, {
@@ -36,11 +36,11 @@ export default function CategoryPage() {
           setProducts(records.items.map(item => ({
             id: item.id,
             name: item.name,
-            price: item.price,
+            price: Number(item.price),
             image: pb.files.getUrl(item, item.image)
           })));
         }
-      } catch (err) {
+      } catch {
         console.log('PocketBase not reachable, using mocks');
       }
     }
@@ -54,7 +54,7 @@ export default function CategoryPage() {
       <div className="pt-32 pb-20 container mx-auto px-6">
         <header className="mb-16">
            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-black/30 mb-2">Project: TWWW // Subject:</p>
-           <h1 className="text-6xl font-black uppercase tracking-tighter italic font-abel">{category}</h1>
+           <h1 className="text-6xl font-black uppercase tracking-tighter italic">{category}</h1>
         </header>
 
         {/* Filters Bar */}
@@ -73,7 +73,7 @@ export default function CategoryPage() {
 
            <div className="flex items-center gap-6">
               <p className="text-[10px] font-black uppercase tracking-widest text-black/30">
-                Wyświetlono {Math.min(displayCount, mockProducts.length)} z {mockProducts.length} produktów
+                Wyświetlono {Math.min(displayCount, products.length)} z {products.length} produktów
               </p>
               <div className="flex gap-2">
                  <LayoutGrid size={18} className="opacity-100" />

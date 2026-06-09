@@ -1,0 +1,21 @@
+
+> twww-premium-store@0.1.0 dev
+> next dev
+
+ ⚠ Port 3000 is in use, trying 3001 instead.
+ ⚠ Port 3001 is in use, trying 3002 instead.
+ ⚠ Port 3002 is in use, trying 3003 instead.
+   ▲ Next.js 15.0.8
+   - Local:        http://localhost:3003
+
+ ✓ Starting...
+ ✓ Ready in 1967ms
+ ○ Compiling / ...
+ ✓ Compiled / in 7.9s (1408 modules)
+ GET / 200 in 8931ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 4.9s (1410 modules)
+ GET / 200 in 220ms
+ GET /login 200 in 5219ms
+ ✓ Compiled /status/[id] in 405ms (1413 modules)
+ GET /status/TWWW-999 200 in 1794ms
