@@ -54,6 +54,15 @@ const productData = {
 
 const LaundryIcon = ({ icon: Icon, label, detail }: { icon: any, label: string, detail: string }) => {
   const [showDetail, setShowDetail] = useState(false);
+
+  React.useEffect(() => {
+    let timer: any;
+    if (showDetail) {
+      timer = setTimeout(() => setShowDetail(false), 5000);
+    }
+    return () => clearTimeout(timer);
+  }, [showDetail]);
+
   return (
     <div className="relative group">
       <button
@@ -91,7 +100,7 @@ export default function ProductPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#dcdcdc] font-montserrat text-black pb-20">
+    <main className="min-h-screen bg-[#dcdcdc] font-abel text-black pb-20">
       <Header />
 
       <div className="container mx-auto px-6 pt-32">
@@ -108,7 +117,7 @@ export default function ProductPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="absolute -top-12 left-0 z-10 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full border border-black/5 flex items-center gap-2 shadow-sm"
                    >
-                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                    <span className="w-2 h-2 bg-black rounded-full animate-pulse" />
                     <span className="text-[10px] font-black uppercase tracking-widest">
                       {viewers} OSÓB OGLĄDAŁO W OSTATNIE 48H
                     </span>
@@ -186,7 +195,7 @@ export default function ProductPage() {
                     <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/40">Rozmiar</h3>
                     <button className="text-[10px] font-black uppercase tracking-widest underline underline-offset-4">Tabela rozmiarów</button>
                   </div>
-                  <div className="grid grid-cols-6 gap-2">
+                  <div className="grid grid-cols-6 gap-2 mb-4">
                     {productData.sizes.map((size) => (
                       <button
                         key={size.label}
@@ -196,10 +205,6 @@ export default function ProductPage() {
                         {size.label}
                       </button>
                     ))}
-                  </div>
-                  <div className="mt-4 flex flex-col gap-2">
-                     <p className="text-[10px] font-bold text-black/30 uppercase italic">Możesz też wpisać własne wymiary:</p>
-                     <input type="text" placeholder="NP. WZROST 180CM, WAGA 75KG..." className="w-full bg-black/5 border border-black/10 rounded-xl px-6 py-3 text-xs focus:outline-none focus:border-black" />
                   </div>
                </div>
 
@@ -223,7 +228,7 @@ export default function ProductPage() {
                            {productData.extraColors.map(c => (
                              <button key={c.name} className="w-full flex justify-between items-center px-4 py-3 rounded-lg hover:bg-white transition-all text-[10px] font-bold uppercase tracking-widest">
                                <span>{c.name}</span>
-                               <span className="text-green-600">+{c.fee} PLN</span>
+                               <span className="opacity-50">+{c.fee} PLN</span>
                              </button>
                            ))}
                         </div>
@@ -234,7 +239,7 @@ export default function ProductPage() {
 
                {/* Actions */}
                <div className="space-y-4">
-                  <button className={`w-full py-6 rounded-full font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 border-2 ${selectedSize ? 'border-green-600 text-green-600 hover:bg-green-600 hover:text-white' : 'border-black bg-black text-white hover:bg-white hover:text-black'}`}>
+                  <button className={`w-full py-6 rounded-full font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 border-2 border-black bg-black text-white hover:bg-white hover:text-black`}>
                     <ShoppingBag size={20} /> Dodaj do koszyka
                   </button>
                   <button className="w-full py-6 rounded-full font-black uppercase tracking-[0.2em] border border-black/10 flex items-center justify-center gap-3 hover:bg-white transition-all">

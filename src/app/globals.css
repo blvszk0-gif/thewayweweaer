@@ -1,88 +1,54 @@
-@import "tailwindcss";
-
-@theme {
-  --font-abel: "Abel", sans-serif;
-  --font-montserrat: var(--font-montserrat), sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #dcdcdc;
+  --background: #ffffff;
   --foreground: #000000;
+  --accent: #000000;
+  --faction-bg: #f8f8f8;
 }
 
 body {
-  background: var(--background);
-  background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4) 0%, rgba(0,0,0,0.05) 100%);
   color: var(--foreground);
-  font-family: var(--font-montserrat);
+  background: var(--background);
+  font-family: var(--font-abel), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
 }
 
-/* Metallic Shine Effect for background */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    135deg,
-    transparent 0%,
-    transparent 40%,
-    rgba(255, 255, 255, 0.1) 45%,
-    rgba(255, 255, 255, 0.2) 50%,
-    rgba(255, 255, 255, 0.1) 55%,
-    transparent 60%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* Custom Scrollbar */
+/* Premium Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #dcdcdc;
+  background: #f1f1f1;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #999;
-  border-radius: 3px;
+  background: #000;
+  border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #666;
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-abel uppercase tracking-tighter italic;
+  }
+
+  .accent-border {
+    border-color: var(--accent);
+  }
+
+  .accent-text {
+    color: var(--accent);
+  }
 }
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
-}
-
-.animate-shake {
-  animation: shake 0.2s ease-in-out 0s 2;
-}
-
-.font-abel {
-  font-family: var(--font-abel);
-}
-
-.font-montserrat {
-  font-family: var(--font-montserrat);
 }

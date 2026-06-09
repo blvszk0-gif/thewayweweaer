@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export const Footer = () => {
   return (
-    <footer className="bg-black text-white py-24 border-t border-white/5 font-montserrat">
+    <footer className="bg-black text-white py-24 border-t border-white/5 font-abel">
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16 md:gap-8">
         {/* Help */}
         <div>
@@ -33,9 +33,9 @@ export const Footer = () => {
           <h4 className="text-lg font-black uppercase tracking-tighter mb-8 italic underline decoration-1 underline-offset-4 font-abel">O nas</h4>
           <ul className="flex flex-col gap-4 text-sm font-bold text-white/50 uppercase tracking-widest">
             <li><Link href="/historia" className="hover:text-white transition-colors">Nasza historia</Link></li>
+            <li><Link href="/unboxing" className="hover:text-white transition-colors">Unboxing</Link></li>
             <li><Link href="/karta-podarunkowa" className="hover:text-white transition-colors">Karta podarunkowa</Link></li>
             <li><Link href="/sledz-nas" className="hover:text-white transition-colors">Śledź nas</Link></li>
-            <li><Link href="/nota-prawna" className="hover:text-white transition-colors">Nota prawna</Link></li>
           </ul>
         </div>
 

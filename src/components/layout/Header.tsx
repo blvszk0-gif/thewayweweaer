@@ -30,32 +30,13 @@ export const Header = () => {
   return (
     <>
       <header className={`fixed top-0 left-0 right-0 z-50 h-20 transition-transform duration-300 bg-white/80 backdrop-blur-md border-b border-black/10 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="container mx-auto h-full px-6 flex items-center justify-between">
-          {/* Left: Actions */}
-          <div className="flex items-center gap-6">
-            <div className="hidden md:flex items-center border border-black/20 rounded px-3 py-1.5 gap-2 text-black">
-              <Search size={18} className="opacity-50" />
-              <input type="text" placeholder="SZUKAJ..." className="bg-transparent border-none text-xs focus:outline-none w-32 uppercase font-black" />
-            </div>
-            <Link href="/login" className="text-black"><User size={22} /></Link>
-            <Link href="/wishlist" className="text-black"><Heart size={22} /></Link>
-            <Link href="/cart" className="relative text-black">
-              <ShoppingBag size={22} />
-              <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center font-montserrat">0</span>
-            </Link>
-          </div>
-
-          {/* Center: Logo */}
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-center text-black">
-             <span className="text-2xl font-black tracking-tighter block leading-none font-abel">The Way WE Wear</span>
-          </Link>
-
-          {/* Right: Menu Trigger (Zara-style) */}
+        <div className="container mx-auto h-full px-4 md:px-6 flex items-center justify-between">
+          {/* Left: Menu Trigger (Zara-style) */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="relative w-8 h-8 flex items-center justify-center group z-[80]"
           >
-            <div className="flex flex-col gap-2 w-6 items-end">
+            <div className="flex flex-col gap-2 w-6 items-start">
                <motion.div
                 animate={isMenuOpen ? { rotate: 45, y: 5, width: '100%' } : { rotate: 0, y: 0, width: '100%' }}
                 className="h-0.5 bg-black"
@@ -66,6 +47,25 @@ export const Header = () => {
                />
             </div>
           </button>
+
+          {/* Center: Logo */}
+          <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-center text-black">
+             <span className="text-xl md:text-2xl font-black tracking-tighter block leading-none font-abel">The Way WE Wear</span>
+          </Link>
+
+          {/* Right: Actions */}
+          <div className="flex items-center gap-3 md:gap-6">
+            <div className="hidden lg:flex items-center border border-black/20 rounded px-3 py-1.5 gap-2 text-black">
+              <Search size={18} className="opacity-50" />
+              <input type="text" placeholder="SZUKAJ..." className="bg-transparent border-none text-xs focus:outline-none w-24 xl:w-32 uppercase font-black" />
+            </div>
+            <Link href="/login" className="text-black"><User size={20} className="md:w-[22px] md:h-[22px]" /></Link>
+            <Link href="/wishlist" className="hidden sm:block text-black"><Heart size={20} className="md:w-[22px] md:h-[22px]" /></Link>
+            <Link href="/cart" className="relative text-black">
+              <ShoppingBag size={20} className="md:w-[22px] md:h-[22px]" />
+              <span className="absolute -top-2 -right-2 bg-black text-white text-[9px] md:text-[10px] font-black w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center font-abel">0</span>
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -81,11 +81,11 @@ export const Header = () => {
               className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"
             />
             <motion.div
-              initial={{ x: '100%' }}
+              initial={{ x: '-100%' }}
               animate={{ x: 0 }}
-              exit={{ x: '100%' }}
+              exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-white z-[70] p-8 border-l border-black/10 flex flex-col text-black shadow-2xl"
+              className="fixed top-0 left-0 bottom-0 w-full max-w-sm bg-white z-[70] p-8 border-r border-black/10 flex flex-col text-black shadow-2xl"
             >
               <div className="flex justify-between items-center mb-12">
                 <span className="font-black text-xl tracking-tighter uppercase italic">The Way WE Wear</span>
@@ -98,7 +98,7 @@ export const Header = () => {
               </div>
 
               <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-tighter overflow-y-auto no-scrollbar font-abel">
-                <div className="text-xs text-black/30 font-bold mb-2 font-montserrat">Project: TWWW // Subject:</div>
+                <div className="text-xs text-black/30 font-bold mb-2 font-abel">Project: TWWW // Subject:</div>
 
                 <Link href="/shop/bluzy" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Bluzy</Link>
                 <Link href="/shop/koszulki" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Koszulki</Link>
