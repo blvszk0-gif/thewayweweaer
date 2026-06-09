@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { Abel, Geist_Mono } from "next/font/google";
+import { Abel } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
-import { BackToTop } from "@/components/ui/BackToTop";
 
 const abel = Abel({
   weight: "400",
@@ -10,17 +8,9 @@ const abel = Abel({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   title: "The Way WE Wear",
-  description: "Premium streetwear for gamers and anime fans.",
-  icons: {
-    icon: "/favicon.ico",
-  },
+  description: "Premium Minimalist Streetwear",
 };
 
 export default function RootLayout({
@@ -29,16 +19,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="pl"
-      className={`${abel.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-[#383e42] text-white">
-        <Header />
-        <main className="flex-1 pt-16">
-          {children}
-        </main>
-        <BackToTop />
+    <html lang="pl" className={abel.variable}>
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet" />
+      </head>
+      <body>
+        {children}
       </body>
     </html>
   );
