@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Abel, Montserrat } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Abel } from "next/font/google";
 import "./globals.css";
 
 const abel = Abel({
@@ -31,6 +32,12 @@ export default function RootLayout({
       <body className="font-montserrat">
         {children}
         <SpeedInsights />
+    <html lang="pl" className={abel.variable}>
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet" />
+      </head>
+      <body>
+        {children}
       </body>
     </html>
   );

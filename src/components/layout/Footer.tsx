@@ -10,6 +10,11 @@ export const Footer = () => {
         {/* Help */}
         <div>
           <h4 className="text-lg font-black uppercase tracking-tighter mb-8 italic underline decoration-1 underline-offset-4 font-abel">Pomoc</h4>
+    <footer className="bg-black text-white py-24 border-t border-white/5">
+      <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16 md:gap-8">
+        {/* Help */}
+        <div>
+          <h4 className="text-lg font-black uppercase tracking-tighter mb-8 italic underline decoration-1 underline-offset-4">Pomoc</h4>
           <ul className="flex flex-col gap-4 text-sm font-bold text-white/50 uppercase tracking-widest">
             <li><Link href="/moje-konto" className="hover:text-white transition-colors">Moje konto</Link></li>
             <li><Link href="/moje-zakupy" className="hover:text-white transition-colors">Moje zakupy</Link></li>
@@ -20,6 +25,7 @@ export const Footer = () => {
         {/* Policy */}
         <div>
           <h4 className="text-lg font-black uppercase tracking-tighter mb-8 italic underline decoration-1 underline-offset-4 font-abel">Polityka</h4>
+          <h4 className="text-lg font-black uppercase tracking-tighter mb-8 italic underline decoration-1 underline-offset-4">Polityka</h4>
           <ul className="flex flex-col gap-4 text-sm font-bold text-white/50 uppercase tracking-widest">
             <li><Link href="/polityka-prywatnosci" className="hover:text-white transition-colors">Polityka prywatności</Link></li>
             <li><Link href="/warunki-zakupow" className="hover:text-white transition-colors">Warunki zakupów</Link></li>
@@ -31,6 +37,7 @@ export const Footer = () => {
         {/* Company */}
         <div>
           <h4 className="text-lg font-black uppercase tracking-tighter mb-8 italic underline decoration-1 underline-offset-4 font-abel">O nas</h4>
+          <h4 className="text-lg font-black uppercase tracking-tighter mb-8 italic underline decoration-1 underline-offset-4">O nas</h4>
           <ul className="flex flex-col gap-4 text-sm font-bold text-white/50 uppercase tracking-widest">
             <li><Link href="/historia" className="hover:text-white transition-colors">Nasza historia</Link></li>
             <li><Link href="/karta-podarunkowa" className="hover:text-white transition-colors">Karta podarunkowa</Link></li>
@@ -42,6 +49,7 @@ export const Footer = () => {
         {/* Account */}
         <div>
           <h4 className="text-lg font-black uppercase tracking-tighter mb-8 italic underline decoration-1 underline-offset-4 font-abel">Konto</h4>
+          <h4 className="text-lg font-black uppercase tracking-tighter mb-8 italic underline decoration-1 underline-offset-4">Konto</h4>
           <ul className="flex flex-col gap-4 text-sm font-bold text-white/50 uppercase tracking-widest">
             <li><Link href="/newsletter" className="hover:text-white transition-colors">Newsletter</Link></li>
             <li><Link href="/usun-konto" className="hover:text-white transition-colors">Usuń swoje konto</Link></li>

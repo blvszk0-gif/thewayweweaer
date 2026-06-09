@@ -14,6 +14,13 @@ export default function Home() {
       <HeroSlider />
       <LandingSections />
       <BackToTop />
+
+export default function Home() {
+  return (
+    <main className="min-h-screen bg-black">
+      <Header />
+      <HeroSlider />
+      <LandingSections />
       <Footer />
     </main>
   );
