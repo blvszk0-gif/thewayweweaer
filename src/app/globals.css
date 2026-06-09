@@ -1,32 +1,54 @@
-@import "tailwindcss";
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-abel);
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
-  --font-abel: 'Abel', sans-serif;
+  --background: #ffffff;
+  --foreground: #000000;
+  --accent: #000000;
+  --faction-bg: #f8f8f8;
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-abel);
+  background: var(--background);
+  font-family: var(--font-abel), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.shake {
-  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+/* Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-@keyframes shake {
-  10%, 90% { transform: translate3d(-1px, 0, 0); }
-  20%, 80% { transform: translate3d(2px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-  40%, 60% { transform: translate3d(4px, 0, 0); }
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000;
+  border-radius: 10px;
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-abel uppercase tracking-tighter italic;
+  }
+
+  .accent-border {
+    border-color: var(--accent);
+  }
+
+  .accent-text {
+    color: var(--accent);
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
