@@ -239,7 +239,7 @@ export default function ProductPage() {
 
                {/* Actions */}
                <div className="space-y-4">
-                  <button className={`w-full py-6 rounded-full font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 border-2 border-black bg-black text-white hover:bg-white hover:text-black`}>
+                  <button className={`w-full py-6 rounded-full font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 border-2 ${selectedSize ? 'border-green-500 bg-black text-white' : 'border-black bg-black text-white hover:bg-white hover:text-black'}`}>
                     <ShoppingBag size={20} /> Dodaj do koszyka
                   </button>
                   <button className="w-full py-6 rounded-full font-black uppercase tracking-[0.2em] border border-black/10 flex items-center justify-center gap-3 hover:bg-white transition-all">

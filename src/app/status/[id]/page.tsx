@@ -4,220 +4,164 @@ import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, Truck, CheckCircle, Monitor, Box, Layout } from 'lucide-react';
+import { Package, Truck, CheckCircle2, MapPin, Search } from 'lucide-react';
+import { useParams } from 'next/navigation';
 
-const STATUSES = [
-  { id: 'CONFIRMED', label: 'ZAMÓWIENIE POTWIERDZONE', icon: CheckCircle },
-  { id: 'PREPARING', label: 'PRZYGOTOWANIE ZAMÓWIENIA', icon: Monitor },
-  { id: 'PACKING', label: 'PAKOWANIE', icon: Box },
-  { id: 'SHIPPED', label: 'WYSŁANO', icon: Truck },
+const statusSteps = [
+  {
+    id: 'confirmed',
+    label: 'ZAMÓWIENIE POTWIERDZONE',
+    icon: CheckCircle2,
+    animation: 'okejka',
+    catDesc: 'Kot daje okejke (jak ten gif z rudym dzieciakiem)'
+  },
+  {
+    id: 'preparing',
+    label: 'PRZYGOTOWANIE ZAMÓWIENIA',
+    icon: Search,
+    animation: 'kot_w_pudelku',
+    catDesc: 'Kot wskakuje do pudełka'
+  },
+  {
+    id: 'sent',
+    label: 'WYSYŁKA ZAMÓWIENIA',
+    icon: Truck,
+    animation: 'kot_okno',
+    catDesc: 'Kot patrzy przez okno i czeka'
+  },
+  {
+    id: 'delivered',
+    label: 'ODEBRANO',
+    icon: Package,
+    animation: 'kot_biurko',
+    catDesc: 'Kot wskakuje na biurko na którym jest komputer i monitor'
+  },
 ];
 
-const CatAnimation = ({ status }: { status: string }) => {
-  // Pixelated Cat Component (Visual representation)
-  // Animation descriptions:
-  // CONFIRMED -> kot daje okejke (gif style)
-  // PREPARING -> kot wskakuje na biurko na którym jest komputer i monitor
-  // PACKING -> kot wskakuje do pudełka
-  // SHIPPED -> kot patrzy przez okno i czeka
-
-  const getAnimation = () => {
-    switch(status) {
-      case 'CONFIRMED':
-        return (
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="flex flex-col items-center gap-4"
-          >
-            <div className="text-8xl">👍</div>
-            <div className="w-32 h-32 bg-orange-400 rounded-2xl border-4 border-black relative overflow-hidden flex items-center justify-center">
-               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center font-black text-4xl">🐱</div>
-            </div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-black/40">Kot daje okejke!</p>
-          </motion.div>
-        );
-      case 'PREPARING':
-        return (
-          <motion.div
-            initial={{ x: -100, y: 50, opacity: 0 }}
-            animate={{ x: 0, y: 0, opacity: 1 }}
-            className="flex flex-col items-center gap-4"
-          >
-            <div className="relative">
-               <Monitor size={100} strokeWidth={1} />
-               <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ repeat: Infinity, duration: 2 }}
-                className="absolute -top-4 -right-4 text-4xl"
-               >
-                 🐱
-               </motion.div>
-            </div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-black/40">Kot wskoczył na biurko!</p>
-          </motion.div>
-        );
-      case 'PACKING':
-        return (
-          <motion.div
-            initial={{ y: -50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="flex flex-col items-center gap-4"
-          >
-            <div className="relative">
-               <Box size={100} strokeWidth={1} />
-               <motion.div
-                animate={{ scale: [1, 0.9, 1] }}
-                transition={{ repeat: Infinity, duration: 1.5 }}
-                className="absolute inset-0 flex items-center justify-center text-4xl"
-               >
-                 🐱
-               </motion.div>
-            </div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-black/40">Kot wskoczył do pudełka!</p>
-          </motion.div>
-        );
-      case 'SHIPPED':
-        return (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex flex-col items-center gap-4"
-          >
-            <div className="relative">
-               <div className="w-32 h-32 border-4 border-black rounded-xl flex items-center justify-center relative bg-blue-50">
-                  <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-yellow-400" /> {/* Sun */}
-                  <div className="text-4xl">🐱</div>
-               </div>
-            </div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-black/40">Kot patrzy przez okno...</p>
-          </motion.div>
-        );
-      default: return null;
-    }
-  };
-
-  return (
-    <div className="h-64 flex items-center justify-center">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={status}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.1 }}
-          transition={{ duration: 0.5 }}
-        >
-          {getAnimation()}
-        </motion.div>
-      </AnimatePresence>
-    </div>
-  );
-};
-
 export default function OrderStatusPage() {
-  const [activeStep, setActiveStep] = useState(0);
+  const params = useParams();
+  const id = params.id as string;
+  const [currentStatus, setCurrentStatus] = useState(1); // 1 = Preparing (Mock)
 
-  // Simulation for demo
   useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % STATUSES.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
+    // Simulating status fetch
+    const timer = setTimeout(() => setCurrentStatus(1), 500);
+    return () => clearTimeout(timer);
+  }, [id]);
 
   return (
-    <main className="min-h-screen bg-white font-abel">
+    <main className="min-h-screen bg-[#dcdcdc] font-abel shadow-[inset_0_0_100px_rgba(0,0,0,0.1)]">
       <Header />
 
       <div className="container mx-auto px-6 pt-40 pb-20 max-w-4xl">
-        <div className="text-center mb-16">
-          <span className="text-[10px] font-black tracking-[0.5em] text-black/20 uppercase mb-4 block">Order Tracking // ID: #TWWW-7721</span>
-          <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter italic font-abel">Status Twojego zamówienia</h1>
-        </div>
+        <div className="bg-white/90 backdrop-blur-md rounded-[50px] p-12 shadow-2xl relative overflow-hidden border border-white/20">
 
-        <CatAnimation status={STATUSES[activeStep].id} />
+          <div className="flex justify-between items-start mb-16 relative z-10">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30 mb-2">Order Tracking // ID: {id}</p>
+              <h1 className="text-4xl font-black uppercase tracking-tighter italic">Status Twojej Paczki</h1>
+            </div>
+            <div className="bg-black text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">
+              Live Update
+            </div>
+          </div>
 
-        <div className="mt-20">
-          <div className="relative">
-             {/* Progress Line */}
-             <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-black/5 -translate-y-1/2" />
-             <motion.div
-              className="absolute top-1/2 left-0 h-0.5 bg-black -translate-y-1/2"
-              initial={{ width: '0%' }}
-              animate={{ width: `${(activeStep / (STATUSES.length - 1)) * 100}%` }}
-              transition={{ duration: 1, ease: "easeInOut" }}
+          {/* Cat Animation Zone */}
+          <div className="mb-20 aspect-video bg-black/5 rounded-[40px] flex items-center justify-center relative overflow-hidden group border border-black/5 shadow-inner">
+             <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-repeat" />
+
+             <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentStatus}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="relative z-10 text-center flex flex-col items-center"
+                >
+                   <div className="relative w-72 h-72">
+                      <motion.img
+                        src="/cat.jpg"
+                        alt="Cat Status"
+                        className="w-full h-full object-cover rounded-full border-8 border-white shadow-2xl grayscale brightness-110 contrast-125"
+                        initial={{ scale: 0.8 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", damping: 15 }}
+                      />
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/40 to-transparent flex items-end justify-center pb-8">
+                         <p className="text-[8px] font-black uppercase tracking-widest text-white/80 max-w-[150px]">
+                           {statusSteps[currentStatus].catDesc}
+                         </p>
+                      </div>
+                   </div>
+                   <p className="mt-8 text-2xl font-black italic uppercase tracking-tighter">{statusSteps[currentStatus].label}</p>
+                </motion.div>
+             </AnimatePresence>
+
+             {/* Background Truck Animation */}
+             <motion.img
+               src="/truck_anim.png"
+               className="absolute bottom-8 right-0 w-32 grayscale opacity-10"
+               animate={{ x: [-200, 1000] }}
+               transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
              />
+          </div>
 
-             <div className="relative flex justify-between">
-                {STATUSES.map((status, i) => {
-                  const Icon = status.icon;
-                  return (
-                    <div key={status.id} className="flex flex-col items-center">
-                       <motion.div
-                        animate={{
-                          scale: i <= activeStep ? 1.2 : 1,
-                          backgroundColor: i <= activeStep ? '#000' : '#fff',
-                          color: i <= activeStep ? '#fff' : '#000'
-                        }}
-                        className={`w-12 h-12 rounded-full border-2 border-black flex items-center justify-center z-10 transition-colors`}
-                       >
-                         <Icon size={20} />
-                       </motion.div>
-                       <div className={`mt-6 text-[8px] font-black uppercase tracking-tighter text-center max-w-[80px] transition-opacity ${i <= activeStep ? 'opacity-100' : 'opacity-20'}`}>
-                         {status.label}
-                       </div>
-                    </div>
-                  );
-                })}
+          {/* Stepper */}
+          <div className="relative px-4">
+            <div className="absolute top-6 left-12 right-12 h-1 bg-black/5" />
+            <motion.div
+              className="absolute top-6 left-12 h-1 bg-black origin-left"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: (currentStatus / (statusSteps.length - 1)) }}
+              transition={{ duration: 1, ease: "circOut" }}
+            />
+            <div className="relative flex justify-between">
+               {statusSteps.map((step, i) => (
+                 <div key={step.id} className="flex flex-col items-center relative z-10">
+                    <motion.div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border-2 ${i <= currentStatus ? 'bg-black text-white border-black shadow-xl' : 'bg-white text-black/20 border-black/5'}`}
+                      animate={i === currentStatus ? { scale: [1, 1.2, 1] } : {}}
+                      transition={{ repeat: Infinity, duration: 2 }}
+                    >
+                       <step.icon size={20} />
+                    </motion.div>
+                    <p className={`mt-4 text-[8px] font-black uppercase tracking-widest text-center max-w-[80px] ${i <= currentStatus ? 'opacity-100' : 'opacity-20'}`}>
+                      {step.label}
+                    </p>
+                 </div>
+               ))}
+            </div>
+          </div>
+
+          <div className="mt-20 pt-12 border-t border-black/5 flex flex-col md:flex-row gap-12">
+             <div className="flex-1">
+               <h3 className="text-xs font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
+                 <MapPin size={16} /> Adres Dostawy
+               </h3>
+               <p className="text-sm font-bold uppercase opacity-40 leading-relaxed">
+                 Jan Kowalski<br />
+                 ul. Gamingowa 13/37<br />
+                 00-001 Warszawa, Polska
+               </p>
+             </div>
+             <div className="flex-1">
+               <h3 className="text-xs font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
+                 <Truck size={16} /> Metoda Dostawy
+               </h3>
+               <p className="text-sm font-bold uppercase opacity-40 leading-relaxed">
+                 Kurier TWWW Squad (InPost)<br />
+                 Przewidywana dostawa: Jutro
+               </p>
              </div>
           </div>
         </div>
 
-        <div className="mt-32 grid grid-cols-1 md:grid-cols-2 gap-8">
-           <div className="bg-black/5 p-8 rounded-[30px] border border-black/5">
-              <h3 className="text-xs font-black uppercase tracking-widest mb-6 italic">Szczegóły dostawy</h3>
-              <div className="space-y-4 text-xs font-bold uppercase">
-                 <div className="flex justify-between">
-                    <span className="opacity-40">Kurier</span>
-                    <span>InPost Paczkomat</span>
-                 </div>
-                 <div className="flex justify-between">
-                    <span className="opacity-40">Nr paczki</span>
-                    <span className="underline italic">62881122334455</span>
-                 </div>
-                 <div className="flex justify-between">
-                    <span className="opacity-40">Przewidywana data</span>
-                    <span>Jutro, 12:00 - 15:00</span>
-                 </div>
-              </div>
-           </div>
-
-           <div className="bg-black/5 p-8 rounded-[30px] border border-black/5">
-              <h3 className="text-xs font-black uppercase tracking-widest mb-6 italic">Twoja paczka</h3>
-              <div className="space-y-4 text-xs font-bold uppercase">
-                 <div className="flex justify-between">
-                    <span className="opacity-40">Przedmioty</span>
-                    <span>1x OVERSIZE HOODIE</span>
-                 </div>
-                 <div className="flex justify-between">
-                    <span className="opacity-40">Box Theme</span>
-                    <span>THE WAY WE STARE (ANIME)</span>
-                 </div>
-                 <div className="flex justify-between">
-                    <span className="opacity-40">Unboxing Gadget</span>
-                    <span>3D PRINTED KATANA STAND</span>
-                 </div>
-              </div>
-           </div>
-        </div>
-
-        <div className="mt-12 text-center">
-           <p className="text-[10px] font-black uppercase tracking-widest text-black/20 italic">
-             Przygotuj telefon, żeby nagrać unboxing i zgarnąć dodatkowe żetony do Koła Fortuny!
-           </p>
+        <div className="mt-8 text-center">
+           <button className="text-[10px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity underline underline-offset-4">
+             Potrzebujesz pomocy? Skontaktuj się ze Squadem
+           </button>
         </div>
       </div>
-
       <Footer />
     </main>
   );

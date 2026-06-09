@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Star, Camera, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -19,7 +19,7 @@ export const LandingSections = () => {
         <div className="mb-48">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
             <div>
-              <h2 className="text-5xl font-black uppercase tracking-tighter italic font-abel">Głos Squadu</h2>
+              <h2 className="text-5xl font-black uppercase tracking-tighter italic">Głos Squadu</h2>
               <p className="text-black/40 font-bold uppercase tracking-widest text-xs mt-2">Wasze opinie o naszych dropach</p>
             </div>
             <button className="flex items-center gap-2 text-xs font-black uppercase tracking-widest border border-black px-6 py-3 rounded-full hover:bg-black hover:text-white transition-all">
@@ -39,7 +39,7 @@ export const LandingSections = () => {
                     <Star key={i} size={16} fill={i < rev.rating ? "currentColor" : "none"} />
                   ))}
                 </div>
-                <p className="text-sm font-bold uppercase leading-relaxed mb-6 flex-1 italic">"{rev.text}"</p>
+                <p className="text-sm font-bold uppercase leading-relaxed mb-6 flex-1 italic">&quot;{rev.text}&quot;</p>
 
                 {rev.photo && (
                   <div className="mb-6 aspect-[4/5] rounded-2xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
@@ -104,7 +104,7 @@ export const LandingSections = () => {
         <div className="bg-white rounded-[50px] p-16 md:p-24 shadow-2xl relative overflow-hidden group">
            <div className="absolute top-0 right-0 w-96 h-96 bg-black/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-black/10 transition-all duration-1000" />
            <div className="relative z-10 max-w-2xl">
-              <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-8 font-abel">Be a part of our squad!</h3>
+              <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-8">Be a part of our squad!</h3>
               <p className="text-xl font-bold opacity-40 uppercase mb-12 tracking-wide">Zapisz się już dziś do newslettera i bądź na bieżąco z dropami nowych kolekcji.</p>
 
               <div className="flex flex-col md:flex-row gap-4">
