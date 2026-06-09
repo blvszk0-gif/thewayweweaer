@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Abel } from "next/font/google";
+import { Abel, Montserrat } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const abel = Abel({
   weight: "400",
   variable: "--font-abel",
   subsets: ["latin"],
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-montserrat",
 });
 
 export const metadata: Metadata = {
@@ -19,12 +25,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl" className={abel.variable}>
+    <html lang="pl" className={`${abel.variable} ${montserrat.variable}`}>
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet" />
       </head>
-      <body>
+      <body className="font-montserrat">
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );

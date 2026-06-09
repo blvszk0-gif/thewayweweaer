@@ -2,14 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, User, ShoppingBag, Heart, X, ChevronRight, Menu as MenuIcon } from 'lucide-react';
+import { Search, User, ShoppingBag, Heart, X, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { HaftWizard } from '../shop/HaftWizard';
 
 export const Header = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [expandedKolekcje, setExpandedKolekcje] = useState(false);
+  const [isHaftModalOpen, setIsHaftModalOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,32 +29,43 @@ export const Header = () => {
 
   return (
     <>
-      <header className={`fixed top-0 left-0 right-0 z-50 h-20 transition-transform duration-300 bg-black border-b border-white/10 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+      <header className={`fixed top-0 left-0 right-0 z-50 h-20 transition-transform duration-300 bg-white/80 backdrop-blur-md border-b border-black/10 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="container mx-auto h-full px-6 flex items-center justify-between">
-          {/* Left: Menu Trigger */}
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="flex flex-col gap-1.5 w-6 group"
-          >
-            <div className="h-0.5 w-full bg-white transition-all"></div>
-            <div className="h-0.5 w-full bg-white transition-all"></div>
-          </button>
+          {/* Left: Actions */}
+          <div className="flex items-center gap-6">
+            <div className="hidden md:flex items-center border border-black/20 rounded px-3 py-1.5 gap-2 text-black">
+              <Search size={18} className="opacity-50" />
+              <input type="text" placeholder="SZUKAJ..." className="bg-transparent border-none text-xs focus:outline-none w-32 uppercase font-black" />
+            </div>
+            <Link href="/login" className="text-black"><User size={22} /></Link>
+            <Link href="/wishlist" className="text-black"><Heart size={22} /></Link>
+            <Link href="/cart" className="relative text-black">
+              <ShoppingBag size={22} />
+              <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center font-montserrat">0</span>
+            </Link>
+          </div>
 
           {/* Center: Logo */}
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-center">
-             <span className="text-2xl font-black tracking-tighter block leading-none">The Way WE Wear</span>
+          <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-center text-black">
+             <span className="text-2xl font-black tracking-tighter block leading-none font-abel">The Way WE Wear</span>
           </Link>
 
-          {/* Right: Actions */}
-          <div className="flex items-center gap-6">
-            <div className="hidden md:flex items-center border border-white/20 rounded px-3 py-1.5 gap-2">
-              <Search size={18} className="opacity-50" />
-              <input type="text" placeholder="SZUKAJ..." className="bg-transparent border-none text-xs focus:outline-none w-32" />
+          {/* Right: Menu Trigger (Zara-style) */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="relative w-8 h-8 flex items-center justify-center group z-[80]"
+          >
+            <div className="flex flex-col gap-2 w-6 items-end">
+               <motion.div
+                animate={isMenuOpen ? { rotate: 45, y: 5, width: '100%' } : { rotate: 0, y: 0, width: '100%' }}
+                className="h-0.5 bg-black"
+               />
+               <motion.div
+                animate={isMenuOpen ? { rotate: -45, y: -5, width: '100%' } : { rotate: 0, y: 0, width: '70%' }}
+                className="h-0.5 bg-black"
+               />
             </div>
-            <Link href="/login"><User size={22} /></Link>
-            <Link href="/wishlist"><Heart size={22} /></Link>
-            <Link href="/cart"><ShoppingBag size={22} /></Link>
-          </div>
+          </button>
         </div>
       </header>
 
@@ -65,38 +78,36 @@ export const Header = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60]"
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"
             />
             <motion.div
-              initial={{ x: '-100%' }}
+              initial={{ x: '100%' }}
               animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
+              exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 left-0 bottom-0 w-full max-w-sm bg-black z-[70] p-8 border-r border-white/10 flex flex-col"
+              className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-white z-[70] p-8 border-l border-black/10 flex flex-col text-black shadow-2xl"
             >
               <div className="flex justify-between items-center mb-12">
                 <span className="font-black text-xl tracking-tighter uppercase italic">The Way WE Wear</span>
-                <button onClick={() => setIsMenuOpen(false)}>
-                  <X size={32} strokeWidth={1.5} />
-                </button>
+                <div className="w-8" /> {/* Placeholder for alignment since trigger is outside */}
               </div>
 
-              <div className="flex items-center bg-white/5 rounded-xl px-4 py-3 gap-3 mb-8">
+              <div className="flex items-center bg-black/5 rounded-xl px-4 py-3 gap-3 mb-8">
                 <Search size={20} className="opacity-50" />
-                <input type="text" placeholder="SZUKAJ PRODUKTU..." className="bg-transparent border-none text-sm focus:outline-none flex-1" />
+                <input type="text" placeholder="SZUKAJ PRODUKTU..." className="bg-transparent border-none text-sm focus:outline-none flex-1 uppercase font-black" />
               </div>
 
-              <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-tighter">
-                <div className="text-xs text-white/30 font-bold mb-2">Project: TWWW // Subject:</div>
+              <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-tighter overflow-y-auto no-scrollbar font-abel">
+                <div className="text-xs text-black/30 font-bold mb-2 font-montserrat">Project: TWWW // Subject:</div>
 
-                <Link href="/shop/bluzy" className="hover:pl-4 transition-all">Bluzy</Link>
-                <Link href="/shop/koszulki" className="hover:pl-4 transition-all">Koszulki</Link>
-                <Link href="/shop/akcesoria" className="hover:pl-4 transition-all">Akcesoria</Link>
+                <Link href="/shop/bluzy" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Bluzy</Link>
+                <Link href="/shop/koszulki" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Koszulki</Link>
+                <Link href="/shop/akcesoria" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Akcesoria</Link>
 
                 <div>
                    <button
                     onClick={() => setExpandedKolekcje(!expandedKolekcje)}
-                    className="flex items-center gap-2 hover:pl-4 transition-all"
+                    className="flex items-center gap-2 hover:pl-4 transition-all italic"
                    >
                      Kolekcje <ChevronRight size={24} className={`transition-transform ${expandedKolekcje ? 'rotate-90' : ''}`} />
                    </button>
@@ -106,25 +117,37 @@ export const Header = () => {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden flex flex-col gap-4 pl-6 pt-6 text-lg font-bold text-white/60"
+                        className="overflow-hidden flex flex-col gap-4 pl-6 pt-6 text-lg font-bold text-black/60"
                       >
-                        <Link href="/kolekcja/stare" className="hover:text-white transition-colors">The Way WE Stare</Link>
-                        <Link href="/kolekcja/roll" className="hover:text-white transition-colors">The Way WE Roll</Link>
-                        <Link href="/kolekcja/bloom" className="hover:text-white transition-colors">The Way WE Bloom</Link>
-                        <Link href="/kolekcja/fly" className="hover:text-white transition-colors">The Way WE Fly</Link>
+                        <Link href="/shop/stare" onClick={() => setIsMenuOpen(false)} className="hover:text-black transition-colors">The Way WE Stare</Link>
+                        <Link href="/shop/roll" onClick={() => setIsMenuOpen(false)} className="hover:text-black transition-colors">The Way WE Roll</Link>
+                        <Link href="/shop/bloom" onClick={() => setIsMenuOpen(false)} className="hover:text-black transition-colors">The Way WE Bloom</Link>
+                        <Link href="/shop/fly" onClick={() => setIsMenuOpen(false)} className="hover:text-black transition-colors">The Way WE Fly</Link>
                       </motion.div>
                     )}
                    </AnimatePresence>
                 </div>
+
+                <button
+                  onClick={() => { setIsMenuOpen(false); setIsHaftModalOpen(true); }}
+                  className="text-left hover:pl-4 transition-all italic uppercase font-black"
+                >
+                  Haft na zamówienie
+                </button>
               </div>
 
-              <div className="mt-auto pt-12 text-[10px] font-bold text-white/20 tracking-widest uppercase">
+              <div className="mt-auto pt-12 text-[10px] font-bold text-black/20 tracking-widest uppercase">
                 © 2025 THE WAY WE WEAR
               </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
+
+      <HaftWizard
+        isOpen={isHaftModalOpen}
+        onClose={() => setIsHaftModalOpen(false)}
+      />
     </>
   );
 };
