@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Zap } from 'lucide-react';
+import { ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const BackToTop = () => {
@@ -30,14 +30,14 @@ export const BackToTop = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.button
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.5 }}
+          initial={{ opacity: 0, scale: 0.5, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.5, y: 20 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-[40] w-12 h-12 bg-white text-black flex items-center justify-center rounded-full shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:scale-110 transition-transform"
+          className="fixed bottom-8 right-8 z-[100] w-14 h-14 bg-white text-black flex items-center justify-center rounded-full shadow-2xl border border-black/5 hover:scale-110 transition-transform group"
           aria-label="Back to top"
         >
-          <Zap size={24} fill="currentColor" />
+          <ChevronUp size={24} className="group-hover:-translate-y-1 transition-transform" />
         </motion.button>
       )}
     </AnimatePresence>

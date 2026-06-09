@@ -9,7 +9,7 @@ import { BackToTop } from '@/components/ui/BackToTop';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen">
       <Header />
       <HeroSlider />
       <LandingSections />

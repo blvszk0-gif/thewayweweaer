@@ -27,61 +27,55 @@ export const HeroSlider = () => {
   }, []);
 
   return (
-    <section className="relative w-full overflow-hidden bg-black pt-20 min-h-screen flex flex-col">
-      {/* Collection Label */}
-      <div className="container mx-auto px-6 py-8">
+    <section className="relative w-full overflow-hidden bg-black/5 pt-32 pb-20 font-montserrat">
+      <div className="container mx-auto px-6 mb-12">
         <Link href="/shop/stare" className="group inline-flex flex-col">
-          <span className="text-xs font-bold text-white/30 tracking-widest uppercase mb-1 font-sans">Project: TWWW // Subject:</span>
-          <span className="text-4xl md:text-6xl font-black uppercase tracking-tighter group-hover:pl-4 transition-all duration-500 italic underline decoration-1 underline-offset-8 decoration-white/20">
+          <span className="text-[10px] font-black text-black/30 tracking-[0.3em] uppercase mb-1">Project: TWWW // Subject:</span>
+          <span className="text-4xl md:text-7xl font-black uppercase tracking-tighter group-hover:pl-4 transition-all duration-500 italic font-abel">
             {collection.name}
           </span>
         </Link>
       </div>
 
-      <div className="flex-1 container mx-auto px-6 flex flex-col lg:flex-row gap-8 pb-20 items-center">
-        {/* Main Slider Image */}
-        <div className="relative w-full lg:flex-1 aspect-[3/4] rounded-3xl overflow-hidden group/slider bg-white/5">
+      <div className="container mx-auto px-6 flex flex-col lg:flex-row gap-8 items-center">
+        <div className="relative w-full lg:flex-1 aspect-[3/4] rounded-[40px] overflow-hidden group/slider shadow-2xl bg-white">
           <AnimatePresence mode="wait">
             <motion.img
               key={current}
               src={collection.items[current].img}
-              alt={collection.items[current].name}
               initial={{ opacity: 0, scale: 1.1 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full h-full object-cover grayscale"
+              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
             />
           </AnimatePresence>
 
-          {/* Quick Actions Overlay */}
-          <div className="absolute top-8 right-8 flex flex-col gap-4 opacity-0 group-hover/slider:opacity-100 transition-opacity duration-500">
-             <button className="bg-white text-black p-4 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center">
+          <div className="absolute top-8 right-8 flex flex-col gap-4 opacity-0 group-hover/slider:opacity-100 transition-all duration-500 translate-x-4 group-hover/slider:translate-x-0">
+             <button className="bg-white text-black p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-black/5">
                <Heart size={24} strokeWidth={2} />
              </button>
-             <button className="bg-white text-black p-4 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center">
+             <button className="bg-white text-black p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-black/5">
                <ShoppingBag size={24} strokeWidth={2} />
              </button>
           </div>
 
-          {/* Navigation Arrows */}
           <button
             onClick={() => setCurrent((prev) => (prev - 1 + collection.items.length) % collection.items.length)}
-            className="absolute left-6 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors p-2"
+            className="absolute left-6 top-1/2 -translate-y-1/2 text-black/20 hover:text-black transition-colors p-2"
           >
-            <ChevronLeft size={48} strokeWidth={1} />
+            <ChevronLeft size={64} strokeWidth={1} />
           </button>
           <button
             onClick={() => setCurrent((prev) => (prev + 1) % collection.items.length)}
-            className="absolute right-6 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors p-2"
+            className="absolute right-6 top-1/2 -translate-y-1/2 text-black/20 hover:text-black transition-colors p-2"
           >
-            <ChevronRight size={48} strokeWidth={1} />
+            <ChevronRight size={64} strokeWidth={1} />
           </button>
 
-          {/* Label */}
-          <div className="absolute bottom-8 left-8">
-             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-1">Image {current + 1} of {collection.items.length}</p>
-             <h3 className="text-xl font-bold uppercase tracking-tighter">{collection.items[current].name}</h3>
+          <div className="absolute bottom-10 left-10">
+             <p className="text-[10px] font-black uppercase tracking-[0.4em] text-black/30 mb-2">Slide 0{current + 1} / 0{collection.items.length}</p>
+             <h3 className="text-2xl font-black uppercase tracking-tighter italic font-abel">{collection.items[current].name}</h3>
           </div>
         </div>
 
@@ -91,7 +85,7 @@ export const HeroSlider = () => {
              <button
                key={item.id}
                onClick={() => setCurrent(i)}
-               className={`relative flex-shrink-0 w-20 lg:w-full aspect-[3/4] rounded-xl overflow-hidden transition-all duration-300 border-2 ${current === i ? 'border-white scale-105' : 'border-transparent opacity-40 hover:opacity-100'}`}
+               className={`relative flex-shrink-0 w-24 lg:w-full aspect-[3/4] rounded-2xl overflow-hidden transition-all duration-500 border-2 ${current === i ? 'border-black scale-105 shadow-xl' : 'border-transparent opacity-30 hover:opacity-100'}`}
              >
                <img src={item.img} alt={item.name} className="w-full h-full object-cover grayscale" />
              </button>

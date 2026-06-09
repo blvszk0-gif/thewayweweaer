@@ -1,153 +1,103 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { BackToTop } from '@/components/ui/BackToTop';
-import { motion } from 'framer-motion';
-import { ShoppingBag, Heart } from 'lucide-react';
-import { Card } from '@/components/ui/Card';
+import { ProductCard } from '@/components/shop/ProductCard';
+import { Filter, ChevronDown, LayoutGrid, List } from 'lucide-react';
+import pb from '@/lib/pocketbase';
 
-const colors = ['Czarny', 'Biały', 'Szary'];
-const sizes = ['S', 'M', 'L', 'XL'];
-
-// Mock data generator
-const generateProducts = (category: string) => {
-  return Array.from({ length: 100 }).map((_, i) => ({
-    id: `${category}-${i + 1}`,
-    name: `${category ? category.toString().toUpperCase() : 'PRODUKT'} "${i % 2 === 0 ? 'SQUAD' : 'LORE'}" V${(i % 5) + 1}`,
-    price: `${249 + (i % 3) * 50} PLN`,
-    img: `https://placehold.co/600x800/000000/FFFFFF?text=${category ? category.toString().toUpperCase() : 'PRODUKT'}+${i + 1}`,
-    color: colors[i % 3],
-    size: sizes[i % 4],
-  }));
-};
+const mockProducts = [
+  { id: '1', name: 'OVERSIZE HOODIE // STARE', price: 299, image: 'https://placehold.co/600x800/000000/FFFFFF?text=HOODIE+1' },
+  { id: '2', name: 'GRAFIC T-SHIRT // ROLL', price: 149, image: 'https://placehold.co/600x800/000000/FFFFFF?text=TEE+1' },
+  { id: '3', name: 'CARGO PANTS // BLOOM', price: 349, image: 'https://placehold.co/600x800/000000/FFFFFF?text=PANTS+1' },
+  { id: '4', name: 'SQUAD CAP // FLY', price: 99, image: 'https://placehold.co/600x800/000000/FFFFFF?text=CAP+1' },
+  { id: '5', name: 'OVERSIZE HOODIE // ROLL', price: 299, image: 'https://placehold.co/600x800/000000/FFFFFF?text=HOODIE+2' },
+  { id: '6', name: 'GRAFIC T-SHIRT // STARE', price: 149, image: 'https://placehold.co/600x800/000000/FFFFFF?text=TEE+2' },
+  { id: '7', name: 'CARGO PANTS // FLY', price: 349, image: 'https://placehold.co/600x800/000000/FFFFFF?text=PANTS+2' },
+  { id: '8', name: 'SQUAD CAP // BLOOM', price: 99, image: 'https://placehold.co/600x800/000000/FFFFFF?text=CAP+2' },
+];
 
 export default function CategoryPage() {
   const params = useParams();
-  const category = params?.category as string;
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [limit, setLimit] = useState(12);
+  const category = params.category as string;
+  const [displayCount, setDisplayCount] = useState(8);
+  const [products, setProducts] = useState(mockProducts);
 
-  const allProducts = useMemo(() => generateProducts(category), [category]);
-
-  const filteredProducts = useMemo(() => {
-    return allProducts.filter(p => {
-      const colorMatch = !selectedColor || p.color === selectedColor;
-      const sizeMatch = !selectedSize || p.size === selectedSize;
-      return colorMatch && sizeMatch;
-    });
-  }, [allProducts, selectedColor, selectedSize]);
-
-  const displayedProducts = filteredProducts.slice(0, limit);
+  React.useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const records = await pb.collection('products').getList(1, 50, {
+          filter: `category = "${category}"`,
+        });
+        if (records.items.length > 0) {
+          setProducts(records.items.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            image: pb.files.getUrl(item, item.image)
+          })));
+        }
+      } catch (err) {
+        console.log('PocketBase not reachable, using mocks');
+      }
+    }
+    fetchProducts();
+  }, [category]);
 
   return (
-    <main className="min-h-screen bg-black text-white pt-24 pb-24">
+    <main className="min-h-screen font-montserrat">
       <Header />
 
-      <div className="container mx-auto px-6">
-        <header className="mb-12">
-           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-2 font-sans">Katalog 2026 // Category</p>
-           <h1 className="text-6xl font-black uppercase tracking-tighter italic">{category}</h1>
+      <div className="pt-32 pb-20 container mx-auto px-6">
+        <header className="mb-16">
+           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-black/30 mb-2">Project: TWWW // Subject:</p>
+           <h1 className="text-6xl font-black uppercase tracking-tighter italic font-abel">{category}</h1>
         </header>
 
-        {/* Filters */}
-        <div className="flex flex-wrap gap-8 mb-12 border-y border-white/10 py-6">
-           {/* Color Filter */}
-           <div className="flex flex-col gap-3">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-white/50">Kolor</span>
-              <div className="flex gap-2">
-                 {colors.map(c => (
-                   <button
-                    key={c}
-                    onClick={() => setSelectedColor(selectedColor === c ? null : c)}
-                    className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border transition-all ${selectedColor === c ? 'bg-white text-black border-white' : 'border-white/20 hover:border-white'}`}
-                   >
-                     {c}
-                   </button>
-                 ))}
-              </div>
+        {/* Filters Bar */}
+        <div className="flex flex-wrap justify-between items-center gap-6 py-6 border-y border-black/10 mb-12">
+           <div className="flex gap-8">
+              <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:opacity-50 transition-opacity">
+                <Filter size={14} /> Filtry
+              </button>
+              <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:opacity-50 transition-opacity">
+                Kolor <ChevronDown size={14} />
+              </button>
+              <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:opacity-50 transition-opacity">
+                Rozmiar <ChevronDown size={14} />
+              </button>
            </div>
 
-           {/* Size Filter */}
-           <div className="flex flex-col gap-3">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-white/50">Rozmiar</span>
+           <div className="flex items-center gap-6">
+              <p className="text-[10px] font-black uppercase tracking-widest text-black/30">
+                Wyświetlono {Math.min(displayCount, mockProducts.length)} z {mockProducts.length} produktów
+              </p>
               <div className="flex gap-2">
-                 {sizes.map(s => (
-                   <button
-                    key={s}
-                    onClick={() => setSelectedSize(selectedSize === s ? null : s)}
-                    className={`w-10 h-10 rounded-full text-xs font-bold border flex items-center justify-center transition-all ${selectedSize === s ? 'bg-white text-black border-white' : 'border-white/20 hover:border-white'}`}
-                   >
-                     {s}
-                   </button>
-                 ))}
+                 <LayoutGrid size={18} className="opacity-100" />
+                 <List size={18} className="opacity-20" />
               </div>
            </div>
-
-           <button
-             onClick={() => { setSelectedColor(null); setSelectedSize(null); }}
-             className="ml-auto text-[10px] font-bold uppercase tracking-widest hover:underline opacity-50 hover:opacity-100"
-           >
-             Wyczyść filtry
-           </button>
         </div>
 
-        {/* Grid: Stradivarius Style (4 per row) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12 mb-24">
-           {displayedProducts.map((p, i) => (
-             <motion.div
-               key={p.id}
-               initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ delay: (i % 12) * 0.05 }}
-             >
-               <Card className="group cursor-pointer border-none bg-transparent">
-                  <div className="aspect-[3/4] relative overflow-hidden rounded-3xl bg-white/5 grayscale group-hover:grayscale-0 transition-all duration-700">
-                    <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-
-                    {/* Quick Add Overlay */}
-                    <div className="absolute inset-x-0 bottom-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black/80 to-transparent flex justify-between items-center">
-                       <div className="flex gap-2">
-                          <button className="bg-white text-black p-3 rounded-full hover:scale-110 transition-transform"><Heart size={18} /></button>
-                          <button className="bg-white text-black p-3 rounded-full hover:scale-110 transition-transform"><ShoppingBag size={18} /></button>
-                       </div>
-                       <span className="text-[10px] font-black uppercase tracking-widest text-white/60">Quick View</span>
-                    </div>
-                  </div>
-                  <div className="mt-6 flex justify-between items-start">
-                    <div>
-                       <h3 className="text-sm font-black uppercase tracking-tighter mb-1">{p.name}</h3>
-                       <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{p.color} // {p.size}</p>
-                    </div>
-                    <span className="font-black text-sm tracking-tighter">{p.price}</span>
-                  </div>
-               </Card>
-             </motion.div>
+        {/* Product Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+           {products.slice(0, displayCount).map((p) => (
+             <ProductCard key={p.id} {...p} />
            ))}
         </div>
 
-        {/* Load More */}
-        {limit < filteredProducts.length && (
-           <div className="flex flex-col items-center gap-6">
-              <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.4em]">Wyświetlasz {displayedProducts.length} z {filteredProducts.length} artykułów</p>
-              <div className="flex gap-4">
-                 <button
-                  onClick={() => setLimit(prev => prev + 12)}
-                  className="px-12 py-4 border border-white rounded-full font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all"
-                 >
-                   Pokaż więcej
-                 </button>
-                 <button
-                  onClick={() => setLimit(100)}
-                  className="px-8 py-4 border border-white/20 rounded-full font-black uppercase tracking-widest text-[10px] hover:border-white transition-all text-white/60 hover:text-white"
-                 >
-                   Pokaż 100
-                 </button>
-              </div>
-           </div>
+        {displayCount < products.length && (
+          <div className="mt-20 flex justify-center">
+            <button
+              onClick={() => setDisplayCount(prev => prev + 4)}
+              className="px-12 py-5 border-2 border-black rounded-full font-black uppercase tracking-widest text-xs hover:bg-black hover:text-white transition-all"
+            >
+              Załaduj więcej
+            </button>
+          </div>
         )}
       </div>
 
