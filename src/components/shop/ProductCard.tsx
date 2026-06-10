@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShoppingBag, Heart, CreditCard } from 'lucide-react';
+import { ShoppingBag, Heart } from 'lucide-react';
 import Link from 'next/link';
 
 interface ProductCardProps {
@@ -14,7 +14,7 @@ interface ProductCardProps {
 
 export const ProductCard = ({ id, name, price, image }: ProductCardProps) => {
   return (
-    <div className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-black/5 hover:shadow-2xl transition-all duration-500">
+    <div className="group flex flex-col bg-[color:var(--surface)] rounded-3xl overflow-hidden border border-[color:var(--border)] hover:shadow-2xl transition-all duration-500">
       <Link href={`/product/${id}`} className="relative aspect-[3/4] overflow-hidden">
         <motion.img
           src={image}
@@ -23,7 +23,7 @@ export const ProductCard = ({ id, name, price, image }: ProductCardProps) => {
           className="w-full h-full object-cover"
         />
         <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-           <button className="bg-white/80 backdrop-blur-md p-3 rounded-full text-black hover:bg-black hover:text-white transition-all shadow-xl">
+           <button className="bg-[color:var(--surface)]/80 backdrop-blur-md p-3 rounded-full text-[color:var(--foreground)] hover:bg-[color:var(--surface-muted)] hover:text-[color:var(--foreground)] transition-all shadow-xl">
              <Heart size={18} />
            </button>
         </div>
@@ -37,16 +37,9 @@ export const ProductCard = ({ id, name, price, image }: ProductCardProps) => {
         </Link>
 
         <div className="mt-auto space-y-4">
-          <button className="w-full bg-black text-white py-4 rounded-full font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:bg-black/80 transition-all">
+          <button className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-full font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)]/90 transition-all">
             <ShoppingBag size={16} /> Dodaj do koszyka
           </button>
-
-          <div className="flex items-center justify-center gap-4 opacity-20 py-2">
-            <CreditCard size={16} />
-            <span className="text-[8px] font-black italic">BLIK</span>
-            <span className="text-[8px] font-black italic">VISA</span>
-            <span className="text-[8px] font-black italic">APPLE PAY</span>
-          </div>
         </div>
       </div>
     </div>

@@ -37,19 +37,19 @@ export default function SuccessPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#dcdcdc] font-abel overflow-hidden">
+    <main className="min-h-screen bg-[color:var(--surface)] font-abel overflow-hidden">
       <Header />
 
       <div className="container mx-auto px-6 pt-40 pb-20 max-w-4xl">
         <div className="text-center mb-16">
-          <div className="w-20 h-20 bg-black text-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
+          <div className="w-20 h-20 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
             <Check size={40} />
           </div>
           <h1 className="text-6xl font-black uppercase tracking-tighter italic">Dzięki za drop!</h1>
-          <p className="text-black/48 font-bold uppercase tracking-[0.3em] text-xs mt-4">Twoje zamówienie #TWWW-0001 jest już w bazie.</p>
+          <p className="text-[color:var(--foreground)]/48 font-bold uppercase tracking-[0.3em] text-xs mt-4">Twoje zamówienie #TWWW-0001 jest już w bazie.</p>
         </div>
 
-        <div className="bg-white rounded-[50px] p-12 md:p-20 shadow-2xl border border-white/20 relative overflow-hidden">
+        <div className="bg-[color:var(--surface)] rounded-[50px] p-12 md:p-20 shadow-2xl border border-[color:var(--border)] relative overflow-hidden">
            <div className="absolute top-0 right-0 p-8 opacity-5">
              <Gift size={200} />
            </div>
@@ -61,10 +61,10 @@ export default function SuccessPage() {
 
            <div className="flex flex-col items-center gap-12">
              <div className="relative w-80 h-80 md:w-96 md:h-96">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 w-8 h-10 bg-black clip-path-triangle" style={{ clipPath: 'polygon(50% 100%, 0 0, 100% 0)' }} />
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 w-8 h-10 bg-[color:var(--foreground)] clip-path-triangle" style={{ clipPath: 'polygon(50% 100%, 0 0, 100% 0)' }} />
 
                 <motion.div
-                  className="w-full h-full rounded-full border-[10px] border-black shadow-2xl relative overflow-hidden"
+                  className="w-full h-full rounded-full border-[10px] border-[color:var(--border)] shadow-2xl relative overflow-hidden"
                   animate={{ rotate: rotation }}
                   transition={{ duration: 4, ease: [0.1, 0, 0, 1] }}
                 >
@@ -81,7 +81,7 @@ export default function SuccessPage() {
                       }}
                     >
                       <span
-                        className="absolute top-16 left-1/2 -translate-x-1/2 -rotate-[60deg] text-white font-black uppercase text-[10px] tracking-widest text-center max-w-[60px]"
+                        className="absolute top-16 left-1/2 -translate-x-1/2 -rotate-[60deg] text-[color:var(--surface)] font-black uppercase text-[10px] tracking-widest text-center max-w-[60px]"
                         style={{ transform: 'translateX(-50%) rotate(30deg)', top: '15%', left: '75%' }}
                       >
                         {prize.label}
@@ -89,7 +89,7 @@ export default function SuccessPage() {
                     </div>
                   ))}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-xl z-10 border-4 border-black">
+                    <div className="w-16 h-16 bg-[color:var(--surface)] text-[color:var(--foreground)] rounded-full flex items-center justify-center shadow-xl z-10 border-4 border-[color:var(--border)]">
                        <Ticket size={24} />
                     </div>
                   </div>
@@ -103,7 +103,7 @@ export default function SuccessPage() {
                    animate={{ opacity: 1, scale: 1 }}
                    className="text-center space-y-6"
                  >
-                   <div className="inline-flex items-center gap-4 bg-black text-white px-10 py-5 rounded-full font-black uppercase tracking-widest shadow-2xl animate-bounce">
+                   <div className="inline-flex items-center gap-4 bg-[color:var(--foreground)] text-[color:var(--surface)] px-10 py-5 rounded-full font-black uppercase tracking-widest shadow-2xl animate-bounce">
                      <Sparkles size={24} /> WYGRANA: {wonPrize}
                    </div>
                    <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Kod wysłaliśmy na Twój e-mail!</p>
@@ -112,7 +112,7 @@ export default function SuccessPage() {
                  <button
                   onClick={spin}
                   disabled={isSpinning}
-                  className={`group relative bg-black text-white px-16 py-6 rounded-full font-black uppercase tracking-[0.3em] shadow-2xl transition-all ${isSpinning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'}`}
+                  className={`group relative bg-[color:var(--foreground)] text-[color:var(--surface)] px-16 py-6 rounded-full font-black uppercase tracking-[0.3em] shadow-2xl transition-all ${isSpinning ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'}`}
                  >
                    {isSpinning ? <RefreshCcw className="animate-spin mx-auto" /> : 'ZAKRĘĆ KOŁEM'}
                  </button>

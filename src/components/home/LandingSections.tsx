@@ -17,12 +17,12 @@ export const LandingSections = () => {
 
         {/* Reviews Section */}
         <div className="mb-48">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+          <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-4 text-center md:text-left">
             <div>
               <h2 className="text-5xl font-black uppercase tracking-tighter italic">Głos Squadu</h2>
-              <p className="text-black/40 font-bold uppercase tracking-widest text-xs mt-2">Wasze opinie o naszych dropach</p>
+              <p className="text-[color:var(--foreground)]/70 font-bold uppercase tracking-widest text-xs mt-2">Wasze opinie o naszych dropach</p>
             </div>
-            <button className="flex items-center gap-2 text-xs font-black uppercase tracking-widest border border-black px-6 py-3 rounded-full hover:bg-black hover:text-white transition-all">
+            <button className="w-full md:w-auto flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest border border-[color:var(--border)] px-6 py-3 rounded-full hover:bg-[color:var(--surface-muted)] hover:text-[color:var(--foreground)] transition-all">
               <Camera size={16} /> Dodaj swoją opinię
             </button>
           </div>
@@ -32,7 +32,7 @@ export const LandingSections = () => {
               <motion.div
                 key={rev.id}
                 whileHover={{ y: -10 }}
-                className="bg-white p-8 rounded-[30px] shadow-xl border border-black/5 flex flex-col h-full"
+                className="bg-[color:var(--surface)] text-[color:var(--foreground)] p-8 rounded-[30px] shadow-xl border border-[color:var(--border)] flex flex-col h-full"
               >
                 <div className="flex gap-1 mb-4 text-yellow-500">
                   {[...Array(5)].map((_, i) => (
@@ -42,7 +42,7 @@ export const LandingSections = () => {
                 <p className="text-sm font-bold uppercase leading-relaxed mb-6 flex-1 italic">&quot;{rev.text}&quot;</p>
 
                 {rev.photo && (
-                  <div className="mb-6 aspect-[4/5] rounded-2xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
+                  <div className="mb-6 aspect-[4/5] rounded-2xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 border border-[color:var(--border)] bg-[color:var(--surface-muted)]">
                     <img src={rev.photo} alt="Review" className="w-full h-full object-cover" />
                   </div>
                 )}
@@ -59,7 +59,7 @@ export const LandingSections = () => {
         <div className="mb-48 max-w-4xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-5xl font-black uppercase tracking-tighter italic mb-4">FAQ</h2>
-            <p className="text-black/40 font-bold uppercase tracking-widest text-xs">Najczęściej zadawane pytania</p>
+            <p className="text-[color:var(--foreground)]/40 font-bold uppercase tracking-widest text-xs">Najczęściej zadawane pytania</p>
           </div>
 
           <div className="space-y-6">
@@ -85,14 +85,14 @@ export const LandingSections = () => {
                 a: "To nasz system lojalnościowy. Za każde zakupy zbierasz punkty, które wymienisz na zniżki lub dostęp do tajnych dropów."
               }
             ].map((item, i) => (
-              <details key={i} className="group bg-white border border-black/5 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all">
-                <summary className="flex justify-between items-center p-8 cursor-pointer list-none">
+              <details key={i} className="group bg-[color:var(--surface)] border border-[color:var(--border)] rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all">
+                <summary className="flex justify-between items-center p-8 cursor-pointer list-none text-[color:var(--foreground)]">
                   <span className="font-black uppercase tracking-widest text-sm">{item.q}</span>
-                  <span className="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center group-open:rotate-45 transition-transform">
+                  <span className="w-8 h-8 rounded-full bg-[color:var(--surface-muted)] flex items-center justify-center group-open:rotate-45 transition-transform">
                     <Plus size={16} />
                   </span>
                 </summary>
-                <div className="px-8 pb-8 text-sm font-bold uppercase opacity-50 leading-relaxed">
+                <div className="px-8 pb-8 text-sm font-bold uppercase opacity-70 leading-relaxed text-[color:var(--foreground)]">
                   {item.a}
                 </div>
               </details>
@@ -101,19 +101,19 @@ export const LandingSections = () => {
         </div>
 
         {/* Newsletter Section */}
-        <div className="bg-white rounded-[50px] p-16 md:p-24 shadow-2xl relative overflow-hidden group">
-           <div className="absolute top-0 right-0 w-96 h-96 bg-black/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-black/10 transition-all duration-1000" />
+        <div className="bg-[color:var(--surface)] rounded-[50px] p-16 md:p-24 shadow-2xl relative overflow-hidden group border border-[color:var(--border)]">
+           <div className="absolute top-0 right-0 w-96 h-96 bg-[color:var(--foreground)]/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-[color:var(--foreground)]/10 transition-all duration-1000" />
            <div className="relative z-10 max-w-2xl">
-              <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-8">Be a part of our squad!</h3>
-              <p className="text-xl font-bold opacity-40 uppercase mb-12 tracking-wide">Zapisz się już dziś do newslettera i bądź na bieżąco z dropami nowych kolekcji.</p>
+              <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-8 text-[color:var(--foreground)]">Be a part of our squad!</h3>
+              <p className="text-xl font-bold opacity-40 uppercase mb-12 tracking-wide text-[color:var(--foreground)]">Zapisz się już dziś do newslettera i bądź na bieżąco z dropami nowych kolekcji.</p>
 
               <div className="flex flex-col md:flex-row gap-4">
                  <input
                   type="email"
                   placeholder="TWOJA@POCZTA.COM"
-                  className="flex-1 bg-black/5 border border-black/10 rounded-full px-10 py-6 font-black uppercase text-sm focus:outline-none focus:border-black transition-all"
+                  className="flex-1 bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-full px-10 py-6 font-black uppercase text-sm focus:outline-none focus:border-[color:var(--foreground)] transition-all text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50"
                  />
-                 <button className="bg-black text-white px-12 py-6 rounded-full font-black uppercase tracking-widest hover:bg-black/80 transition-all shadow-xl">
+                 <button className="bg-[color:var(--foreground)] text-[color:var(--surface)] px-12 py-6 rounded-full font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-xl">
                    Zapisz się
                  </button>
               </div>

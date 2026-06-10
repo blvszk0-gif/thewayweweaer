@@ -47,17 +47,17 @@ export default function CategoryPage() {
   }, [category]);
 
   return (
-    <main className="min-h-screen font-abel">
+    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-abel">
       <Header />
 
       <div className="pt-32 pb-20 container mx-auto px-6">
         <header className="mb-16">
-           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-black/30 mb-2">Project: TWWW // Subject:</p>
+           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[color:var(--foreground)]/45 mb-2">Project: TWWW // Subject:</p>
            <h1 className="text-6xl font-black uppercase tracking-tighter italic">{category}</h1>
         </header>
 
         {/* Filters Bar */}
-        <div className="flex flex-wrap justify-between items-center gap-6 py-6 border-y border-black/10 mb-12">
+        <div className="flex flex-wrap justify-between items-center gap-6 py-6 border-y border-[color:var(--border)] mb-12">
            <div className="flex gap-8">
               <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:opacity-50 transition-opacity">
                 <Filter size={14} /> Filtry
@@ -71,7 +71,7 @@ export default function CategoryPage() {
            </div>
 
            <div className="flex items-center gap-6">
-              <p className="text-[10px] font-black uppercase tracking-widest text-black/30">
+              <p className="text-[10px] font-black uppercase tracking-widest text-[color:var(--foreground)]/30">
                 Wyświetlono {Math.min(displayCount, products.length)} z {products.length} produktów
               </p>
               <div className="flex gap-2">
@@ -92,7 +92,7 @@ export default function CategoryPage() {
           <div className="mt-20 flex justify-center">
             <button
               onClick={() => setDisplayCount(prev => prev + 4)}
-              className="px-12 py-5 border-2 border-black rounded-full font-black uppercase tracking-widest text-xs hover:bg-black hover:text-white transition-all"
+              className="px-12 py-5 border-2 border-[color:var(--border)] rounded-full font-black uppercase tracking-widest text-xs text-[color:var(--foreground)] hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all"
             >
               Załaduj więcej
             </button>

@@ -32,7 +32,7 @@ const InputField = ({ type, placeholder, value, onChange }: { type: string, plac
           value={value}
           onBlur={() => setTouched(true)}
           onChange={(e) => onChange(e.target.value)}
-          className={`w-full bg-black/5 border rounded-2xl px-8 py-5 font-black uppercase text-xs focus:outline-none transition-all ${isEmpty ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'border-black/10 focus:border-black'}`}
+          className={`w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50 border rounded-2xl px-8 py-5 font-black uppercase text-xs focus:outline-none transition-all ${isEmpty ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'border-[color:var(--border)] focus:border-[color:var(--foreground)]'}`}
         />
       </motion.div>
       <AnimatePresence>
@@ -72,9 +72,9 @@ export const LoginForm = () => {
             key="success"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-[40px] p-12 text-center shadow-2xl border border-black/5"
+            className="bg-[color:var(--surface)] text-[color:var(--foreground)] rounded-[40px] p-12 text-center shadow-2xl border border-[color:var(--border)]"
           >
-            <div className="w-20 h-20 bg-black text-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
+            <div className="w-20 h-20 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
               <Check size={40} />
             </div>
             <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4">Witaj w Squadzie!</h2>
@@ -86,7 +86,7 @@ export const LoginForm = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="bg-white rounded-[40px] p-12 shadow-2xl border border-black/5"
+            className="bg-[color:var(--surface)] text-[color:var(--foreground)] rounded-[40px] p-12 shadow-2xl border border-[color:var(--border)]"
           >
             <div className="flex gap-8 mb-12">
               <button
@@ -118,7 +118,7 @@ export const LoginForm = () => {
               />
               <button
                 type="submit"
-                className="w-full bg-black text-white py-6 rounded-full font-black uppercase tracking-[0.2em] shadow-xl hover:bg-black/80 transition-all mt-4"
+                className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-6 rounded-full font-black uppercase tracking-[0.2em] shadow-xl hover:bg-[color:var(--foreground)]/80 transition-all mt-4"
               >
                 {isLogin ? 'Zaloguj się' : 'Dołącz do squadu'}
               </button>
@@ -131,7 +131,7 @@ export const LoginForm = () => {
                     <button
                       type="button"
                       onClick={() => setIsLogin(false)}
-                      className="text-[10px] font-black uppercase tracking-widest text-black/60 hover:text-black transition-colors"
+                      className="text-[10px] font-black uppercase tracking-widest text-[color:var(--foreground)]/60 hover:text-[color:var(--foreground)] transition-colors"
                     >
                       Nie masz konta? Zarejestruj je tutaj
                     </button>
@@ -140,15 +140,15 @@ export const LoginForm = () => {
             </form>
 
             <div className="relative my-8">
-              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-black/5"></div></div>
-              <div className="relative flex justify-center text-[10px] font-black uppercase tracking-widest text-black/20"><span className="bg-white px-4">LUB</span></div>
+              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[color:var(--border)]"></div></div>
+              <div className="relative flex justify-center text-[10px] font-black uppercase tracking-widest text-[color:var(--foreground)]/30"><span className="bg-[color:var(--surface)] px-4">LUB</span></div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-3 bg-black text-white py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-black/80 transition-all shadow-lg">
+              <button className="flex items-center justify-center gap-3 bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-[color:var(--foreground)]/80 transition-all shadow-lg">
                 <AppleIcon /> Apple
               </button>
-              <button className="flex items-center justify-center gap-3 bg-white text-black border border-black/10 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-black/5 transition-all shadow-lg">
+              <button className="flex items-center justify-center gap-3 bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-[color:var(--surface)] transition-all shadow-lg">
                 <GoogleIcon /> Google
               </button>
             </div>
