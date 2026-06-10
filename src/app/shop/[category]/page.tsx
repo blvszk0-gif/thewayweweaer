@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { BackToTop } from '@/components/ui/BackToTop';
 import { ProductCard } from '@/components/shop/ProductCard';
 import { Filter, ChevronDown, LayoutGrid, List } from 'lucide-react';
 import pb from '@/lib/pocketbase';
@@ -101,7 +100,6 @@ export default function CategoryPage() {
         )}
       </div>
 
-      <BackToTop />
       <Footer />
     </main>
   );

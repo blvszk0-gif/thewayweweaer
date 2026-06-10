@@ -8,9 +8,9 @@ import Link from 'next/link';
 const collection = {
   name: "The Way WE Stare",
   items: [
-    { id: 1, name: "Detal haftu 1", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=DETAL+HAFTU+1" },
-    { id: 2, name: "Detal haftu 2", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=DETAL+HAFTU+2" },
-    { id: 3, name: "Packshot Produktu", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=PACKSHOT+PRODUKTU" },
+    { id: 1, name: "Detal haftu 1", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=DETAL+HAFTU+1", dark: true },
+    { id: 2, name: "Detal haftu 2", img: "https://placehold.co/1200x1600/FFFFFF/000000?text=DETAL+HAFTU+2", dark: false },
+    { id: 3, name: "Packshot Produktu", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=PACKSHOT+PRODUKTU", dark: true },
     { id: 4, name: "Metka Szyja", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=METKA+SZYJA" },
     { id: 5, name: "Metka Bok", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=METKA+BOK" },
   ]
@@ -79,8 +79,8 @@ export const HeroSlider = () => {
           </button>
 
           {/* Caption */}
-          <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10">
-             <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] text-black/40 mb-1">Slide 0{current + 1} / 0{collection.items.length}</p>
+          <div className={`absolute bottom-6 left-6 sm:bottom-10 sm:left-10 transition-colors duration-1000 ${collection.items[current].dark ? 'text-white' : 'text-black'}`}>
+             <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] mb-1 ${collection.items[current].dark ? 'text-white/40' : 'text-black/40'}`}>Slide 0{current + 1} / 0{collection.items.length}</p>
              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tighter italic font-abel">{collection.items[current].name}</h3>
           </div>
         </div>

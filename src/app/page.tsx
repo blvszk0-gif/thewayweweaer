@@ -5,7 +5,6 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSlider } from '@/components/home/HeroSlider';
 import { LandingSections } from '@/components/home/LandingSections';
-import { BackToTop } from '@/components/ui/BackToTop';
 
 export default function Home() {
   return (
@@ -13,7 +12,6 @@ export default function Home() {
       <Header />
       <HeroSlider />
       <LandingSections />
-      <BackToTop />
       <Footer />
     </main>
   );
