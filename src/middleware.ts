@@ -4,21 +4,26 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Allow access to the maintenance page, static assets, and images
-  if (
-    pathname === '/maintenance' ||
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/api') ||
-    pathname.includes('.')
-  ) {
-    return NextResponse.next();
-  }
-
   // Bypass maintenance mode with a secret query param: ?squad=access
   const hasAccess = request.cookies.has('twww_access');
   const isSecretParam = request.nextUrl.searchParams.get('squad') === 'access';
 
   if (hasAccess || isSecretParam) {
+    // If they have access and are on maintenance page, send them to home
+    if (pathname === '/maintenance') {
+      const url = request.nextUrl.clone();
+      url.pathname = '/';
+      url.searchParams.delete('squad');
+      const response = NextResponse.redirect(url);
+      if (isSecretParam && !hasAccess) {
+        response.cookies.set('twww_access', 'true', {
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+          path: '/',
+        });
+      }
+      return response;
+    }
+
     const response = NextResponse.next();
     if (isSecretParam && !hasAccess) {
       response.cookies.set('twww_access', 'true', {
@@ -29,10 +34,23 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
-  // Redirect all other requests to the maintenance page
-  const url = request.nextUrl.clone();
-  url.pathname = '/maintenance';
-  return NextResponse.redirect(url);
+  // Allow access to static assets, and images
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/api') ||
+    pathname.includes('.')
+  ) {
+    return NextResponse.next();
+  }
+
+  // If not on maintenance page, redirect there
+  if (pathname !== '/maintenance') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/maintenance';
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
