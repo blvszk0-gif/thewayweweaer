@@ -29,21 +29,19 @@ export const HeroSlider = () => {
   const prevSlide = () => setCurrent((prev) => (prev - 1 + collection.items.length) % collection.items.length);
   const nextSlide = () => setCurrent((prev) => (prev + 1) % collection.items.length);
 
-  const isDark = collection.items[current].dark;
-
   return (
-    <section className="relative w-full overflow-hidden bg-black/5 pt-24 pb-12 font-abel">
+    <section className="relative w-full overflow-hidden bg-[color:var(--surface)] pt-24 pb-12 font-abel">
       <div className="container mx-auto px-6 mb-8">
         <Link href="/shop/stare" className="group inline-flex flex-col">
-          <span className="text-[10px] font-black text-black/30 tracking-[0.3em] uppercase mb-1">Project: TWWW // Subject:</span>
-          <span className="text-3xl md:text-5xl font-black uppercase tracking-tighter group-hover:pl-4 transition-all duration-500 italic font-abel">
+          <span className="text-[10px] font-black text-[color:var(--foreground)]/45 tracking-[0.3em] uppercase mb-1">Project: TWWW // Subject:</span>
+          <span className="text-3xl md:text-5xl font-black uppercase tracking-tighter group-hover:pl-4 transition-all duration-500 italic font-abel text-[color:var(--foreground)]">
             {collection.name}
           </span>
         </Link>
       </div>
 
       <div className="container mx-auto px-6 flex flex-col lg:flex-row gap-8 items-center max-w-6xl">
-        <div className="relative w-full max-w-6xl mx-auto overflow-hidden rounded-3xl bg-[#d1d1d1] aspect-video sm:aspect-video lg:flex-1 group/slider">
+        <div className="relative w-full max-w-6xl mx-auto overflow-hidden rounded-3xl bg-[color:var(--surface-muted)] aspect-video sm:aspect-video lg:flex-1 group/slider shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]">
           <AnimatePresence mode="wait">
             <motion.img
               key={current}
@@ -58,10 +56,10 @@ export const HeroSlider = () => {
 
           {/* Action Buttons Overlay */}
           <div className="absolute top-4 right-4 sm:top-8 sm:right-8 flex flex-col gap-3 opacity-0 group-hover/slider:opacity-100 transition-all duration-500">
-             <button className="bg-white/90 text-black p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-black/5 backdrop-blur-sm">
+             <button className="bg-[color:var(--surface)]/90 text-[color:var(--foreground)] p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-sm">
                <Heart size={20} className="sm:w-6 sm:h-6" strokeWidth={2} />
              </button>
-             <button className="bg-white/90 text-black p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-black/5 backdrop-blur-sm">
+             <button className="bg-[color:var(--surface)]/90 text-[color:var(--foreground)] p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-sm">
                <ShoppingBag size={20} className="sm:w-6 sm:h-6" strokeWidth={2} />
              </button>
           </div>
@@ -69,21 +67,21 @@ export const HeroSlider = () => {
           {/* Navigation Controls */}
           <button
             onClick={prevSlide}
-            className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors p-2 ${isDark ? 'text-white/20 hover:text-white' : 'text-black/20 hover:text-black'}`}
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-[color:var(--foreground)]/50 hover:text-[color:var(--foreground)] transition-colors p-2"
           >
-            <ChevronLeft size={32} strokeWidth={1} />
+            <ChevronLeft size={32} className="w-8 h-8 sm:w-16 sm:h-16" strokeWidth={1} />
           </button>
           <button
             onClick={nextSlide}
-            className={`absolute right-4 top-1/2 -translate-y-1/2 transition-colors p-2 ${isDark ? 'text-white/20 hover:text-white' : 'text-black/20 hover:text-black'}`}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-[color:var(--foreground)]/50 hover:text-[color:var(--foreground)] transition-colors p-2"
           >
-            <ChevronRight size={32} strokeWidth={1} />
+            <ChevronRight size={32} className="w-8 h-8 sm:w-16 sm:h-16" strokeWidth={1} />
           </button>
 
           {/* Caption with dynamic contrast */}
-          <div className={`absolute bottom-6 left-6 sm:bottom-10 sm:left-10 transition-colors duration-500 p-4 rounded-xl ${isDark ? 'text-white' : 'text-black'}`}>
-             <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] mb-1 ${isDark ? 'text-white/40' : 'text-black/40'}`}>Slide 0{current + 1} / 0{collection.items.length}</p>
-             <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tighter italic font-abel">{collection.items[current].name}</h3>
+          <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 text-[color:var(--foreground)] transition-colors duration-500 p-4 rounded-xl bg-[color:var(--surface)]/90 max-w-[80%] sm:max-w-[60%]">
+             <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] mb-1 text-[color:var(--foreground)]/40">Slide 0{current + 1} / 0{collection.items.length}</p>
+             <h3 className="text-base sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-abel text-[color:var(--foreground)]">{collection.items[current].name}</h3>
           </div>
         </div>
 
@@ -93,7 +91,7 @@ export const HeroSlider = () => {
              <button
                key={item.id}
                onClick={() => setCurrent(i)}
-               className={`relative flex-shrink-0 w-20 lg:w-full aspect-video lg:aspect-[16/9] rounded-xl overflow-hidden transition-all duration-500 border-2 ${current === i ? 'border-black scale-105 shadow-xl' : 'border-transparent opacity-30 hover:opacity-100'}`}
+               className={`relative flex-shrink-0 w-20 lg:w-full aspect-video lg:aspect-[16/9] rounded-xl overflow-hidden transition-all duration-500 border-2 ${current === i ? 'border-[color:var(--foreground)] scale-105 shadow-xl' : 'border-transparent opacity-30 hover:opacity-100'}`}
              >
                <img src={item.img} alt={item.name} className="w-full h-full object-cover grayscale" />
              </button>

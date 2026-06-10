@@ -34,7 +34,7 @@ export const BackToTop = () => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-[100] w-12 h-12 bg-black text-white flex items-center justify-center rounded-full shadow-2xl border border-white/20 hover:scale-110 transition-transform group"
+          className="fixed bottom-8 right-8 z-[100] w-12 h-12 bg-[color:var(--foreground)] text-[color:var(--surface)] flex items-center justify-center rounded-full shadow-2xl border border-[color:var(--border)] hover:scale-110 transition-transform group"
           aria-label="Back to top"
         >
           <ArrowUp size={24} className="group-hover:-translate-y-1 transition-transform" />

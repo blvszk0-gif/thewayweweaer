@@ -44,22 +44,22 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-black/60 backdrop-blur-md"
+          className="absolute inset-0 bg-[color:var(--foreground)]/15 backdrop-blur-md"
         />
 
         <motion.div
           initial={{ scale: 0.9, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
-          className="relative w-full max-w-2xl bg-[#dcdcdc] rounded-[40px] shadow-2xl overflow-hidden text-black p-12 border border-white/20"
+          className="relative w-full max-w-2xl bg-[color:var(--surface)] rounded-[40px] shadow-2xl overflow-hidden text-[color:var(--foreground)] p-12 border border-[color:var(--border)]"
         >
-          <button onClick={onClose} className="absolute top-8 right-8 text-black/40 hover:text-black transition-colors z-20">
+          <button onClick={onClose} className="absolute top-8 right-8 text-[color:var(--foreground)]/40 hover:text-[color:var(--foreground)] transition-colors z-20">
             <X size={32} />
           </button>
 
           {!isLoggedIn ? (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-8 py-12">
-              <div className="w-24 h-24 bg-black/5 rounded-full flex items-center justify-center mx-auto">
+              <div className="w-24 h-24 bg-[color:var(--foreground)]/10 rounded-full flex items-center justify-center mx-auto">
                 <User size={40} />
               </div>
               <div>
@@ -67,7 +67,7 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                 <p className="text-sm font-bold opacity-50 uppercase px-12 leading-relaxed">Ta opcja jest dostępna tylko dla członków Squadu. Zaloguj się, aby kontynuować projektowanie haftu.</p>
               </div>
               <div className="space-y-4 max-w-xs mx-auto">
-                <button onClick={() => setIsLoggedIn(true)} className="w-full bg-black text-white py-6 rounded-full font-black uppercase tracking-widest text-sm shadow-xl hover:scale-105 transition-transform">Logowanie / Rejestracja</button>
+                <button onClick={() => setIsLoggedIn(true)} className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-6 rounded-full font-black uppercase tracking-widest text-sm shadow-xl hover:scale-105 transition-transform">Logowanie / Rejestracja</button>
                 <button onClick={onClose} className="w-full py-2 font-black uppercase tracking-widest text-[10px] opacity-40 hover:opacity-100 transition-opacity">Anuluj i wróć</button>
               </div>
             </motion.div>
@@ -76,10 +76,10 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
               <div className="mb-12">
                 <div className="flex gap-2 mb-4">
                   {[1, 2, 3, 4, 5].map((i) => (
-                    <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-500 ${step >= i ? 'bg-black' : 'bg-black/10'}`} />
+                    <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-500 ${step >= i ? 'bg-[color:var(--foreground)]' : 'bg-[color:var(--foreground)]/10'}`} />
                   ))}
                 </div>
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-black/40 italic">Haft na zamówienie // Krok 0{step}</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[color:var(--foreground)]/40 italic">Haft na zamówienie // Krok 0{step}</p>
               </div>
 
               <div className="min-h-[350px]">
@@ -94,7 +94,7 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                         <button
                           key={item.id}
                           onClick={() => { setFormData({...formData, garment: item.id}); nextStep(); }}
-                          className={`p-8 rounded-3xl border-2 transition-all text-left group ${formData.garment === item.id ? 'border-black bg-white shadow-xl' : 'border-transparent bg-white hover:border-black/20'}`}
+                          className={`p-8 rounded-3xl border-2 transition-all text-left group ${formData.garment === item.id ? 'border-[color:var(--foreground)] bg-[color:var(--surface)] shadow-xl' : 'border-transparent bg-[color:var(--surface)] hover:border-[color:var(--border)]'}`}
                         >
                           <h4 className="text-xl font-black uppercase italic mb-2">{item.name}</h4>
                           <p className="text-[10px] font-bold opacity-40 uppercase">{item.desc}</p>
@@ -118,17 +118,17 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                         <button
                           key={c.name}
                           onClick={() => setFormData({...formData, color: c.name})}
-                          className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${formData.color === c.name ? 'border-black bg-white shadow-xl scale-105' : 'border-transparent bg-black/5 opacity-60 hover:opacity-100'}`}
+                          className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${formData.color === c.name ? 'border-[color:var(--foreground)] bg-[color:var(--surface)] shadow-xl scale-105' : 'border-transparent bg-[color:var(--foreground)]/10 opacity-60 hover:opacity-100'}`}
                         >
-                          <div className="w-8 h-8 rounded-full border border-black/10 shadow-inner" style={{ backgroundColor: c.color }} />
+                          <div className="w-8 h-8 rounded-full border border-[color:var(--border)] shadow-inner" style={{ backgroundColor: c.color }} />
                           <span className="text-[10px] font-black uppercase tracking-tighter">{c.name}</span>
-                          {c.extra > 0 && <span className="text-[8px] font-bold text-black/40">+ {c.extra} PLN</span>}
+                          {c.extra > 0 && <span className="text-[8px] font-bold text-[color:var(--foreground)]/40">+ {c.extra} PLN</span>}
                         </button>
                       ))}
                     </div>
                     <div className="flex gap-4">
-                       <button onClick={prevStep} className="flex-1 py-5 font-black uppercase tracking-widest text-xs border border-black/10 rounded-full hover:bg-white transition-all">Wróć</button>
-                       <button onClick={nextStep} className="flex-[2] bg-black text-white py-5 rounded-full font-black uppercase tracking-widest text-sm shadow-xl hover:scale-[1.02] transition-transform">Kontynuuj</button>
+                       <button onClick={prevStep} className="flex-1 py-5 font-black uppercase tracking-widest text-xs border border-[color:var(--border)] rounded-full hover:bg-[color:var(--surface)] transition-all">Wróć</button>
+                       <button onClick={nextStep} className="flex-[2] bg-[color:var(--foreground)] text-[color:var(--surface)] py-5 rounded-full font-black uppercase tracking-widest text-sm shadow-xl hover:scale-[1.02] transition-transform">Kontynuuj</button>
                     </div>
                   </motion.div>
                 )}
@@ -136,8 +136,8 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                 {step === 3 && (
                   <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
                     <h3 className="text-4xl font-black uppercase tracking-tighter italic mb-8">Prześlij projekt</h3>
-                    <div className={`bg-white border-2 border-dashed rounded-3xl p-12 flex flex-col items-center justify-center gap-6 relative transition-all ${fileError ? 'border-red-500 bg-red-50' : 'border-black/10'}`}>
-                      <div className={`w-20 h-20 rounded-full flex items-center justify-center transition-colors ${fileError ? 'bg-red-100 text-red-500' : 'bg-black/5'}`}>
+                    <div className={`bg-[color:var(--surface)] border-2 border-dashed rounded-3xl p-12 flex flex-col items-center justify-center gap-6 relative transition-all ${fileError ? 'border-red-500 bg-red-50' : 'border-[color:var(--border)]'}`}>
+                      <div className={`w-20 h-20 rounded-full flex items-center justify-center transition-colors ${fileError ? 'bg-red-100 text-red-500' : 'bg-[color:var(--foreground)]/10'}`}>
                         <Upload size={32} />
                       </div>
                       <div className="text-center">
@@ -169,14 +169,14 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                   <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
                     <h3 className="text-4xl font-black uppercase tracking-tighter italic mb-8">Ważne informacje</h3>
                     <div className="space-y-6">
-                      <div className="flex gap-4 p-6 bg-white rounded-2xl">
+                      <div className="flex gap-4 p-6 bg-[color:var(--surface)] rounded-2xl border border-[color:var(--border)]">
                         <AlertCircle className="shrink-0" />
                         <div>
                           <p className="text-xs font-black uppercase mb-1">Brak zwrotów</p>
                           <p className="text-[10px] font-bold opacity-50 uppercase leading-relaxed">Artykuły z haftem na zamówienie są personalizowane i nie podlegają zwrotowi.</p>
                         </div>
                       </div>
-                      <div className="flex gap-4 p-6 bg-white rounded-2xl">
+                      <div className="flex gap-4 p-6 bg-[color:var(--surface)] rounded-2xl border border-[color:var(--border)]">
                         <Loader2 className="shrink-0 animate-spin" />
                         <div>
                           <p className="text-xs font-black uppercase mb-1">Czas realizacji</p>
@@ -184,10 +184,10 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                         </div>
                       </div>
                       <div className="flex gap-4 pt-4">
-                        <button onClick={prevStep} className="flex-1 py-5 font-black uppercase tracking-widest text-xs border border-black/10 rounded-full hover:bg-white transition-all">Wróć</button>
+                        <button onClick={prevStep} className="flex-1 py-5 font-black uppercase tracking-widest text-xs border border-[color:var(--border)] rounded-full hover:bg-[color:var(--surface)] transition-all">Wróć</button>
                         <button
                           onClick={nextStep}
-                          className="flex-[2] bg-black text-white py-5 rounded-full font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-xl hover:scale-[1.02] transition-transform"
+                          className="flex-[2] bg-[color:var(--foreground)] text-[color:var(--surface)] py-5 rounded-full font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 shadow-xl hover:scale-[1.02] transition-transform"
                         >
                           Rozumiem, kontynuuj <ArrowRight size={18} />
                         </button>
@@ -200,14 +200,14 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                   <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
                     <div className="space-y-8">
                       <h3 className="text-4xl font-black uppercase tracking-tighter italic mb-4">Potwierdź dane</h3>
-                      <div className="bg-white p-8 rounded-3xl space-y-6 shadow-xl">
+                      <div className="bg-[color:var(--surface)] p-8 rounded-3xl space-y-6 shadow-xl border border-[color:var(--border)]">
                         <div>
-                          <p className="text-[10px] font-black uppercase text-black/30 mb-2">Twój e-mail kontaktowy:</p>
+                          <p className="text-[10px] font-black uppercase text-[color:var(--foreground)]/30 mb-2">Twój e-mail kontaktowy:</p>
                           <input
                             type="email"
                             value={formData.email}
                             onChange={(e) => setFormData({...formData, email: e.target.value})}
-                            className="w-full bg-black/5 px-6 py-4 rounded-xl border border-black/10 font-black uppercase text-sm focus:outline-none focus:border-black transition-all"
+                            className="w-full bg-[color:var(--foreground)]/10 px-6 py-4 rounded-xl border border-[color:var(--border)] font-black uppercase text-sm focus:outline-none focus:border-[color:var(--foreground)] transition-all"
                           />
                         </div>
                         <div className="flex justify-between items-center text-[10px] font-black uppercase">
@@ -217,8 +217,8 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                         <p className="text-[10px] font-bold opacity-40 uppercase leading-relaxed">Na ten adres prześlemy informację o akceptacji projektu oraz wycenę końcową.</p>
                       </div>
                       <div className="flex gap-4">
-                        <button onClick={prevStep} className="flex-1 py-5 font-black uppercase tracking-widest text-xs border border-black/10 rounded-full hover:bg-white transition-all">Wróć</button>
-                        <button onClick={nextStep} className="flex-[2] bg-black text-white py-5 rounded-full font-black uppercase tracking-widest text-sm shadow-xl hover:scale-[1.02] transition-transform">Potwierdzam, wyślij</button>
+                        <button onClick={prevStep} className="flex-1 py-5 font-black uppercase tracking-widest text-xs border border-[color:var(--border)] rounded-full hover:bg-[color:var(--surface)] transition-all">Wróć</button>
+                        <button onClick={nextStep} className="flex-[2] bg-[color:var(--foreground)] text-[color:var(--surface)] py-5 rounded-full font-black uppercase tracking-widest text-sm shadow-xl hover:scale-[1.02] transition-transform">Potwierdzam, wyślij</button>
                       </div>
                     </div>
                   </motion.div>
@@ -226,7 +226,7 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
 
                 {step === 6 && (
                   <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center space-y-8 py-12">
-                    <div className="w-24 h-24 bg-black rounded-full flex items-center justify-center mx-auto text-white shadow-2xl">
+                    <div className="w-24 h-24 bg-[color:var(--foreground)] rounded-full flex items-center justify-center mx-auto text-[color:var(--surface)] shadow-2xl">
                       <Check size={48} strokeWidth={3} />
                     </div>
                     <div>
@@ -238,7 +238,7 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                     <div className="flex flex-col gap-4 max-w-xs mx-auto">
                       <button
                         onClick={() => resetWizard()}
-                        className="w-full bg-black text-white py-5 rounded-full font-black uppercase tracking-widest text-sm shadow-xl hover:scale-105 transition-transform"
+                        className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-5 rounded-full font-black uppercase tracking-widest text-sm shadow-xl hover:scale-105 transition-transform"
                       >
                         Kolejne zamówienie
                       </button>
@@ -246,7 +246,7 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                         onClick={onClose}
                         className="w-full py-2 font-black uppercase tracking-widest text-[10px] opacity-40 hover:opacity-100 transition-opacity"
                       >
-                        Zamknij wizard
+                        Zamknij
                       </button>
                     </div>
                   </motion.div>

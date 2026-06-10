@@ -41,13 +41,13 @@ export default function CatalogPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#dcdcdc] font-abel overflow-hidden">
+    <main className="min-h-screen bg-[color:var(--surface)] font-abel overflow-hidden">
       <Header />
       <audio ref={audioRef} src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" />
 
       <div className="container mx-auto px-6 pt-40 pb-20 min-h-[80vh] flex flex-col items-center justify-center">
         <div className="mb-8 text-center">
-          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-black/30 mb-2">Digital Lookbook // 2025</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-[color:var(--foreground)]/30 mb-2">Digital Lookbook // 2025</p>
           <h1 className="text-5xl font-black uppercase tracking-tighter italic">Katalog TWWW</h1>
         </div>
 
@@ -55,7 +55,7 @@ export default function CatalogPage() {
            {/* Book Container */}
            <div className="absolute inset-0 flex">
               {/* Left Side (Static) */}
-              <div className="w-1/2 bg-white border-r border-black/5 shadow-2xl relative overflow-hidden flex items-center justify-center p-12">
+              <div className="w-1/2 bg-[color:var(--surface)] border-r border-[color:var(--border)] shadow-2xl relative overflow-hidden flex items-center justify-center p-12">
                  <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
                  {currentPage > 0 && (
                    <div className="relative z-10 text-center">
@@ -66,7 +66,7 @@ export default function CatalogPage() {
               </div>
 
               {/* Right Side (Static) */}
-              <div className="w-1/2 bg-white shadow-2xl relative overflow-hidden flex items-center justify-center p-12">
+              <div className="w-1/2 bg-[color:var(--surface)] shadow-2xl relative overflow-hidden flex items-center justify-center p-12">
                  <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
                  <div className="relative z-10 text-center">
                     <img src={PAGES[currentPage].image} className="w-full h-64 object-cover grayscale mb-8 shadow-xl" alt="" />
@@ -87,15 +87,15 @@ export default function CatalogPage() {
               <button
                 onClick={prev}
                 disabled={currentPage === 0}
-                className="w-14 h-14 bg-black text-white rounded-full flex items-center justify-center disabled:opacity-20 transition-all hover:scale-110 active:scale-95 shadow-xl"
+                className="w-14 h-14 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center disabled:opacity-20 transition-all hover:scale-110 active:scale-95 shadow-xl"
               >
                 <ChevronLeft size={24} />
               </button>
               <div className="flex flex-col items-center">
                 <span className="text-xs font-black uppercase tracking-widest">{currentPage + 1} / {PAGES.length}</span>
-                <div className="w-32 h-1 bg-black/5 rounded-full mt-2 overflow-hidden">
+                <div className="w-32 h-1 bg-[color:var(--border)] rounded-full mt-2 overflow-hidden">
                    <motion.div
-                    className="h-full bg-black"
+                    className="h-full bg-[color:var(--foreground)]"
                     initial={{ width: 0 }}
                     animate={{ width: `${((currentPage + 1) / PAGES.length) * 100}%` }}
                    />
@@ -104,7 +104,7 @@ export default function CatalogPage() {
               <button
                 onClick={next}
                 disabled={currentPage === PAGES.length - 1}
-                className="w-14 h-14 bg-black text-white rounded-full flex items-center justify-center disabled:opacity-20 transition-all hover:scale-110 active:scale-95 shadow-xl"
+                className="w-14 h-14 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center disabled:opacity-20 transition-all hover:scale-110 active:scale-95 shadow-xl"
               >
                 <ChevronRight size={24} />
               </button>
