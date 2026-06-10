@@ -8,6 +8,7 @@ const abel = Abel({
   weight: "400",
   variable: "--font-abel",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {

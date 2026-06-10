@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Loading() {
   return (
-    <div className="min-h-screen bg-black pt-20 px-6">
+    <div className="min-h-screen bg-[#dcdcdc] pt-20 px-6">
       <div className="container mx-auto animate-pulse space-y-12">
         {/* Hero Skeleton */}
         <div className="h-20 w-1/3 bg-white/5 rounded-xl mb-8"></div>

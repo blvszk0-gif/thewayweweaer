@@ -82,7 +82,7 @@ const sizeTable = [
   { size: 'XL', chest: '66 cm', length: '76 cm', sleeve: '66 cm' },
 ];
 
-const LaundryIcon = ({ icon: Icon, label, detail, active, onToggle }: { icon: any, label: string, detail: string, active: boolean, onToggle: () => void }) => {
+const LaundryIcon = ({ icon: Icon, label, detail, active, onToggle }: { icon: React.ComponentType, label: string, detail: string, active: boolean, onToggle: () => void }) => {
   return (
     <div className="relative">
       <button

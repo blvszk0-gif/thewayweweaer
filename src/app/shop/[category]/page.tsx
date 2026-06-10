@@ -36,7 +36,7 @@ export default function CategoryPage() {
             id: item.id,
             name: item.name,
             price: Number(item.price),
-            image: pb.files.getUrl(item, item.image)
+            image: pb.files.getUrl(item, item.image || (item.images && item.images[0]))
           })));
         }
       } catch {
