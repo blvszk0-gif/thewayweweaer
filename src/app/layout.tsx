@@ -21,9 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl" className={`${abel.variable}`}>
-      <head>
-      </head>
-      <body className="font-abel">
+      <body className="font-abel antialiased">
         {children}
         <SpeedInsights />
       </body>

@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, User, ShoppingBag, Heart, ChevronRight } from 'lucide-react';
+import { Search, User, ShoppingBag, Heart, ChevronRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HaftWizard } from '../shop/HaftWizard';
+import { LoginForm } from '../auth/LoginForm';
 
 export const Header = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -12,6 +13,7 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [expandedKolekcje, setExpandedKolekcje] = useState(false);
   const [isHaftModalOpen, setIsHaftModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,7 +61,7 @@ export const Header = () => {
               <Search size={18} className="opacity-50" />
               <input type="text" placeholder="SZUKAJ..." className="bg-transparent border-none text-xs focus:outline-none w-24 xl:w-32 uppercase font-black" />
             </div>
-            <Link href="/login" className="text-black"><User size={20} className="md:w-[22px] md:h-[22px]" /></Link>
+            <button onClick={() => setIsLoginModalOpen(true)} className="text-black outline-none"><User size={20} className="md:w-[22px] md:h-[22px]" /></button>
             <Link href="/wishlist" className="hidden sm:block text-black"><Heart size={20} className="md:w-[22px] md:h-[22px]" /></Link>
             <Link href="/cart" className="relative text-black">
               <ShoppingBag size={20} className="md:w-[22px] md:h-[22px]" />
@@ -103,6 +105,7 @@ export const Header = () => {
                 <Link href="/shop/bluzy" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Bluzy</Link>
                 <Link href="/shop/koszulki" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Koszulki</Link>
                 <Link href="/shop/akcesoria" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Akcesoria</Link>
+                <Link href="/catalog" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Katalog</Link>
 
                 <div>
                    <button
@@ -148,6 +151,37 @@ export const Header = () => {
         isOpen={isHaftModalOpen}
         onClose={() => setIsHaftModalOpen(false)}
       />
+
+      {/* Login Modal */}
+      <AnimatePresence>
+        {isLoginModalOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsLoginModalOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100]"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="fixed inset-0 flex items-center justify-center z-[101] p-4 pointer-events-none"
+            >
+              <div className="w-full max-w-md pointer-events-auto relative">
+                <button
+                  onClick={() => setIsLoginModalOpen(false)}
+                  className="absolute -top-12 right-0 text-white/50 hover:text-white transition-colors"
+                >
+                  <X size={32} />
+                </button>
+                <LoginForm />
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 };
