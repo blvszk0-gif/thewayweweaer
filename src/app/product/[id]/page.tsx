@@ -46,7 +46,8 @@ const IronIcon = () => (
 const productData = {
   id: 'twww-hoodie-01',
   category: 'Bluzy',
-  name: 'OVERSIZE HOODIE // THE WAY WE STARE',
+  name: 'THE WAY WE STARE',
+  type: 'OVERSIZE HOODIE',
   price: 299,
   currency: 'PLN',
   colors: [
@@ -123,6 +124,10 @@ export default function ProductPage() {
 
   const totalPrice = productData.price + (selectedColor.extra || 0);
 
+  const handleToggleTooltip = (id: string) => {
+    setActiveTooltip(activeTooltip === id ? null : id);
+  };
+
   return (
     <main className="min-h-screen bg-[#dcdcdc] font-abel text-black shadow-[inset_0_0_100px_rgba(0,0,0,0.1)] relative overflow-x-hidden">
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-repeat" />
@@ -176,7 +181,7 @@ export default function ProductPage() {
 
           <div className="lg:flex-1 flex flex-col">
             <div className="mb-8">
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-black/30 block mb-2">Project: TWWW // Subject: {productData.category} //</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-black/30 block mb-2">Project: TWWW // Subject: {productData.type} //</span>
                 <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter italic leading-none">{productData.name}</h1>
             </div>
 
@@ -184,7 +189,7 @@ export default function ProductPage() {
 
             <div className="space-y-12">
                <div>
-                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] mb-4 text-black/48">Wybierz Kolor: {selectedColor.name}</h3>
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] mb-4 text-black/48 italic">Wybierz Kolor: {selectedColor.name}</h3>
                   <div className="space-y-6">
                       <div className="flex gap-3">
                         {productData.colors.map((color) => (
@@ -199,7 +204,7 @@ export default function ProductPage() {
                       </div>
 
                       <div className="flex flex-col gap-2">
-                        <p className="text-[9px] font-black uppercase tracking-widest opacity-20">Premium Colors:</p>
+                        <p className="text-[9px] font-black uppercase tracking-widest opacity-20 italic">Premium Colors (+40 PLN):</p>
                         <div className="flex gap-3">
                             {productData.premiumColors.map((color) => (
                                 <button
@@ -207,7 +212,6 @@ export default function ProductPage() {
                                     className={`w-12 h-12 rounded-full border-2 transition-all relative flex items-center justify-center ${selectedColor.name === color.name ? 'border-black scale-110 shadow-xl' : 'border-transparent'} ${!color.stock ? 'opacity-20 cursor-not-allowed grayscale' : ''}`}
                                     style={{ backgroundColor: color.hex }}
                                 >
-                                    <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[8px] font-black whitespace-nowrap opacity-40">+{color.extra} PLN</span>
                                     {!color.stock && <div className="absolute inset-0 flex items-center justify-center text-black"><X size={20} /></div>}
                                 </button>
                             ))}
@@ -218,7 +222,7 @@ export default function ProductPage() {
 
                <div>
                   <div className="flex justify-between items-end mb-4">
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/48">Rozmiar</h3>
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/48 italic">Rozmiar</h3>
                     <button onClick={() => setIsSizeTableOpen(true)} className="text-[10px] font-black uppercase tracking-widest underline underline-offset-4 flex items-center gap-2"><Ruler size={12} /> Tabela rozmiarów</button>
                   </div>
                   <div className="grid grid-cols-4 gap-2 mb-6">
@@ -259,19 +263,19 @@ export default function ProductPage() {
                     <div className="flex gap-4">
                         <LaundryIcon
                             icon={WashIcon} label="PRANIE" detail="PRAĆ W MAX 30°C. NIE STOSOWAĆ WYBIELACZY."
-                            active={activeTooltip === 'wash'} onToggle={() => setActiveTooltip(activeTooltip === 'wash' ? null : 'wash')}
+                            active={activeTooltip === 'wash'} onToggle={() => handleToggleTooltip('wash')}
                         />
                         <LaundryIcon
                             icon={BleachIcon} label="WYBIELANIE" detail="NIE STOSOWAĆ WYBIELACZY I CHLORU."
-                            active={activeTooltip === 'bleach'} onToggle={() => setActiveTooltip(activeTooltip === 'bleach' ? null : 'bleach')}
+                            active={activeTooltip === 'bleach'} onToggle={() => handleToggleTooltip('bleach')}
                         />
                         <LaundryIcon
                             icon={TumbleIcon} label="SUSZENIE" detail="NIE SUSZYĆ W SUSZARCE BĘBNOWEJ."
-                            active={activeTooltip === 'dry'} onToggle={() => setActiveTooltip(activeTooltip === 'dry' ? null : 'dry')}
+                            active={activeTooltip === 'dry'} onToggle={() => handleToggleTooltip('dry')}
                         />
                         <LaundryIcon
                             icon={IronIcon} label="PRASOWANIE" detail="PRASOWAĆ NA LEWEJ STRONIE (MAX 110°C)."
-                            active={activeTooltip === 'iron'} onToggle={() => setActiveTooltip(activeTooltip === 'iron' ? null : 'iron')}
+                            active={activeTooltip === 'iron'} onToggle={() => handleToggleTooltip('iron')}
                         />
                     </div>
                   </div>
@@ -303,7 +307,6 @@ export default function ProductPage() {
         )}
       </AnimatePresence>
 
-      <div className="pb-20" />
       <Footer />
     </main>
   );
