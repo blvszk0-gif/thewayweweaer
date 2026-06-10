@@ -8,11 +8,11 @@ import Link from 'next/link';
 const collection = {
   name: "The Way WE Stare",
   items: [
-    { id: 1, name: "Detal haftu 1", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=DETAL+HAFTU+1" },
-    { id: 2, name: "Detal haftu 2", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=DETAL+HAFTU+2" },
-    { id: 3, name: "Packshot Produktu", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=PACKSHOT+PRODUKTU" },
-    { id: 4, name: "Metka Szyja", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=METKA+SZYJA" },
-    { id: 5, name: "Metka Bok", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=METKA+BOK" },
+    { id: 1, name: "Detal haftu 1", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=DETAL+HAFTU+1", dark: true },
+    { id: 2, name: "Detal haftu 2", img: "https://placehold.co/1200x1600/FFFFFF/000000?text=DETAL+HAFTU+2", dark: false },
+    { id: 3, name: "Packshot Produktu", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=PACKSHOT+PRODUKTU", dark: true },
+    { id: 4, name: "Metka Szyja", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=METKA+SZYJA", dark: true },
+    { id: 5, name: "Metka Bok", img: "https://placehold.co/1200x1600/FFFFFF/000000?text=METKA+BOK", dark: false },
   ]
 };
 
@@ -29,6 +29,8 @@ export const HeroSlider = () => {
   const prevSlide = () => setCurrent((prev) => (prev - 1 + collection.items.length) % collection.items.length);
   const nextSlide = () => setCurrent((prev) => (prev + 1) % collection.items.length);
 
+  const isDark = collection.items[current].dark;
+
   return (
     <section className="relative w-full overflow-hidden bg-black/5 pt-24 pb-12 font-abel">
       <div className="container mx-auto px-6 mb-8">
@@ -41,7 +43,7 @@ export const HeroSlider = () => {
       </div>
 
       <div className="container mx-auto px-6 flex flex-col lg:flex-row gap-8 items-center max-w-6xl">
-        <div className="relative w-full max-w-6xl mx-auto overflow-hidden rounded-3xl bg-[#d1d1d1] aspect-video sm:aspect-video lg:flex-1">
+        <div className="relative w-full max-w-6xl mx-auto overflow-hidden rounded-3xl bg-[#d1d1d1] aspect-video sm:aspect-video lg:flex-1 group/slider">
           <AnimatePresence mode="wait">
             <motion.img
               key={current}
@@ -67,20 +69,20 @@ export const HeroSlider = () => {
           {/* Navigation Controls */}
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-black/20 hover:text-black transition-colors p-2"
+            className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors p-2 ${isDark ? 'text-white/20 hover:text-white' : 'text-black/20 hover:text-black'}`}
           >
-            <ChevronLeft size={32} sm-size={64} className="w-8 h-8 sm:w-16 sm:h-16" strokeWidth={1} />
+            <ChevronLeft size={32} className="w-8 h-8 sm:w-16 sm:h-16" strokeWidth={1} />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-black/20 hover:text-black transition-colors p-2"
+            className={`absolute right-4 top-1/2 -translate-y-1/2 transition-colors p-2 ${isDark ? 'text-white/20 hover:text-white' : 'text-black/20 hover:text-black'}`}
           >
-            <ChevronRight size={32} sm-size={64} className="w-8 h-8 sm:w-16 sm:h-16" strokeWidth={1} />
+            <ChevronRight size={32} className="w-8 h-8 sm:w-16 sm:h-16" strokeWidth={1} />
           </button>
 
-          {/* Caption */}
-          <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10">
-             <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] text-black/40 mb-1">Slide 0{current + 1} / 0{collection.items.length}</p>
+          {/* Caption with dynamic contrast */}
+          <div className={`absolute bottom-6 left-6 sm:bottom-10 sm:left-10 transition-colors duration-500 p-4 rounded-xl ${isDark ? 'text-white' : 'text-black'}`}>
+             <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] mb-1 ${isDark ? 'text-white/40' : 'text-black/40'}`}>Slide 0{current + 1} / 0{collection.items.length}</p>
              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tighter italic font-abel">{collection.items[current].name}</h3>
           </div>
         </div>

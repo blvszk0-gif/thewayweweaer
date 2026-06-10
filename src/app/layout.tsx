@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Abel } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { BackToTop } from "@/components/ui/BackToTop";
 import "./globals.css";
 
 const abel = Abel({
@@ -21,10 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl" className={`${abel.variable}`}>
-      <head>
-      </head>
-      <body className="font-abel">
+      <body className="font-abel antialiased">
         {children}
+        <BackToTop />
         <SpeedInsights />
       </body>
     </html>

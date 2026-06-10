@@ -9,7 +9,7 @@ import { Package, Gift, Heart, Camera, Sparkles } from 'lucide-react';
 export default function UnboxingPage() {
   const steps = [
     { title: 'Personalizowany Karton', desc: 'Sygnowany logiem TWWW, usztywniony, by chronić to, co najcenniejsze.', icon: Package },
-    { title: 'Papier z Motywem', desc: 'W zależności od Twojej frakcji (Gracz/Anime), papier do pakowania nawiązuje do danego uniwersum.', icon: Sparkles },
+    { title: 'Papier z Motywem', desc: 'W zależności od wybranej kolekcji i motywu, papier do pakowania nawiązuje do danego uniwersum.', icon: Sparkles },
     { title: 'Rzemieślnicza Krówka', desc: 'Coś słodkiego na start Twojej nowej przygody.', icon: Heart },
     { title: 'Gadżet z Druku 3D', desc: 'Unikalna figurka lub akcesorium dopasowane do Twojego zakupu.', icon: Gift },
   ];
