@@ -53,7 +53,7 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
   };
 
   return (
-    <motion.div
+    <motion.div 
       layout
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -61,33 +61,30 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
       className="bg-white rounded-[40px] overflow-hidden shadow-2xl border border-white/20 group flex flex-col relative"
     >
       <div className="aspect-[4/5] relative overflow-hidden bg-black/5">
-        <div
+        <div 
           ref={scrollRef}
           onScroll={handleScroll}
           className="flex overflow-x-auto snap-x snap-mandatory h-full no-scrollbar"
         >
           {item.images.map((img: string, idx: number) => (
             <div key={idx} className="min-w-full h-full snap-center">
-              <img src={img} alt={item.name} className={`w-full h-full object-cover grayscale transition-all duration-700 ${item.inStock ? 'group-hover:grayscale-0' : 'blur-sm grayscale'}`} />
               <img src={img} alt={item.name} className={`w-full h-full object-cover grayscale transition-all duration-700 ${item.inStock ? 'group-hover:grayscale-0' : 'blur-sm'}`} />
             </div>
           ))}
         </div>
-
+        
         {/* Navigation Arrows */}
         {item.images.length > 1 && (
           <>
-            <button
+            <button 
               onClick={() => scroll('left')}
               className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20"
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
             >
               <ChevronLeft size={16} />
             </button>
-            <button
+            <button 
               onClick={() => scroll('right')}
               className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20"
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
             >
               <ChevronRight size={16} />
             </button>
@@ -96,8 +93,7 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
 
         {/* Action Button - Trash (NOT BLURRED) */}
         <div className="absolute top-6 right-6 flex flex-col gap-2 z-30">
-        <div className="absolute top-6 right-6 flex flex-col gap-2 z-20">
-          <button
+          <button 
             onClick={() => onRemove(item.id)}
             className="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-xl"
           >
@@ -133,7 +129,7 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
                <ShoppingBag size={14} className="group-hover/btn:scale-110 transition-transform" /> Dodaj do koszyka
              </button>
            ) : (
-             <button
+             <button 
               onClick={() => onNotify(item.id)}
               className="w-full bg-white text-black border border-black/10 py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-black hover:text-white transition-all shadow-lg"
              >
@@ -160,8 +156,8 @@ export default function WishlistPage() {
   const [notifiedItems, setNotifiedItems] = useState<string[]>([]);
   const [isLoggedIn] = useState(false); // Mock
 
-  const filteredItems = filter === 'Wszystko'
-    ? items
+  const filteredItems = filter === 'Wszystko' 
+    ? items 
     : items.filter(i => i.category === filter);
 
   const handleNotify = (id: string) => {
@@ -179,7 +175,7 @@ export default function WishlistPage() {
   return (
     <main className="min-h-screen bg-[#dcdcdc] font-abel shadow-[inset_0_0_100px_rgba(0,0,0,0.1)]">
       <Header />
-
+      
       <div className="container mx-auto px-6 pt-40 pb-20">
         <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
           <div>
@@ -207,11 +203,11 @@ export default function WishlistPage() {
         {filteredItems.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredItems.map((item) => (
-              <WishlistProductCard
-                key={item.id}
-                item={{...item, isNotified: notifiedItems.includes(item.id)}}
-                onRemove={removeItem}
-                onNotify={handleNotify}
+              <WishlistProductCard 
+                key={item.id} 
+                item={{...item, isNotified: notifiedItems.includes(item.id)}} 
+                onRemove={removeItem} 
+                onNotify={handleNotify} 
               />
             ))}
           </div>
@@ -241,7 +237,7 @@ export default function WishlistPage() {
               <h3 className="text-2xl font-black uppercase tracking-tighter italic mb-4">Daj nam znać</h3>
               <p className="text-[10px] font-bold uppercase opacity-40 tracking-widest leading-relaxed mb-8">Zostaw swój e-mail, a wyślemy Ci powiadomienie gdy tylko produkt wróci na stan.</p>
               <input type="email" placeholder="TWOJA@POCZTA.COM" className="w-full bg-black/5 border border-black/10 rounded-2xl px-6 py-4 font-black uppercase text-xs mb-4 focus:outline-none focus:border-black" />
-              <button
+              <button 
                 onClick={() => { setNotifiedItems([...notifiedItems, emailPrompt]); setEmailPrompt(null); }}
                 className="w-full bg-black text-white py-5 rounded-full font-black uppercase tracking-widest text-xs shadow-xl"
               >
