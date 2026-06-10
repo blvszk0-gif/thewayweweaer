@@ -12,12 +12,26 @@ interface HaftWizardProps {
 export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
   const [step, setStep] = useState(1);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Mock
+  const [fileError, setFileError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     garment: '',
+    color: 'Czarny',
     weight: '',
     file: null as File | null,
     email: 'user@example.com' // Mock
   });
+
+  const resetWizard = () => {
+    setStep(1);
+    setFormData({
+      garment: '',
+      color: 'Czarny',
+      weight: '',
+      file: null as File | null,
+      email: 'user@example.com'
+    });
+    setFileError(null);
+  };
 
   const nextStep = () => setStep(prev => prev + 1);
   const prevStep = () => setStep(prev => prev - 1);
@@ -63,7 +77,7 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
             <>
               <div className="mb-12">
                 <div className="flex gap-2 mb-4">
-                  {[1, 2, 3, 4].map((i) => (
+                  {[1, 2, 3, 4, 5].map((i) => (
                     <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-500 ${step >= i ? 'bg-black' : 'bg-black/10'}`} />
                   ))}
                 </div>
@@ -76,8 +90,8 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                     <h3 className="text-4xl font-black uppercase tracking-tighter italic mb-8">Wybierz bazę</h3>
                     <div className="grid grid-cols-2 gap-4">
                       {[
-                        { id: 'hoodie', name: 'Bluza Oversize', desc: '300g/m2 - Szary, Czarny, Biały' },
-                        { id: 'tshirt', name: 'Koszulka Premium', desc: '200g/m2 - Szary, Czarny, Biały' },
+                        { id: 'hoodie', name: 'Bluza Oversize', desc: '300g/m2' },
+                        { id: 'tshirt', name: 'Koszulka Premium', desc: '200g/m2' },
                       ].map((item) => (
                         <button
                           key={item.id}
@@ -94,27 +108,64 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
 
                 {step === 2 && (
                   <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-                    <h3 className="text-4xl font-black uppercase tracking-tighter italic mb-8">Prześlij projekt</h3>
-                    <div className="bg-white border-2 border-dashed border-black/10 rounded-3xl p-12 flex flex-col items-center justify-center gap-6 relative">
-                      <div className="w-20 h-20 bg-black/5 rounded-full flex items-center justify-center">
-                        <Upload size={32} />
-                      </div>
-                      <div className="text-center">
-                        <p className="font-black uppercase text-xs mb-2">Kliknij aby przesłać plik</p>
-                        <p className="text-[10px] font-bold opacity-30 uppercase">PNG, JPG LUB SVG (MAX 10MB)</p>
-                      </div>
-                      <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => {
-                        if (e.target.files?.[0]) {
-                          setFormData({...formData, file: e.target.files[0]});
-                          nextStep();
-                        }
-                      }} />
+                    <h3 className="text-4xl font-black uppercase tracking-tighter italic mb-8">Wybierz kolor</h3>
+                    <div className="grid grid-cols-3 gap-4 mb-8">
+                      {[
+                        { name: 'Czarny', extra: 0, color: '#000000' },
+                        { name: 'Biały', extra: 0, color: '#FFFFFF' },
+                        { name: 'Szary', extra: 0, color: '#808080' },
+                        { name: 'Powder Pink', extra: 40, color: '#FFD1DC' },
+                        { name: 'Baby Blue', extra: 40, color: '#89CFF0' },
+                      ].map((c) => (
+                        <button
+                          key={c.name}
+                          onClick={() => setFormData({...formData, color: c.name})}
+                          className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${formData.color === c.name ? 'border-black bg-white shadow-xl scale-105' : 'border-transparent bg-black/5 opacity-60'}`}
+                        >
+                          <div className="w-8 h-8 rounded-full border border-black/10 shadow-inner" style={{ backgroundColor: c.color }} />
+                          <span className="text-[10px] font-black uppercase tracking-tighter">{c.name}</span>
+                          {c.extra > 0 && <span className="text-[8px] font-bold text-black/40">+ {c.extra} PLN</span>}
+                        </button>
+                      ))}
                     </div>
-                    <button onClick={prevStep} className="mt-8 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">← Wróć do wyboru bazy</button>
+                    <div className="flex gap-4">
+                       <button onClick={prevStep} className="flex-1 py-5 font-black uppercase tracking-widest text-xs border border-black/10 rounded-full">Wróć</button>
+                       <button onClick={nextStep} className="flex-[2] bg-black text-white py-5 rounded-full font-black uppercase tracking-widest text-sm">Kontynuuj</button>
+                    </div>
                   </motion.div>
                 )}
 
                 {step === 3 && (
+                  <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+                    <h3 className="text-4xl font-black uppercase tracking-tighter italic mb-8">Prześlij projekt</h3>
+                    <div className={`bg-white border-2 border-dashed rounded-3xl p-12 flex flex-col items-center justify-center gap-6 relative transition-colors ${fileError ? 'border-red-500 bg-red-50' : 'border-black/10'}`}>
+                      <div className={`w-20 h-20 rounded-full flex items-center justify-center ${fileError ? 'bg-red-100 text-red-500' : 'bg-black/5'}`}>
+                        <Upload size={32} />
+                      </div>
+                      <div className="text-center">
+                        <p className="font-black uppercase text-xs mb-2">Kliknij aby przesłać plik</p>
+                        <p className="text-[10px] font-bold opacity-30 uppercase">PNG, SVG LUB TIFF (MAX 10MB)</p>
+                      </div>
+                      <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const ext = file.name.split('.').pop()?.toLowerCase();
+                          if (['png', 'svg', 'tiff', 'tif'].includes(ext || '')) {
+                            setFileError(null);
+                            setFormData({...formData, file: file});
+                            nextStep();
+                          } else {
+                            setFileError('Nie obsługiwany format');
+                          }
+                        }
+                      }} />
+                    </div>
+                    {fileError && <p className="text-red-500 text-[10px] font-black uppercase tracking-widest mt-4 text-center">{fileError}</p>}
+                    <button onClick={prevStep} className="mt-8 text-[10px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">← Wróć do wyboru koloru</button>
+                  </motion.div>
+                )}
+
+                {step === 4 && (
                   <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
                     <h3 className="text-4xl font-black uppercase tracking-tighter italic mb-8">Ważne informacje</h3>
                     <div className="space-y-6">
@@ -145,17 +196,23 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                   </motion.div>
                 )}
 
-                {step === 4 && (
+                {step === 5 && (
                   <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
                     <div className="space-y-8">
                       <h3 className="text-4xl font-black uppercase tracking-tighter italic mb-4">Potwierdź dane</h3>
                       <div className="bg-white p-8 rounded-3xl space-y-6">
                         <div>
                           <p className="text-[10px] font-black uppercase text-black/30 mb-2">Twój e-mail kontaktowy:</p>
-                          <div className="flex items-center gap-4 bg-black/5 px-6 py-4 rounded-xl border border-black/5">
-                            <Mail size={18} className="opacity-40" />
-                            <span className="font-black uppercase text-sm">{formData.email}</span>
-                          </div>
+                          <input
+                            type="email"
+                            value={formData.email}
+                            onChange={(e) => setFormData({...formData, email: e.target.value})}
+                            className="w-full bg-black/5 px-6 py-4 rounded-xl border border-black/5 font-black uppercase text-sm focus:outline-none focus:border-black"
+                          />
+                        </div>
+                        <div className="flex justify-between items-center text-[10px] font-black uppercase">
+                           <span className="opacity-30">Wybrany kolor:</span>
+                           <span>{formData.color}</span>
                         </div>
                         <p className="text-[10px] font-bold opacity-40 uppercase leading-relaxed">Na ten adres prześlemy informację o akceptacji projektu oraz wycenę końcową.</p>
                       </div>
@@ -167,18 +224,18 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                   </motion.div>
                 )}
 
-                {step === 5 && (
+                {step === 6 && (
                   <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center space-y-8 py-12">
-                <div className="w-24 h-24 bg-black rounded-full flex items-center justify-center mx-auto text-white">
-                  <Check size={48} strokeWidth={3} />
-                </div>
-                <div>
-                  <h3 className="text-4xl font-black uppercase tracking-tighter italic mb-4">Zlecenie wysłane!</h3>
-                  <p className="text-xs font-bold opacity-50 uppercase px-12 leading-relaxed">
-                    Dziękujemy! Twój projekt trafił do naszych designerów. Otrzymasz maila z informacją czy podejmiemy się realizacji Twojego haftu.
-                  </p>
-                </div>
-                    <button onClick={onClose} className="w-full bg-black text-white py-5 rounded-full font-black uppercase tracking-widest text-sm">Powrót do sklepu</button>
+                    <div className="w-24 h-24 bg-black rounded-full flex items-center justify-center mx-auto text-white">
+                      <Check size={48} strokeWidth={3} />
+                    </div>
+                    <div>
+                      <h3 className="text-4xl font-black uppercase tracking-tighter italic mb-4">Zlecenie wysłane!</h3>
+                      <p className="text-xs font-bold opacity-50 uppercase px-12 leading-relaxed">
+                        Dziękujemy! Twój projekt trafił do naszych designerów. Otrzymasz maila z informacją czy podejmiemy się realizacji Twojego haftu.
+                      </p>
+                    </div>
+                    <button onClick={() => { resetWizard(); onClose(); }} className="w-full bg-black text-white py-5 rounded-full font-black uppercase tracking-widest text-sm">Kolejne zamówienie</button>
                   </motion.div>
                 )}
               </div>

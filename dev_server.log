@@ -1,0 +1,25 @@
+
+> twww-premium-store@0.1.0 dev
+> next dev
+
+ ⚠ Port 3000 is in use, trying 3001 instead.
+ ⚠ Port 3001 is in use, trying 3002 instead.
+ ⚠ Port 3002 is in use, trying 3003 instead.
+ ⚠ Port 3003 is in use, trying 3004 instead.
+ ⚠ Port 3004 is in use, trying 3005 instead.
+ ⚠ Port 3005 is in use, trying 3006 instead.
+ ⚠ Port 3006 is in use, trying 3007 instead.
+ ⚠ Port 3007 is in use, trying 3008 instead.
+ ⚠ Port 3008 is in use, trying 3009 instead.
+   ▲ Next.js 15.0.8
+   - Local:        http://localhost:3009
+
+ ✓ Starting...
+ ✓ Ready in 1952ms
+ ○ Compiling /src/middleware ...
+ ✓ Compiled /src/middleware in 810ms (91 modules)
+ ○ Compiling /maintenance ...
+ ✓ Compiled /maintenance in 8.2s (1312 modules)
+ GET /maintenance 200 in 9175ms
+ GET /maintenance 200 in 114ms
+ GET /maintenance 200 in 46ms

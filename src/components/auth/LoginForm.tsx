@@ -123,10 +123,19 @@ export const LoginForm = () => {
                 {isLogin ? 'Zaloguj się' : 'Dołącz do squadu'}
               </button>
 
-              <div className="text-center pt-4">
+              <div className="flex flex-col items-center gap-4 pt-4">
                  <button type="button" className="text-[10px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity">
                    Zapomniałeś hasła?
                  </button>
+                 {isLogin && (
+                    <button
+                      type="button"
+                      onClick={() => setIsLogin(false)}
+                      className="text-[10px] font-black uppercase tracking-widest text-black/60 hover:text-black transition-colors"
+                    >
+                      Nie masz konta? Zarejestruj je tutaj
+                    </button>
+                 )}
               </div>
             </form>
 
