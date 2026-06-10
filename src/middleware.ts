@@ -14,6 +14,21 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Bypass maintenance mode with a secret query param: ?squad=access
+  const hasAccess = request.cookies.has('twww_access');
+  const isSecretParam = request.nextUrl.searchParams.get('squad') === 'access';
+
+  if (hasAccess || isSecretParam) {
+    const response = NextResponse.next();
+    if (isSecretParam && !hasAccess) {
+      response.cookies.set('twww_access', 'true', {
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+        path: '/',
+      });
+    }
+    return response;
+  }
+
   // Redirect all other requests to the maintenance page
   const url = request.nextUrl.clone();
   url.pathname = '/maintenance';
