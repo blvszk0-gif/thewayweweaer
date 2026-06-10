@@ -68,6 +68,7 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
         >
           {item.images.map((img: string, idx: number) => (
             <div key={idx} className="min-w-full h-full snap-center">
+              <img src={img} alt={item.name} className={`w-full h-full object-cover grayscale transition-all duration-700 ${item.inStock ? 'group-hover:grayscale-0' : 'blur-sm grayscale'}`} />
               <img src={img} alt={item.name} className={`w-full h-full object-cover grayscale transition-all duration-700 ${item.inStock ? 'group-hover:grayscale-0' : 'blur-sm'}`} />
             </div>
           ))}
@@ -78,12 +79,14 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
           <>
             <button
               onClick={() => scroll('left')}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20"
               className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
             >
               <ChevronLeft size={16} />
             </button>
             <button
               onClick={() => scroll('right')}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20"
               className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
             >
               <ChevronRight size={16} />
@@ -91,6 +94,8 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
           </>
         )}
 
+        {/* Action Button - Trash (NOT BLURRED) */}
+        <div className="absolute top-6 right-6 flex flex-col gap-2 z-30">
         <div className="absolute top-6 right-6 flex flex-col gap-2 z-20">
           <button
             onClick={() => onRemove(item.id)}
