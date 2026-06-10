@@ -71,13 +71,13 @@ export const HeroSlider = () => {
             onClick={prevSlide}
             className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors p-2 ${isDark ? 'text-white/20 hover:text-white' : 'text-black/20 hover:text-black'}`}
           >
-            <ChevronLeft size={32} className="w-8 h-8 sm:w-16 sm:h-16" strokeWidth={1} />
+            <ChevronLeft size={32} strokeWidth={1} />
           </button>
           <button
             onClick={nextSlide}
             className={`absolute right-4 top-1/2 -translate-y-1/2 transition-colors p-2 ${isDark ? 'text-white/20 hover:text-white' : 'text-black/20 hover:text-black'}`}
           >
-            <ChevronRight size={32} className="w-8 h-8 sm:w-16 sm:h-16" strokeWidth={1} />
+            <ChevronRight size={32} strokeWidth={1} />
           </button>
 
           {/* Caption with dynamic contrast */}

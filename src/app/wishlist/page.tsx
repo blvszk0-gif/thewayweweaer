@@ -78,20 +78,21 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
           <>
             <button
               onClick={() => scroll('left')}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20"
             >
               <ChevronLeft size={16} />
             </button>
             <button
               onClick={() => scroll('right')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20"
             >
               <ChevronRight size={16} />
             </button>
           </>
         )}
 
-        <div className="absolute top-6 right-6 flex flex-col gap-2 z-20">
+        {/* Action Button - Trash (NOT BLURRED) */}
+        <div className="absolute top-6 right-6 flex flex-col gap-2 z-30">
           <button
             onClick={() => onRemove(item.id)}
             className="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-xl"

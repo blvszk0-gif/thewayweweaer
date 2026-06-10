@@ -49,7 +49,7 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 mt-24 pt-8 border-t border-white/5 flex flex-col md:row justify-between items-center gap-4 text-[10px] font-bold text-white/20 tracking-[0.4em] uppercase">
+      <div className="container mx-auto px-6 mt-24 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold text-white/20 tracking-[0.4em] uppercase">
         <p>© 2025 THE WAY WE WEAR. ALL RIGHTS RESERVED.</p>
         <div className="flex gap-8">
            <span>VISA</span>

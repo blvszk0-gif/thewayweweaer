@@ -31,7 +31,12 @@ export default function SuccessPage() {
 
     setTimeout(() => {
       setIsSpinning(false);
-      const prizeIndex = Math.floor((360 - (newRotation % 360)) / (360 / prizes.length));
+      // Normalized rotation within 0-359
+      const normalizedRotation = newRotation % 360;
+      // Pointer is at -90 degrees relative to wheel starting point (top)
+      // Index = floor((360 - normalized) / segment_size)
+      const sliceSize = 360 / prizes.length;
+      const prizeIndex = Math.floor((360 - normalizedRotation) / sliceSize) % prizes.length;
       setWonPrize(prizes[prizeIndex].label);
     }, 4000);
   };
