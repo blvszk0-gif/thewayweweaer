@@ -36,7 +36,8 @@ export default function CategoryPage() {
             id: item.id,
             name: item.name,
             price: Number(item.price),
-            image: pb.files.getUrl(item, item.image)
+            image: pb.files.getUrl(item, item.image || (item.images && item.images[0])),
+            category: item.category
           })));
         }
       } catch {
@@ -84,7 +85,7 @@ export default function CategoryPage() {
         {/* Product Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
            {products.slice(0, displayCount).map((p) => (
-             <ProductCard key={p.id} {...p} />
+             <ProductCard key={p.id} {...p} category={category} />
            ))}
         </div>
 

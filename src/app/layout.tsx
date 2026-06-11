@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Antonio } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { BackToTop } from "@/components/ui/BackToTop";
+import { StoreProvider } from "@/context/StoreContext";
 import "./globals.css";
 
 const antonio = Antonio({
@@ -24,8 +25,10 @@ export default function RootLayout({
   return (
     <html lang="pl" className={`${antonio.variable}`}>
       <body className="font-antonio antialiased">
-        {children}
-        <BackToTop />
+        <StoreProvider>
+          {children}
+          <BackToTop />
+        </StoreProvider>
         <SpeedInsights />
       </body>
     </html>

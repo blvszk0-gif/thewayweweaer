@@ -40,7 +40,7 @@ export default function MaintenancePage() {
         </div>
 
         <div className="mt-20 pt-12 border-t border-[color:var(--border)]/20">
-           <p className="text-[9px] font-black uppercase tracking-[0.2em] opacity-40">© 2025 THE WAY WE WEAR // SQUAD ONLY</p>
+           <p className="text-[9px] font-black uppercase tracking-[0.2em] opacity-40">© 2026 THE WAY WE WEAR // SQUAD ONLY</p>
         </div>
       </motion.div>
 

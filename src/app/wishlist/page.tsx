@@ -6,6 +6,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Heart, Bell, ShoppingBag, Trash2, ArrowRight, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useStore } from '@/context/StoreContext';
 
 interface WishlistItem {
   id: string;
@@ -44,6 +45,7 @@ const wishlistItemsData: WishlistItem[] = [
 ];
 
 const WishlistProductCard = ({ item, onRemove, onNotify }: { item: WishlistItem, onRemove: (id: string) => void, onNotify: (id: string) => void }) => {
+  const { addToCart } = useStore();
   const [currentImg, setCurrentImg] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -60,6 +62,16 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: WishlistItem,
       const index = Math.round(scrollRef.current.scrollLeft / scrollRef.current.clientWidth);
       setCurrentImg(index);
     }
+  };
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      image: item.images[0],
+      quantity: 1
+    });
   };
 
   return (
@@ -127,21 +139,24 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: WishlistItem,
       <div className="p-8 flex-1 flex flex-col">
          <p className="text-[10px] font-black uppercase tracking-widest text-[color:var(--foreground)]/40 mb-2">{item.category}</p>
          <Link href={`/product/${item.id}`} className="hover:opacity-60 transition-opacity">
-          <h3 className="text-xl font-black uppercase tracking-tighter italic mb-4 leading-none">{item.name}</h3>
+          <h3 className="text-xl font-black uppercase tracking-tighter italic mb-4 leading-none text-[color:var(--foreground)]">{item.name}</h3>
          </Link>
          <div className="flex justify-between items-center mb-8">
-           <span className="text-lg font-black">{item.price} PLN</span>
+           <span className="text-lg font-black text-[color:var(--foreground)]">{item.price} PLN</span>
          </div>
 
          <div className="space-y-3 mt-auto">
            {item.inStock ? (
-             <button className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--surface)] hover:text-[color:var(--foreground)] transition-all shadow-lg group/btn">
+             <button
+              onClick={handleAddToCart}
+              className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all shadow-lg group/btn"
+             >
                <ShoppingBag size={14} className="group-hover/btn:scale-110 transition-transform" /> Dodaj do koszyka
              </button>
            ) : (
              <button
               onClick={() => onNotify(item.id)}
-              className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--surface)] hover:text-[color:var(--foreground)] transition-all shadow-lg"
+              className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all shadow-lg"
              >
                {item.isNotified ? (
                  <>Powiadomimy Cię o zapasie</>
@@ -150,7 +165,7 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: WishlistItem,
                )}
              </button>
            )}
-           <button className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)]/60 py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--surface)] hover:text-[color:var(--foreground)] transition-all">
+           <button className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)]/60 py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all">
               <Bell size={14} /> Powiadom o promocji
            </button>
          </div>

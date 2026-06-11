@@ -50,7 +50,7 @@ export const Footer = () => {
       </div>
 
       <div className="container mx-auto px-6 mt-24 pt-8 border-t border-[color:var(--border)] flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold text-[color:var(--foreground)]/30 tracking-[0.4em] uppercase">
-        <p>© 2025 THE WAY WE WEAR. ALL RIGHTS RESERVED.</p>
+        <p>© 2026 THE WAY WE WEAR. ALL RIGHTS RESERVED.</p>
         <div className="flex flex-col md:flex-row items-center gap-4">
           <div className="flex flex-wrap items-center gap-3 text-[color:var(--foreground)]/80 uppercase tracking-[0.4em] text-[10px]">
             <span>Zmień język na:</span>

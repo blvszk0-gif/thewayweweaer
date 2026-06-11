@@ -29,11 +29,13 @@ export const HeroSlider = () => {
   const prevSlide = () => setCurrent((prev) => (prev - 1 + collection.items.length) % collection.items.length);
   const nextSlide = () => setCurrent((prev) => (prev + 1) % collection.items.length);
 
+  const slide = collection.items[current];
+
   return (
     <section className="relative w-full overflow-hidden bg-[color:var(--surface)] pt-24 pb-12 font-antonio">
       <div className="container mx-auto px-6 mb-8">
         <Link href="/shop/stare" className="group inline-flex flex-col">
-          <span className="text-[10px] font-black text-[color:var(--foreground)]/45 tracking-[0.3em] uppercase mb-1">Project: TWWW // Subject:</span>
+          <span className="text-[10px] font-black text-[color:var(--foreground)]/30 tracking-[0.3em] uppercase mb-1">Project: TWWW // Subject:</span>
           <span className="text-3xl md:text-5xl font-black uppercase tracking-tighter group-hover:pl-4 transition-all duration-500 italic font-antonio text-[color:var(--foreground)]">
             {collection.name}
           </span>
@@ -41,11 +43,11 @@ export const HeroSlider = () => {
       </div>
 
       <div className="container mx-auto px-6 flex flex-col lg:flex-row gap-8 items-center max-w-6xl">
-        <div className="relative w-full max-w-6xl mx-auto overflow-hidden rounded-3xl bg-[color:var(--surface-muted)] aspect-video sm:aspect-video lg:flex-1 group/slider shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]">
+        <div className="relative w-full max-w-6xl mx-auto overflow-hidden rounded-3xl bg-[color:var(--surface-muted)] aspect-video sm:aspect-video lg:flex-1 group/slider shadow-2xl border border-[color:var(--border)]">
           <AnimatePresence mode="wait">
             <motion.img
               key={current}
-              src={collection.items[current].img}
+              src={slide.img}
               initial={{ opacity: 0, scale: 1.1 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
@@ -64,24 +66,24 @@ export const HeroSlider = () => {
              </button>
           </div>
 
-          {/* Navigation Controls */}
+          {/* Navigation Controls - Forced Contrast */}
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-[color:var(--foreground)]/50 hover:text-[color:var(--foreground)] transition-colors p-2"
+            className={`absolute left-4 top-1/2 -translate-y-1/2 transition-all p-2 rounded-full backdrop-blur-md border border-white/10 ${slide.dark ? 'text-white bg-black/20 hover:bg-black/40' : 'text-black bg-white/20 hover:bg-white/40'}`}
           >
-            <ChevronLeft size={32} className="w-8 h-8 sm:w-16 sm:h-16" strokeWidth={1} />
+            <ChevronLeft size={32} strokeWidth={1} />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-[color:var(--foreground)]/50 hover:text-[color:var(--foreground)] transition-colors p-2"
+            className={`absolute right-4 top-1/2 -translate-y-1/2 transition-all p-2 rounded-full backdrop-blur-md border border-white/10 ${slide.dark ? 'text-white bg-black/20 hover:bg-black/40' : 'text-black bg-white/20 hover:bg-white/40'}`}
           >
-            <ChevronRight size={32} className="w-8 h-8 sm:w-16 sm:h-16" strokeWidth={1} />
+            <ChevronRight size={32} strokeWidth={1} />
           </button>
 
-          {/* Caption with dynamic contrast */}
-          <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 text-[color:var(--foreground)] transition-colors duration-500 p-4 rounded-xl bg-[color:var(--surface)]/90 max-w-[80%] sm:max-w-[60%]">
-             <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] mb-1 text-[color:var(--foreground)]/40">Slide 0{current + 1} / 0{collection.items.length}</p>
-             <h3 className="text-base sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-antonio text-[color:var(--foreground)]">{collection.items[current].name}</h3>
+          {/* Caption with forced contrast based on SLIDE color, independent of theme */}
+          <div className={`absolute bottom-6 left-6 sm:bottom-10 sm:left-10 transition-all duration-500 p-6 rounded-[2rem] backdrop-blur-xl border border-white/10 ${slide.dark ? 'bg-black/40 text-white shadow-[0_0_50px_rgba(0,0,0,0.3)]' : 'bg-white/40 text-black shadow-[0_0_50px_rgba(255,255,255,0.3)]'}`}>
+             <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] mb-2 ${slide.dark ? 'text-white/40' : 'text-black/40'}`}>Slide 0{current + 1} / 0{collection.items.length}</p>
+             <h3 className="text-base sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-antonio">{slide.name}</h3>
           </div>
         </div>
 

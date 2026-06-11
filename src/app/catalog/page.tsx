@@ -7,12 +7,12 @@ import { Footer } from '@/components/layout/Footer';
 import { ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
 
 const PAGES = [
-  { id: 1, title: 'THE WAY WE WEAR', content: 'SEASON 2025 // LOOKBOOK', image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800' },
+  { id: 1, title: 'THE WAY WE WEAR', content: 'SEASON 2026 // LOOKBOOK', image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800' },
   { id: 2, title: 'OVERSIZE CULTURE', content: 'STREETWEAR // GAMING // GEEK', image: 'https://images.unsplash.com/photo-1554412933-514a83d2f3c8?auto=format&fit=crop&q=80&w=800' },
   { id: 3, title: 'PREMIUM QUALITY', content: '80% BAWEŁNA CZESANA', image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&q=80&w=800' },
   { id: 4, title: 'CUSTOM EMBROIDERY', content: 'TWOJA GRAFIKA // NASZA PASJA', image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=800' },
   { id: 5, title: 'SQUAD ONLY', content: 'DOŁĄCZ DO NAS NA DISCORDZIE', image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=800' },
-  { id: 6, title: 'TWWW // 2025', content: 'KONIEC KATALOGU', image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800' },
+  { id: 6, title: 'TWWW // 2026', content: 'KONIEC KATALOGU', image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800' },
 ];
 
 export default function CatalogPage() {
@@ -47,7 +47,7 @@ export default function CatalogPage() {
 
       <div className="container mx-auto px-6 pt-40 pb-20 min-h-[80vh] flex flex-col items-center justify-center">
         <div className="mb-8 text-center">
-          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-[color:var(--foreground)]/30 mb-2">Digital Lookbook // 2025</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-[color:var(--foreground)]/30 mb-2">Digital Lookbook // 2026</p>
           <h1 className="text-5xl font-black uppercase tracking-tighter italic">Katalog TWWW</h1>
         </div>
 
