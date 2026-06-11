@@ -6,8 +6,10 @@ import { Search, User, ShoppingBag, Heart, Moon, ChevronRight, X } from 'lucide-
 import { motion, AnimatePresence } from 'framer-motion';
 import { HaftWizard } from '../shop/HaftWizard';
 import { LoginForm } from '../auth/LoginForm';
+import { useStore } from '@/context/StoreContext';
 
 export const Header = () => {
+  const { cart, wishlist } = useStore();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,18 +55,25 @@ export const Header = () => {
             aria-haspopup="dialog"
             aria-label={isMenuOpen ? 'Zamknij menu' : 'Otwórz menu'}
             type="button"
-            className="relative w-8 h-8 flex items-center justify-center group z-[80]"
+            className="relative w-10 h-10 flex items-center justify-center group z-[80]"
           >
-            <div className="relative w-6 h-6 flex flex-col justify-between">
-              <span className="block h-0.5 w-full bg-[color:var(--foreground)] transition-all" />
-              <span className="block h-0.5 w-full bg-[color:var(--foreground)] transition-all" />
-              <span className="block h-0.5 w-full bg-[color:var(--foreground)] transition-all" />
+            <div className="relative w-6 h-3 flex flex-col justify-between overflow-hidden">
+              <motion.span
+                animate={isMenuOpen ? { rotate: 45, y: 5.5 } : { rotate: 0, y: 0 }}
+                className="block h-0.5 w-full bg-[color:var(--foreground)] origin-center transition-all"
+              />
+              <motion.span
+                animate={isMenuOpen ? { rotate: -45, y: -5.5 } : { rotate: 0, y: 0 }}
+                className="block h-0.5 w-full bg-[color:var(--foreground)] origin-center transition-all"
+              />
             </div>
           </button>
 
-          {/* Center: Logo */}
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-center text-[color:var(--foreground)]">
-             <span className="text-xl md:text-2xl font-black tracking-tighter block leading-none font-abel">The Way WE Wear</span>
+          {/* Center: Logo with background for contrast */}
+          <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-center flex items-center justify-center group z-[80]">
+             <div className="bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-black/5 group-hover:scale-105 transition-transform">
+               <img src="/logo.png" alt="TWWW Logo" className="h-6 md:h-8 w-auto object-contain" />
+             </div>
           </Link>
 
           {/* Right: Actions */}
@@ -74,10 +83,19 @@ export const Header = () => {
               <input type="text" placeholder="SZUKAJ..." className="bg-transparent border-none text-xs focus:outline-none w-24 xl:w-32 uppercase font-black text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50" />
             </div>
             <button onClick={() => setIsLoginModalOpen(true)} className="text-[color:var(--foreground)] outline-none"><User size={20} className="md:w-[22px] md:h-[22px]" /></button>
-            <Link href="/wishlist" className="text-[color:var(--foreground)]"><Heart size={20} className="md:w-[22px] md:h-[22px]" /></Link>
+            <Link href="/wishlist" className="relative text-[color:var(--foreground)]">
+              <Heart size={20} className="md:w-[22px] md:h-[22px]" />
+              {wishlist.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] md:text-[10px] font-black w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center font-antonio animate-pulse">
+                  {wishlist.length}
+                </span>
+              )}
+            </Link>
             <Link href="/cart" className="relative text-[color:var(--foreground)]">
               <ShoppingBag size={20} className="md:w-[22px] md:h-[22px]" />
-              <span className="absolute -top-2 -right-2 bg-[color:var(--foreground)] text-[color:var(--surface)] text-[9px] md:text-[10px] font-black w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center font-abel">0</span>
+              <span className="absolute -top-2 -right-2 bg-[color:var(--foreground)] text-[color:var(--surface)] text-[9px] md:text-[10px] font-black w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center font-antonio">
+                {cart.reduce((acc, item) => acc + item.quantity, 0)}
+              </span>
             </Link>
             <button
               type="button"
@@ -125,8 +143,8 @@ export const Header = () => {
                 <input type="text" placeholder="SZUKAJ PRODUKTU..." className="bg-transparent border-none text-sm focus:outline-none flex-1 uppercase font-black text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50" />
               </div>
 
-              <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-tighter overflow-y-auto no-scrollbar font-abel text-[color:var(--foreground)]">
-                <div className="text-xs text-[color:var(--foreground)] font-bold opacity-70 mb-2 font-abel">Project: TWWW // Subject:</div>
+              <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-tighter overflow-y-auto no-scrollbar font-antonio text-[color:var(--foreground)]">
+                <div className="text-xs text-[color:var(--foreground)] font-bold opacity-70 mb-2 font-antonio">Project: TWWW // Subject:</div>
 
                 <Link href="/shop/bluzy" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Bluzy</Link>
                 <Link href="/shop/koszulki" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Koszulki</Link>
@@ -163,10 +181,18 @@ export const Header = () => {
                 >
                   Haft na zamówienie
                 </button>
+
+                <Link
+                  href="/account"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="bg-black text-white px-6 py-4 rounded-full text-center text-sm font-black uppercase tracking-widest hover:scale-105 transition-transform mt-4"
+                >
+                  Podgląd Konta
+                </Link>
               </div>
 
               <div className="mt-auto pt-12 text-[10px] font-bold text-[color:var(--foreground)]/50 tracking-widest uppercase">
-                © 2025 THE WAY WE WEAR
+                © 2026 THE WAY WE WEAR
               </div>
             </motion.div>
           </>

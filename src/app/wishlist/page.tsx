@@ -6,8 +6,20 @@ import { Footer } from '@/components/layout/Footer';
 import { Heart, Bell, ShoppingBag, Trash2, ArrowRight, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useStore } from '@/context/StoreContext';
 
-const wishlistItemsData = [
+interface WishlistItem {
+  id: string;
+  name: string;
+  price: number;
+  images: string[];
+  inStock: boolean;
+  category: string;
+  isNotified?: boolean;
+  isPromoNotified?: boolean;
+}
+
+const wishlistItemsData: WishlistItem[] = [
   {
     id: 'twww-hoodie-01',
     name: 'OVERSIZE HOODIE // THE WAY WE STARE',
@@ -33,7 +45,8 @@ const wishlistItemsData = [
   }
 ];
 
-const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove: (id: string) => void, onNotify: (id: string) => void }) => {
+const WishlistProductCard = ({ item, onRemove, onNotify, onNotifyPromo }: { item: WishlistItem, onRemove: (id: string) => void, onNotify: (id: string) => void, onNotifyPromo: (id: string) => void }) => {
+  const { addToCart } = useStore();
   const [currentImg, setCurrentImg] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -52,8 +65,18 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
     }
   };
 
+  const handleAddToCart = () => {
+    addToCart({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      image: item.images[0],
+      quantity: 1
+    });
+  };
+
   return (
-    <motion.div 
+    <motion.div
       layout
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -61,7 +84,7 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
       className="bg-[color:var(--surface)] rounded-[40px] overflow-hidden shadow-2xl border border-[color:var(--border)] group flex flex-col relative"
     >
       <div className="aspect-[4/5] relative overflow-hidden bg-[color:var(--surface-muted)]">
-        <div 
+        <div
           ref={scrollRef}
           onScroll={handleScroll}
           className="flex overflow-x-auto snap-x snap-mandatory h-full no-scrollbar"
@@ -72,19 +95,19 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
             </div>
           ))}
         </div>
-        
+
         {/* Navigation Arrows */}
         {item.images.length > 1 && (
           <>
-            <button 
+            <button
               onClick={() => scroll('left')}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-[color:var(--surface-muted)]/80 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20"
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-[color:var(--surface-muted)]/80 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20 text-[color:var(--foreground)]"
             >
               <ChevronLeft size={16} />
             </button>
-            <button 
+            <button
               onClick={() => scroll('right')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-[color:var(--surface-muted)]/80 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20"
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-[color:var(--surface-muted)]/80 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20 text-[color:var(--foreground)]"
             >
               <ChevronRight size={16} />
             </button>
@@ -93,7 +116,7 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
 
         {/* Action Button - Trash (NOT BLURRED) */}
         <div className="absolute top-6 right-6 flex flex-col gap-2 z-30">
-          <button 
+          <button
             onClick={() => onRemove(item.id)}
             className="w-10 h-10 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center hover:brightness-90 transition-all shadow-xl"
           >
@@ -117,21 +140,24 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
       <div className="p-8 flex-1 flex flex-col">
          <p className="text-[10px] font-black uppercase tracking-widest text-[color:var(--foreground)]/40 mb-2">{item.category}</p>
          <Link href={`/product/${item.id}`} className="hover:opacity-60 transition-opacity">
-          <h3 className="text-xl font-black uppercase tracking-tighter italic mb-4 leading-none">{item.name}</h3>
+          <h3 className="text-xl font-black uppercase tracking-tighter italic mb-4 leading-none text-[color:var(--foreground)]">{item.name}</h3>
          </Link>
          <div className="flex justify-between items-center mb-8">
-           <span className="text-lg font-black">{item.price} PLN</span>
+           <span className="text-lg font-black text-[color:var(--foreground)]">{item.price} PLN</span>
          </div>
 
          <div className="space-y-3 mt-auto">
            {item.inStock ? (
-             <button className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--surface)] hover:text-[color:var(--foreground)] transition-all shadow-lg group/btn">
+             <button
+              onClick={handleAddToCart}
+              className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all shadow-lg group/btn"
+             >
                <ShoppingBag size={14} className="group-hover/btn:scale-110 transition-transform" /> Dodaj do koszyka
              </button>
            ) : (
-             <button 
+             <button
               onClick={() => onNotify(item.id)}
-              className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--surface)] hover:text-[color:var(--foreground)] transition-all shadow-lg"
+              className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all shadow-lg"
              >
                {item.isNotified ? (
                  <>Powiadomimy Cię o zapasie</>
@@ -140,8 +166,15 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
                )}
              </button>
            )}
-           <button className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)]/60 py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--surface)] hover:text-[color:var(--foreground)] transition-all">
-              <Bell size={14} /> Powiadom o promocji
+           <button
+            onClick={() => onNotifyPromo(item.id)}
+            className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)]/60 py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all border border-transparent hover:border-[color:var(--border)]"
+           >
+              {item.isPromoNotified ? (
+                <>Powiadomimy Cię o promocji</>
+              ) : (
+                <><Bell size={14} /> Powiadom o promocji</>
+              )}
            </button>
          </div>
       </div>
@@ -152,23 +185,32 @@ const WishlistProductCard = ({ item, onRemove, onNotify }: { item: any, onRemove
 export default function WishlistPage() {
   const [items, setItems] = useState(wishlistItemsData);
   const [filter, setFilter] = useState('Wszystko');
-  const [emailPrompt, setEmailPrompt] = useState<string | null>(null);
+  const [emailPrompt, setEmailPrompt] = useState<{ id: string, type: 'stock' | 'promo' } | null>(null);
   const [newsletterModalOpen, setNewsletterModalOpen] = useState(false);
   const [userEmail] = useState('twoj@poczta.com');
   const [newsletterEmail, setNewsletterEmail] = useState(userEmail);
   const [newsletterSaved, setNewsletterSaved] = useState(false);
   const [notifiedItems, setNotifiedItems] = useState<string[]>([]);
+  const [promoNotifiedItems, setPromoNotifiedItems] = useState<string[]>([]);
   const [isLoggedIn] = useState(false); // Mock
 
-  const filteredItems = filter === 'Wszystko' 
-    ? items 
+  const filteredItems = filter === 'Wszystko'
+    ? items
     : items.filter(i => i.category === filter);
 
   const handleNotify = (id: string) => {
     if (isLoggedIn) {
       setNotifiedItems([...notifiedItems, id]);
     } else {
-      setEmailPrompt(id);
+      setEmailPrompt({ id, type: 'stock' });
+    }
+  };
+
+  const handleNotifyPromo = (id: string) => {
+    if (isLoggedIn) {
+      setPromoNotifiedItems([...promoNotifiedItems, id]);
+    } else {
+      setEmailPrompt({ id, type: 'promo' });
     }
   };
 
@@ -177,9 +219,9 @@ export default function WishlistPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-abel shadow-[inset_0_0_100px_rgba(0,0,0,0.1)]">
+    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio shadow-[inset_0_0_100px_rgba(0,0,0,0.1)]">
       <Header />
-      
+
       <div className="container mx-auto px-6 pt-40 pb-20">
         <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
           <div>
@@ -207,11 +249,16 @@ export default function WishlistPage() {
         {filteredItems.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredItems.map((item) => (
-              <WishlistProductCard 
-                key={item.id} 
-                item={{...item, isNotified: notifiedItems.includes(item.id)}} 
-                onRemove={removeItem} 
-                onNotify={handleNotify} 
+              <WishlistProductCard
+                key={item.id}
+                item={{
+                  ...item,
+                  isNotified: notifiedItems.includes(item.id),
+                  isPromoNotified: promoNotifiedItems.includes(item.id)
+                }}
+                onRemove={removeItem}
+                onNotify={handleNotify}
+                onNotifyPromo={handleNotifyPromo}
               />
             ))}
           </div>
@@ -221,7 +268,7 @@ export default function WishlistPage() {
                <Heart size={40} className="opacity-20" />
              </div>
              <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4">Pusto tu...</h2>
-             <p className="text-[color:var(--foreground)]/48 font-bold uppercase tracking-widest text-xs mb-8">Twoja wishlista czeka na pierwsze dropy.</p>
+
              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
                <Link href="/shop/bluzy" className="inline-flex items-center justify-center gap-2 bg-[color:var(--foreground)] text-[color:var(--surface)] px-4 py-4 rounded-full font-black uppercase tracking-[0.2em] hover:bg-[color:var(--foreground)]/80 transition-all">Sprawdź nasze Bluzy</Link>
                <Link href="/shop/koszulki" className="inline-flex items-center justify-center gap-2 bg-[color:var(--foreground)] text-[color:var(--surface)] px-4 py-4 rounded-full font-black uppercase tracking-[0.2em] hover:bg-[color:var(--foreground)]/80 transition-all">Sprawdź nasze Koszulki</Link>
@@ -248,10 +295,18 @@ export default function WishlistPage() {
               <button onClick={() => setEmailPrompt(null)} className="absolute top-8 right-8 text-[color:var(--foreground)]/40 hover:text-[color:var(--foreground)]"><X size={24} /></button>
               <div className="w-16 h-16 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center mx-auto mb-8"><Bell size={32} /></div>
               <h3 className="text-2xl font-black uppercase tracking-tighter italic mb-4">Daj nam znać</h3>
-              <p className="text-[10px] font-bold uppercase opacity-40 tracking-widest leading-relaxed mb-8">Zostaw swój e-mail, a wyślemy Ci powiadomienie gdy tylko produkt wróci na stan.</p>
-              <input type="email" placeholder="TWOJA@POCZTA.COM" className="w-full bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-2xl px-6 py-4 font-black uppercase text-xs mb-4 focus:outline-none focus:border-[color:var(--foreground)]" />
-              <button 
-                onClick={() => { setNotifiedItems([...notifiedItems, emailPrompt]); setEmailPrompt(null); }}
+              <p className="text-[10px] font-bold uppercase opacity-40 tracking-widest leading-relaxed mb-8">
+                {emailPrompt.type === 'stock'
+                  ? 'Zostaw swój e-mail, a wyślemy Ci powiadomienie gdy tylko produkt wróci na stan.'
+                  : 'Zostaw swój e-mail, a damy Ci znać gdy tylko ten produkt trafi na promocję.'}
+              </p>
+              <input type="email" placeholder="TWOJA@POCZTA.COM" className="w-full bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-2xl px-6 py-4 font-black uppercase text-xs mb-4 focus:outline-none focus:border-[color:var(--foreground)] text-[color:var(--foreground)]" />
+              <button
+                onClick={() => {
+                  if (emailPrompt.type === 'stock') setNotifiedItems([...notifiedItems, emailPrompt.id]);
+                  else setPromoNotifiedItems([...promoNotifiedItems, emailPrompt.id]);
+                  setEmailPrompt(null);
+                }}
                 className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-5 rounded-full font-black uppercase tracking-widest text-xs shadow-xl"
               >
                 Powiadom mnie
@@ -274,7 +329,7 @@ export default function WishlistPage() {
                 type="email"
                 value={newsletterEmail}
                 onChange={(e) => setNewsletterEmail(e.target.value)}
-                className="w-full bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-2xl px-6 py-4 font-black uppercase text-xs mb-4 focus:outline-none focus:border-[color:var(--foreground)]"
+                className="w-full bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-2xl px-6 py-4 font-black uppercase text-xs mb-4 focus:outline-none focus:border-[color:var(--foreground)] text-[color:var(--foreground)]"
               />
               <button
                 onClick={() => {

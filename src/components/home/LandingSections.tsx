@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Star, Camera, Plus } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const reviews = [
   { id: 1, author: 'Kamil G.', rating: 5, text: 'Najlepsza bluza jaką miałem. Materiał 340G robi robotę, czuć tę jakość od razu po wyjęciu z pudełka.', photo: 'https://placehold.co/400x500/000000/FFFFFF?text=OPINIA+1' },
@@ -10,9 +10,50 @@ const reviews = [
   { id: 3, author: 'Alex_Gamer', rating: 4, text: 'Stylistyka 10/10. Rozmiarówka oversize idealnie trafiona.', photo: 'https://placehold.co/400x500/000000/FFFFFF?text=OPINIA+3' },
 ];
 
+const FAQItem = ({ q, a, i }: { q: string, a: string, i: number }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: i * 0.1 }}
+      className="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all"
+    >
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex justify-between items-center p-8 cursor-pointer text-[color:var(--foreground)] text-left focus:outline-none"
+      >
+        <span className="font-black uppercase tracking-widest text-sm">{q}</span>
+        <motion.span
+          animate={{ rotate: isOpen ? 45 : 0 }}
+          className="w-8 h-8 rounded-full bg-[color:var(--surface-muted)] flex items-center justify-center shrink-0"
+        >
+          <Plus size={16} />
+        </motion.span>
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.5, ease: [0.04, 0.62, 0.23, 0.98] }}
+          >
+            <div className="px-8 pb-8 text-sm font-bold uppercase opacity-70 leading-relaxed text-[color:var(--foreground)]">
+              {a}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
+
 export const LandingSections = () => {
   return (
-    <section className="py-24 font-abel">
+    <section className="py-24 font-antonio">
       <div className="container mx-auto px-6">
 
         {/* Reviews Section */}
@@ -85,17 +126,7 @@ export const LandingSections = () => {
                 a: "To nasz system lojalnościowy. Za każde zakupy zbierasz punkty, które wymienisz na zniżki lub dostęp do tajnych dropów."
               }
             ].map((item, i) => (
-              <details key={i} className="group bg-[color:var(--surface)] border border-[color:var(--border)] rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all">
-                <summary className="flex justify-between items-center p-8 cursor-pointer list-none text-[color:var(--foreground)]">
-                  <span className="font-black uppercase tracking-widest text-sm">{item.q}</span>
-                  <span className="w-8 h-8 rounded-full bg-[color:var(--surface-muted)] flex items-center justify-center group-open:rotate-45 transition-transform">
-                    <Plus size={16} />
-                  </span>
-                </summary>
-                <div className="px-8 pb-8 text-sm font-bold uppercase opacity-70 leading-relaxed text-[color:var(--foreground)]">
-                  {item.a}
-                </div>
-              </details>
+              <FAQItem key={i} q={item.q} a={item.a} i={i} />
             ))}
           </div>
         </div>
