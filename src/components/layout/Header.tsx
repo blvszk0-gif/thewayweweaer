@@ -53,18 +53,23 @@ export const Header = () => {
             aria-haspopup="dialog"
             aria-label={isMenuOpen ? 'Zamknij menu' : 'Otwórz menu'}
             type="button"
-            className="relative w-8 h-8 flex items-center justify-center group z-[80]"
+            className="relative w-10 h-10 flex items-center justify-center group z-[80]"
           >
-            <div className="relative w-6 h-6 flex flex-col justify-between">
-              <span className="block h-0.5 w-full bg-[color:var(--foreground)] transition-all" />
-              <span className="block h-0.5 w-full bg-[color:var(--foreground)] transition-all" />
-              <span className="block h-0.5 w-full bg-[color:var(--foreground)] transition-all" />
+            <div className="relative w-6 h-3 flex flex-col justify-between overflow-hidden">
+              <motion.span
+                animate={isMenuOpen ? { rotate: 45, y: 5.5 } : { rotate: 0, y: 0 }}
+                className="block h-0.5 w-full bg-[color:var(--foreground)] origin-center transition-all"
+              />
+              <motion.span
+                animate={isMenuOpen ? { rotate: -45, y: -5.5 } : { rotate: 0, y: 0 }}
+                className="block h-0.5 w-full bg-[color:var(--foreground)] origin-center transition-all"
+              />
             </div>
           </button>
 
           {/* Center: Logo */}
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-center text-[color:var(--foreground)]">
-             <span className="text-xl md:text-2xl font-black tracking-tighter block leading-none font-antonio">The Way WE Wear</span>
+          <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-center flex items-center justify-center">
+             <img src="/logo.png" alt="TWWW Logo" className="h-8 md:h-10 w-auto object-contain" />
           </Link>
 
           {/* Right: Actions */}

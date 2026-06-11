@@ -9,7 +9,18 @@ module.exports = {
       fontFamily: {
         antonio: ["var(--font-antonio)"],
       },
+      perspective: {
+        '2000': '2000px',
+      }
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.perspective-2000': {
+          perspective: '2000px',
+        },
+      })
+    }
+  ],
 };
