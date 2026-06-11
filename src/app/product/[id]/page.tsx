@@ -129,7 +129,7 @@ export default function ProductPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] font-abel text-[color:var(--foreground)] shadow-[inset_0_0_100px_rgba(0,0,0,0.1)] relative overflow-x-hidden">
+    <main className="min-h-screen bg-[color:var(--surface)] font-antonio text-[color:var(--foreground)] shadow-[inset_0_0_100px_rgba(0,0,0,0.1)] relative overflow-x-hidden">
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-repeat" />
       <Header />
 
@@ -203,16 +203,24 @@ export default function ProductPage() {
                         ))}
                       </div>
 
-                      <div className="flex flex-col gap-2">
-                        <p className="text-[9px] font-black uppercase tracking-widest opacity-20 italic">Premium Colors (+40 PLN):</p>
-                        <div className="flex gap-3">
+                      <div className="flex flex-col gap-4">
+                        <p className="text-[9px] font-black uppercase tracking-widest opacity-20 italic">Premium Colors:</p>
+                        <div className="flex flex-wrap gap-4">
                             {productData.premiumColors.map((color) => (
                                 <button
                                     key={color.name} onClick={() => { if (color.stock) setSelectedColor(color); }}
-                                    className={`w-12 h-12 rounded-full border-2 transition-all relative flex items-center justify-center ${selectedColor.name === color.name ? 'border-[color:var(--foreground)] scale-110 shadow-xl' : 'border-transparent'} ${!color.stock ? 'opacity-20 cursor-not-allowed grayscale' : ''}`}
-                                    style={{ backgroundColor: color.hex }}
+                                    className={`group/color relative flex items-center gap-3 pr-6 py-1 rounded-full border transition-all ${selectedColor.name === color.name ? 'border-black bg-white shadow-lg' : 'border-black/5 hover:border-black/20'}`}
                                 >
-                                    {!color.stock && <div className="absolute inset-0 flex items-center justify-center text-[color:var(--foreground)]"><X size={20} /></div>}
+                                    <div
+                                      className={`w-10 h-10 rounded-full border-2 transition-all ${selectedColor.name === color.name ? 'border-black scale-110 shadow-md' : 'border-transparent shadow-inner'}`}
+                                      style={{ backgroundColor: color.hex }}
+                                    >
+                                       {!color.stock && <div className="absolute inset-0 flex items-center justify-center text-black"><X size={16} /></div>}
+                                    </div>
+                                    <div className="flex flex-col items-start leading-none">
+                                      <span className="text-[10px] font-black uppercase tracking-tighter">{color.name}</span>
+                                      <span className="text-[8px] font-bold opacity-40 mt-1">+40 PLN</span>
+                                    </div>
                                 </button>
                             ))}
                         </div>

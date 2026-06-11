@@ -30,11 +30,11 @@ export const HeroSlider = () => {
   const nextSlide = () => setCurrent((prev) => (prev + 1) % collection.items.length);
 
   return (
-    <section className="relative w-full overflow-hidden bg-[color:var(--surface)] pt-24 pb-12 font-abel">
+    <section className="relative w-full overflow-hidden bg-[color:var(--surface)] pt-24 pb-12 font-antonio">
       <div className="container mx-auto px-6 mb-8">
         <Link href="/shop/stare" className="group inline-flex flex-col">
           <span className="text-[10px] font-black text-[color:var(--foreground)]/45 tracking-[0.3em] uppercase mb-1">Project: TWWW // Subject:</span>
-          <span className="text-3xl md:text-5xl font-black uppercase tracking-tighter group-hover:pl-4 transition-all duration-500 italic font-abel text-[color:var(--foreground)]">
+          <span className="text-3xl md:text-5xl font-black uppercase tracking-tighter group-hover:pl-4 transition-all duration-500 italic font-antonio text-[color:var(--foreground)]">
             {collection.name}
           </span>
         </Link>
@@ -81,7 +81,7 @@ export const HeroSlider = () => {
           {/* Caption with dynamic contrast */}
           <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 text-[color:var(--foreground)] transition-colors duration-500 p-4 rounded-xl bg-[color:var(--surface)]/90 max-w-[80%] sm:max-w-[60%]">
              <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] mb-1 text-[color:var(--foreground)]/40">Slide 0{current + 1} / 0{collection.items.length}</p>
-             <h3 className="text-base sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-abel text-[color:var(--foreground)]">{collection.items[current].name}</h3>
+             <h3 className="text-base sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-antonio text-[color:var(--foreground)]">{collection.items[current].name}</h3>
           </div>
         </div>
 

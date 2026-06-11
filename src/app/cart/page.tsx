@@ -14,7 +14,7 @@ export default function CartPage() {
   const total = cartItems.reduce((acc, item) => acc + item.price, 0);
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-abel">
+    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio">
       <Header />
 
       <div className="container mx-auto px-6 pt-40 pb-20">

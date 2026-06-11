@@ -64,7 +64,7 @@ export const Header = () => {
 
           {/* Center: Logo */}
           <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-center text-[color:var(--foreground)]">
-             <span className="text-xl md:text-2xl font-black tracking-tighter block leading-none font-abel">The Way WE Wear</span>
+             <span className="text-xl md:text-2xl font-black tracking-tighter block leading-none font-antonio">The Way WE Wear</span>
           </Link>
 
           {/* Right: Actions */}
@@ -77,7 +77,7 @@ export const Header = () => {
             <Link href="/wishlist" className="text-[color:var(--foreground)]"><Heart size={20} className="md:w-[22px] md:h-[22px]" /></Link>
             <Link href="/cart" className="relative text-[color:var(--foreground)]">
               <ShoppingBag size={20} className="md:w-[22px] md:h-[22px]" />
-              <span className="absolute -top-2 -right-2 bg-[color:var(--foreground)] text-[color:var(--surface)] text-[9px] md:text-[10px] font-black w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center font-abel">0</span>
+              <span className="absolute -top-2 -right-2 bg-[color:var(--foreground)] text-[color:var(--surface)] text-[9px] md:text-[10px] font-black w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center font-antonio">0</span>
             </Link>
             <button
               type="button"
@@ -125,8 +125,8 @@ export const Header = () => {
                 <input type="text" placeholder="SZUKAJ PRODUKTU..." className="bg-transparent border-none text-sm focus:outline-none flex-1 uppercase font-black text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50" />
               </div>
 
-              <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-tighter overflow-y-auto no-scrollbar font-abel text-[color:var(--foreground)]">
-                <div className="text-xs text-[color:var(--foreground)] font-bold opacity-70 mb-2 font-abel">Project: TWWW // Subject:</div>
+              <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-tighter overflow-y-auto no-scrollbar font-antonio text-[color:var(--foreground)]">
+                <div className="text-xs text-[color:var(--foreground)] font-bold opacity-70 mb-2 font-antonio">Project: TWWW // Subject:</div>
 
                 <Link href="/shop/bluzy" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Bluzy</Link>
                 <Link href="/shop/koszulki" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Koszulki</Link>

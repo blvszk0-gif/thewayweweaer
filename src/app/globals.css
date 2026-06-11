@@ -23,7 +23,7 @@ html.theme-dark {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-abel), sans-serif;
+  font-family: var(--font-antonio), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -44,7 +44,7 @@ body {
 
 @layer base {
   h1, h2, h3, h4, h5, h6 {
-    @apply font-abel uppercase tracking-tighter italic;
+    @apply font-antonio uppercase tracking-tighter italic;
   }
 
   .accent-border {

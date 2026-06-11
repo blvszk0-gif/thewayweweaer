@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { Abel } from "next/font/google";
+import { Antonio } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { BackToTop } from "@/components/ui/BackToTop";
 import "./globals.css";
 
-const abel = Abel({
-  weight: "400",
-  variable: "--font-abel",
+const antonio = Antonio({
+  weight: ["400", "700"],
+  variable: "--font-antonio",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -21,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl" className={`${abel.variable}`}>
-      <body className="font-abel antialiased">
+    <html lang="pl" className={`${antonio.variable}`}>
+      <body className="font-antonio antialiased">
         {children}
         <BackToTop />
         <SpeedInsights />

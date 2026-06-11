@@ -15,7 +15,7 @@ export default function UnboxingPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] font-abel">
+    <main className="min-h-screen bg-[color:var(--surface)] font-antonio">
       <Header />
 
       <div className="container mx-auto px-6 pt-40 pb-20">

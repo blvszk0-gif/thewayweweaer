@@ -7,8 +7,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        abel: ["var(--font-abel)"],
-        montserrat: ["var(--font-montserrat)"],
+        antonio: ["var(--font-antonio)"],
       },
     },
   },

@@ -41,7 +41,7 @@ export default function CatalogPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] font-abel overflow-hidden">
+    <main className="min-h-screen bg-[color:var(--surface)] font-antonio overflow-hidden">
       <Header />
       <audio ref={audioRef} src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" />
 

@@ -12,7 +12,7 @@ const reviews = [
 
 export const LandingSections = () => {
   return (
-    <section className="py-24 font-abel">
+    <section className="py-24 font-antonio">
       <div className="container mx-auto px-6">
 
         {/* Reviews Section */}
