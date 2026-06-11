@@ -49,6 +49,7 @@ export default function CategoryPage() {
 
   return (
     <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio">
+    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-abel">
       <Header />
 
       <div className="pt-32 pb-20 container mx-auto px-6">

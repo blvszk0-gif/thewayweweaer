@@ -42,12 +42,14 @@ export default function CatalogPage() {
 
   return (
     <main className="min-h-screen bg-[color:var(--surface)] font-antonio overflow-hidden">
+    <main className="min-h-screen bg-[color:var(--surface)] font-abel overflow-hidden">
       <Header />
       <audio ref={audioRef} src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" />
 
       <div className="container mx-auto px-6 pt-40 pb-20 min-h-[80vh] flex flex-col items-center justify-center">
         <div className="mb-8 text-center">
           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-[color:var(--foreground)]/30 mb-2">Digital Lookbook // 2026</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-[color:var(--foreground)]/30 mb-2">Digital Lookbook // 2025</p>
           <h1 className="text-5xl font-black uppercase tracking-tighter italic">Katalog TWWW</h1>
         </div>
 
