@@ -33,7 +33,6 @@ const InputField = ({ type, placeholder, value, onChange }: { type: string, plac
           onBlur={() => setTouched(true)}
           onChange={(e) => onChange(e.target.value)}
           className={`w-full bg-[color:var(--surface-muted)] border rounded-2xl px-8 py-5 font-black uppercase text-xs focus:outline-none transition-all ${isEmpty ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'border-[color:var(--border)] focus:border-[color:var(--foreground)] text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/30'}`}
-          className={`w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50 border rounded-2xl px-8 py-5 font-black uppercase text-xs focus:outline-none transition-all ${isEmpty ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'border-[color:var(--border)] focus:border-[color:var(--foreground)]'}`}
         />
       </motion.div>
       <AnimatePresence>
@@ -83,7 +82,6 @@ export const LoginForm = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             className="bg-[color:var(--surface)] rounded-[40px] p-12 text-center shadow-2xl border border-[color:var(--border)]"
-            className="bg-[color:var(--surface)] text-[color:var(--foreground)] rounded-[40px] p-12 text-center shadow-2xl border border-[color:var(--border)]"
           >
             <div className="w-20 h-20 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
               <Check size={40} />
@@ -98,7 +96,6 @@ export const LoginForm = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             className="bg-[color:var(--surface)] rounded-[40px] p-12 shadow-2xl border border-[color:var(--border)]"
-            className="bg-[color:var(--surface)] text-[color:var(--foreground)] rounded-[40px] p-12 shadow-2xl border border-[color:var(--border)]"
           >
             <div className="flex gap-8 mb-12">
               <button
@@ -131,7 +128,6 @@ export const LoginForm = () => {
               <button
                 type="submit"
                 className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-6 rounded-full font-black uppercase tracking-[0.2em] shadow-xl hover:opacity-90 transition-all mt-4"
-                className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-6 rounded-full font-black uppercase tracking-[0.2em] shadow-xl hover:bg-[color:var(--foreground)]/80 transition-all mt-4"
               >
                 {isLogin ? 'Zaloguj się' : 'Dołącz do squadu'}
               </button>
@@ -159,14 +155,9 @@ export const LoginForm = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <button className="flex items-center justify-center gap-3 bg-black text-white py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-black/80 transition-all shadow-lg border border-white/5">
-              <div className="relative flex justify-center text-[10px] font-black uppercase tracking-widest text-[color:var(--foreground)]/30"><span className="bg-[color:var(--surface)] px-4">LUB</span></div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-3 bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-[color:var(--foreground)]/80 transition-all shadow-lg">
                 <AppleIcon /> Apple
               </button>
-              <button className="flex items-center justify-center gap-3 bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-[color:var(--surface)] transition-all shadow-lg">
+              <button className="flex items-center justify-center gap-3 bg-white text-black border border-black/10 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-black/5 transition-all shadow-lg">
                 <GoogleIcon /> Google
               </button>
             </div>

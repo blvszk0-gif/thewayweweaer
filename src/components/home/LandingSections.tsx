@@ -127,17 +127,6 @@ export const LandingSections = () => {
               }
             ].map((item, i) => (
               <FAQItem key={i} q={item.q} a={item.a} i={i} />
-              <details key={i} className="group bg-[color:var(--surface)] border border-[color:var(--border)] rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all">
-                <summary className="flex justify-between items-center p-8 cursor-pointer list-none text-[color:var(--foreground)]">
-                  <span className="font-black uppercase tracking-widest text-sm">{item.q}</span>
-                  <span className="w-8 h-8 rounded-full bg-[color:var(--surface-muted)] flex items-center justify-center group-open:rotate-45 transition-transform">
-                    <Plus size={16} />
-                  </span>
-                </summary>
-                <div className="px-8 pb-8 text-sm font-bold uppercase opacity-70 leading-relaxed text-[color:var(--foreground)]">
-                  {item.a}
-                </div>
-              </details>
             ))}
           </div>
         </div>

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShoppingBag, Heart } from 'lucide-react';
+import { ShoppingBag, Heart, CreditCard } from 'lucide-react';
 import Link from 'next/link';
 import { useStore } from '@/context/StoreContext';
 
@@ -35,7 +35,6 @@ export const ProductCard = ({ id, name, price, image, category }: ProductCardPro
   return (
     <div className="group flex flex-col bg-[color:var(--surface)] rounded-3xl overflow-hidden border border-[color:var(--border)] hover:shadow-2xl transition-all duration-500">
       <Link href={`/product/${id}`} className="relative aspect-[3/4] overflow-hidden bg-[color:var(--surface-muted)]">
-      <Link href={`/product/${id}`} className="relative aspect-[3/4] overflow-hidden">
         <motion.img
           src={image}
           alt={name}
@@ -48,8 +47,6 @@ export const ProductCard = ({ id, name, price, image, category }: ProductCardPro
             className={`backdrop-blur-md p-3 rounded-full transition-all shadow-xl ${liked ? 'bg-red-500 text-white' : 'bg-white/80 text-black hover:bg-black hover:text-white'}`}
            >
              <Heart size={18} fill={liked ? "currentColor" : "none"} />
-           <button className="bg-[color:var(--surface)]/80 backdrop-blur-md p-3 rounded-full text-[color:var(--foreground)] hover:bg-[color:var(--surface-muted)] hover:text-[color:var(--foreground)] transition-all shadow-xl">
-             <Heart size={18} />
            </button>
         </div>
       </Link>
@@ -75,10 +72,6 @@ export const ProductCard = ({ id, name, price, image, category }: ProductCardPro
             <span className="text-[8px] font-black italic">VISA</span>
             <span className="text-[8px] font-black italic">APPLE PAY</span>
           </div>
-        <div className="mt-auto space-y-4">
-          <button className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-full font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)]/90 transition-all">
-            <ShoppingBag size={16} /> Dodaj do koszyka
-          </button>
         </div>
       </div>
     </div>

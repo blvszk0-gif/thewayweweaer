@@ -66,12 +66,6 @@ export const HeroSlider = () => {
         <Link href="/shop/stare" className="group inline-flex flex-col">
           <span className="text-[10px] font-black text-[color:var(--foreground)]/30 tracking-[0.3em] uppercase mb-1">Project: TWWW // Subject:</span>
           <span className="text-3xl md:text-5xl font-black uppercase tracking-tighter group-hover:pl-4 transition-all duration-500 italic font-antonio text-[color:var(--foreground)]">
-  return (
-    <section className="relative w-full overflow-hidden bg-[color:var(--surface)] pt-24 pb-12 font-abel">
-      <div className="container mx-auto px-6 mb-8">
-        <Link href="/shop/stare" className="group inline-flex flex-col">
-          <span className="text-[10px] font-black text-[color:var(--foreground)]/45 tracking-[0.3em] uppercase mb-1">Project: TWWW // Subject:</span>
-          <span className="text-3xl md:text-5xl font-black uppercase tracking-tighter group-hover:pl-4 transition-all duration-500 italic font-abel text-[color:var(--foreground)]">
             {collection.name}
           </span>
         </Link>
@@ -79,7 +73,6 @@ export const HeroSlider = () => {
 
       <div className="container mx-auto px-6 flex flex-col lg:flex-row gap-8 items-center max-w-6xl">
         <div className="relative w-full max-w-6xl mx-auto overflow-hidden rounded-3xl bg-[color:var(--surface-muted)] aspect-video sm:aspect-video lg:flex-1 group/slider shadow-2xl border border-[color:var(--border)]">
-        <div className="relative w-full max-w-6xl mx-auto overflow-hidden rounded-3xl bg-[color:var(--surface-muted)] aspect-video sm:aspect-video lg:flex-1 group/slider shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]">
           <AnimatePresence mode="wait">
             <motion.img
               key={current}
@@ -92,52 +85,40 @@ export const HeroSlider = () => {
             />
           </AnimatePresence>
 
-          {/* Action Buttons Overlay - White bg in Dark, Black bg in Light */}
-          <div className="absolute top-4 right-4 sm:top-8 sm:right-8 flex flex-col gap-3 opacity-0 group-hover/slider:opacity-100 transition-all duration-500 z-20">
+          {/* Action Buttons Overlay - Theme Based Contrast */}
+          <div className="absolute top-4 right-4 sm:top-8 sm:right-8 flex flex-col gap-3 opacity-0 group-hover/slider:opacity-100 transition-all duration-500 z-30">
              <button
               onClick={handleWishlist}
-              className={`p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-sm bg-[color:var(--foreground)] text-[color:var(--surface)]`}
+              className="p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-md bg-[color:var(--foreground)] text-[color:var(--surface)]"
              >
                <Heart size={20} className="sm:w-6 sm:h-6" strokeWidth={2} fill={isLiked ? "currentColor" : "none"} />
              </button>
              <button
               onClick={handleAddToCart}
-              className={`p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-sm bg-[color:var(--foreground)] text-[color:var(--surface)]`}
+              className="p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-md bg-[color:var(--foreground)] text-[color:var(--surface)]"
              >
-          {/* Action Buttons Overlay */}
-          <div className="absolute top-4 right-4 sm:top-8 sm:right-8 flex flex-col gap-3 opacity-0 group-hover/slider:opacity-100 transition-all duration-500">
-             <button className="bg-[color:var(--surface)]/90 text-[color:var(--foreground)] p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-sm">
-               <Heart size={20} className="sm:w-6 sm:h-6" strokeWidth={2} />
-             </button>
-             <button className="bg-[color:var(--surface)]/90 text-[color:var(--foreground)] p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-sm">
                <ShoppingBag size={20} className="sm:w-6 sm:h-6" strokeWidth={2} />
              </button>
           </div>
 
-          {/* Navigation Controls - Forced Contrast */}
+          {/* Navigation Controls - Forced Contrast against IMAGE */}
           <button
             onClick={prevSlide}
-            className={`absolute left-4 top-1/2 -translate-y-1/2 transition-all p-2 rounded-full backdrop-blur-md border border-white/10 z-20 ${slide.dark ? 'text-white bg-black/20 hover:bg-black/40' : 'text-black bg-white/20 hover:bg-white/40'}`}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-[color:var(--foreground)]/50 hover:text-[color:var(--foreground)] transition-colors p-2"
+            className={`absolute left-4 top-1/2 -translate-y-1/2 transition-all p-2 rounded-full backdrop-blur-md border border-white/10 z-30 ${slide.dark ? 'text-white bg-black/20 hover:bg-black/40' : 'text-black bg-white/20 hover:bg-white/40'}`}
           >
             <ChevronLeft size={32} strokeWidth={1} />
           </button>
           <button
             onClick={nextSlide}
-            className={`absolute right-4 top-1/2 -translate-y-1/2 transition-all p-2 rounded-full backdrop-blur-md border border-white/10 z-20 ${slide.dark ? 'text-white bg-black/20 hover:bg-black/40' : 'text-black bg-white/20 hover:bg-white/40'}`}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-[color:var(--foreground)]/50 hover:text-[color:var(--foreground)] transition-colors p-2"
+            className={`absolute right-4 top-1/2 -translate-y-1/2 transition-all p-2 rounded-full backdrop-blur-md border border-white/10 z-30 ${slide.dark ? 'text-white bg-black/20 hover:bg-black/40' : 'text-black bg-white/20 hover:bg-white/40'}`}
           >
             <ChevronRight size={32} strokeWidth={1} />
           </button>
 
-          {/* Caption with forced contrast based on SLIDE color, independent of theme */}
+          {/* Caption with forced contrast based on SLIDE color */}
           <div className={`absolute bottom-6 left-6 sm:bottom-10 sm:left-10 transition-all duration-500 p-6 rounded-[2rem] backdrop-blur-xl border border-white/10 z-10 ${slide.dark ? 'bg-black/40 text-white shadow-[0_0_50px_rgba(0,0,0,0.3)]' : 'bg-white/40 text-black shadow-[0_0_50px_rgba(255,255,255,0.3)]'}`}>
              <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] mb-2 ${slide.dark ? 'text-white/40' : 'text-black/40'}`}>Slide 0{current + 1} / 0{collection.items.length}</p>
              <h3 className="text-base sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-antonio">{slide.name}</h3>
-          {/* Caption with dynamic contrast */}
-          <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 text-[color:var(--foreground)] transition-colors duration-500 p-4 rounded-xl bg-[color:var(--surface)]/90 max-w-[80%] sm:max-w-[60%]">
-             <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] mb-1 text-[color:var(--foreground)]/40">Slide 0{current + 1} / 0{collection.items.length}</p>
-             <h3 className="text-base sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-abel text-[color:var(--foreground)]">{collection.items[current].name}</h3>
           </div>
         </div>
 

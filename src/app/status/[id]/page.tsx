@@ -51,7 +51,6 @@ export default function OrderStatusPage() {
 
   return (
     <main className="min-h-screen bg-[color:var(--surface)] font-antonio shadow-[inset_0_0_100px_rgba(0,0,0,0.1)]">
-    <main className="min-h-screen bg-[color:var(--surface)] font-abel shadow-[inset_0_0_100px_rgba(0,0,0,0.1)]">
       <Header />
 
       <div className="container mx-auto px-6 pt-40 pb-20 max-w-4xl">

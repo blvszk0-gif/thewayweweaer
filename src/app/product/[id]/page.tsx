@@ -89,7 +89,6 @@ const LaundryIcon = ({ icon: Icon, label, detail, active, onToggle }: { icon: Re
       <button
         onClick={onToggle}
         className={`w-12 h-12 border rounded-xl flex items-center justify-center transition-all ${active ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)] shadow-xl scale-110' : 'bg-[color:var(--surface)] text-[color:var(--foreground)]/40 border-[color:var(--border)] hover:border-[color:var(--foreground)]'}`}
-        className={`w-12 h-12 border rounded-xl flex items-center justify-center transition-all ${active ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)] shadow-xl scale-110' : 'bg-[color:var(--surface)] text-[color:var(--foreground)]/60 border-[color:var(--border)] hover:border-[color:var(--foreground)]'}`}
       >
         <Icon />
       </button>
@@ -104,11 +103,6 @@ const LaundryIcon = ({ icon: Icon, label, detail, active, onToggle }: { icon: Re
             <p className="mb-2 opacity-50">{label}</p>
             <p className="leading-relaxed">{detail}</p>
             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-[color:var(--foreground)] rotate-45" />
-            className="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-56 bg-[color:var(--surface)] text-[color:var(--foreground)] p-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] z-20 text-center shadow-2xl border border-[color:var(--border)]"
-          >
-            <p className="mb-2 text-[color:var(--foreground)]/60">{label}</p>
-            <p className="leading-relaxed">{detail}</p>
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-[color:var(--surface)] rotate-45" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -168,7 +162,6 @@ export default function ProductPage() {
 
   return (
     <main className="min-h-screen bg-[color:var(--surface)] font-antonio text-[color:var(--foreground)] shadow-[inset_0_0_100px_rgba(0,0,0,0.1)] relative overflow-x-hidden">
-    <main className="min-h-screen bg-[color:var(--surface)] font-abel text-[color:var(--foreground)] shadow-[inset_0_0_100px_rgba(0,0,0,0.1)] relative overflow-x-hidden">
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-repeat" />
       <Header />
 
@@ -176,7 +169,7 @@ export default function ProductPage() {
         {/* Breadcrumb */}
         <Link
             href={`/shop/${productData.category.toLowerCase()}`}
-            className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity mb-8 text-[color:var(--foreground)]/70"
+            className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity mb-8"
         >
             ← Powrót do Project: TWWW // Subject: {productData.category}
         </Link>
@@ -193,10 +186,6 @@ export default function ProductPage() {
                    >
                     <span className="w-2 h-2 bg-[color:var(--foreground)] rounded-full animate-pulse" />
                     <span className="text-[10px] font-black uppercase tracking-widest">{viewers} OSÓB OGLĄDAŁO W OSTATNIE 48H</span>
-                    className="absolute top-4 left-4 z-20 bg-[color:var(--surface)]/95 backdrop-blur-md px-4 py-2 rounded-full border border-[color:var(--border)] flex items-center gap-2 shadow-sm"
-                   >
-                    <span className="w-2 h-2 bg-[color:var(--foreground)] rounded-full animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-widest">{viewers} OSOB OGLĄDAŁO W OSTANICH 48 GODZINACH</span>
                    </motion.div>
                  )}
                </AnimatePresence>
@@ -212,14 +201,11 @@ export default function ProductPage() {
                   </AnimatePresence>
                   <button onClick={() => setCurrentImg((prev) => (prev - 1 + productData.images.length) % productData.images.length)} className="absolute left-4 top-1/2 -translate-y-1/2 bg-[color:var(--surface)]/20 hover:bg-[color:var(--surface)]/80 p-2 rounded-full transition-all shadow-xl text-[color:var(--foreground)]"><ChevronLeft size={24} /></button>
                   <button onClick={() => setCurrentImg((prev) => (prev + 1) % productData.images.length)} className="absolute right-4 top-1/2 -translate-y-1/2 bg-[color:var(--surface)]/20 hover:bg-[color:var(--surface)]/80 p-2 rounded-full transition-all shadow-xl text-[color:var(--foreground)]"><ChevronRight size={24} /></button>
-                  <button onClick={() => setCurrentImg((prev) => (prev - 1 + productData.images.length) % productData.images.length)} className="absolute left-4 top-1/2 -translate-y-1/2 bg-[color:var(--surface-muted)]/80 hover:bg-[color:var(--surface)] p-2 rounded-full transition-all shadow-xl"><ChevronLeft size={24} /></button>
-                  <button onClick={() => setCurrentImg((prev) => (prev + 1) % productData.images.length)} className="absolute right-4 top-1/2 -translate-y-1/2 bg-[color:var(--surface-muted)]/80 hover:bg-[color:var(--surface)] p-2 rounded-full transition-all shadow-xl"><ChevronRight size={24} /></button>
                </div>
 
                <div className="flex gap-4 mt-6 overflow-x-auto no-scrollbar">
                   {productData.images.map((img, i) => (
                     <button key={i} onClick={() => setCurrentImg(i)} className={`w-20 aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${currentImg === i ? 'border-[color:var(--foreground)]' : 'border-transparent opacity-50'}`}><img src={img} alt="" className="w-full h-full object-cover grayscale" /></button>
-                    <button key={i} onClick={() => setCurrentImg(i)} className={`w-20 aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${currentImg === i ? 'border-[color:var(--foreground)]' : 'border-transparent opacity-50'}`}><img src={img} alt="" className="w-full h-full object-cover" /></button>
                   ))}
                </div>
             </div>
@@ -228,7 +214,6 @@ export default function ProductPage() {
           <div className="lg:flex-1 flex flex-col">
             <div className="mb-8">
                 <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[color:var(--foreground)]/30 block mb-2">Project: TWWW // Subject: {productData.type} //</span>
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[color:var(--foreground)]/45 block mb-2">Project: TWWW // Subject: {productData.type} //</span>
                 <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter italic leading-none">{productData.name}</h1>
             </div>
 
@@ -268,10 +253,6 @@ export default function ProductPage() {
                                       <span className="text-[10px] font-black uppercase tracking-tighter">{color.name}</span>
                                       <span className="text-[8px] font-bold opacity-40 mt-1">+40 PLN</span>
                                     </div>
-                                    className={`w-12 h-12 rounded-full border-2 transition-all relative flex items-center justify-center ${selectedColor.name === color.name ? 'border-[color:var(--foreground)] scale-110 shadow-xl' : 'border-transparent'} ${!color.stock ? 'opacity-20 cursor-not-allowed grayscale' : ''}`}
-                                    style={{ backgroundColor: color.hex }}
-                                >
-                                    {!color.stock && <div className="absolute inset-0 flex items-center justify-center text-[color:var(--foreground)]"><X size={20} /></div>}
                                 </button>
                             ))}
                         </div>
@@ -283,7 +264,6 @@ export default function ProductPage() {
                   <div className="flex justify-between items-end mb-4">
                     <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[color:var(--foreground)]/48 italic">Rozmiar</h3>
                     <button onClick={() => setIsSizeTableOpen(true)} className="text-[10px] font-black uppercase tracking-widest underline underline-offset-4 flex items-center gap-2"><Ruler size={12} /> Tabela rozmiarów</button>
-                    <button onClick={() => setIsSizeTableOpen(true)} className="text-[10px] font-black uppercase tracking-widest underline underline-offset-4 flex items-center gap-2 text-[color:var(--foreground)]/80 hover:text-[color:var(--foreground)]"><Ruler size={12} /> Tabela rozmiarów</button>
                   </div>
                   <div className="grid grid-cols-4 gap-2 mb-6">
                     {productData.sizes.map((size) => (
@@ -299,7 +279,6 @@ export default function ProductPage() {
 
                <div className="flex gap-4 items-stretch">
                   <div className="flex items-center bg-[color:var(--surface)] border border-[color:var(--border)] rounded-full px-6 gap-6 shadow-lg">
-                  <div className="flex items-center bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-full px-6 gap-6 shadow-lg">
                     <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="opacity-40 hover:opacity-100 transition-opacity"><Minus size={16}/></button>
                     <span className="text-sm font-black w-4 text-center">{quantity}</span>
                     <button onClick={() => setQuantity(quantity + 1)} className="opacity-40 hover:opacity-100 transition-opacity"><Plus size={16}/></button>
@@ -308,7 +287,6 @@ export default function ProductPage() {
                     onClick={handleAddToCart}
                     className={`flex-1 py-6 rounded-full font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 border-2 ${selectedSize ? 'border-[color:var(--foreground)] bg-[color:var(--foreground)] text-[color:var(--surface)] shadow-2xl hover:opacity-90' : 'border-[color:var(--border)] bg-transparent text-[color:var(--foreground)]/20 cursor-not-allowed'}`}
                   >
-                  <button className={`flex-1 py-6 rounded-full font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 border-2 ${selectedSize ? 'border-[color:var(--foreground)] bg-[color:var(--foreground)] text-[color:var(--surface)] shadow-2xl hover:scale-[1.02]' : 'border-[color:var(--border)] bg-transparent text-[color:var(--foreground)]/30 cursor-not-allowed'}`}>
                     <ShoppingBag size={20} /> Dodaj do koszyka
                   </button>
                </div>
@@ -324,7 +302,6 @@ export default function ProductPage() {
                   <p className="text-[10px] font-black uppercase tracking-widest text-[color:var(--foreground)]/30 mb-4 text-center">Bezpieczne płatności:</p>
                   <div className="flex justify-center gap-6 opacity-40 italic font-black text-[10px] tracking-widest"><span>BLIK</span><span>APPLE PAY</span><span>VISA</span><span>MASTERCARD</span></div>
                </div>
-               <button className="w-full py-6 rounded-full font-black uppercase tracking-[0.2em] border border-[color:var(--border)] flex items-center justify-center gap-3 bg-[color:var(--surface-muted)] hover:bg-[color:var(--surface)] text-[color:var(--foreground)] transition-all shadow-md"><Heart size={20} /> Dodaj do wishlisty</button>
 
                <div className="space-y-12 pt-12">
                   <div><h4 className="text-[10px] font-black uppercase tracking-[0.3em] mb-4 text-[color:var(--foreground)]/48 italic">Opis produktu</h4><p className="text-xs font-bold leading-relaxed opacity-60 uppercase tracking-widest">{productData.description}</p></div>
@@ -370,17 +347,6 @@ export default function ProductPage() {
                  <table className="w-full text-left font-black uppercase text-xs tracking-widest text-[color:var(--foreground)]">
                     <thead className="border-b border-[color:var(--border)]"><tr><th className="py-4">Rozmiar</th><th className="py-4">Klatka</th><th className="py-4">Długość</th><th className="py-4">Rękaw</th></tr></thead>
                     <tbody className="divide-y divide-[color:var(--border)]/5">{sizeTable.map(s => (<tr key={s.size}><td className="py-4 font-black">{s.size}</td><td className="py-4 opacity-40">{s.chest}</td><td className="py-4 opacity-40">{s.length}</td><td className="py-4 opacity-40">{s.sleeve}</td></tr>))}</tbody>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsSizeTableOpen(false)} className="absolute inset-0 bg-[color:var(--foreground)]/20 backdrop-blur-md" />
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-2xl bg-[color:var(--surface)] text-[color:var(--foreground)] rounded-[40px] shadow-2xl p-12 overflow-hidden border border-[color:var(--border)]"
-            >
-              <button onClick={() => setIsSizeTableOpen(false)} className="absolute top-8 right-8 text-[color:var(--foreground)]/40 hover:text-[color:var(--foreground)] transition-colors"><X size={32} /></button>
-              <h2 className="text-4xl font-black uppercase tracking-tighter italic mb-12">Tabela Rozmiarów</h2>
-              <div className="overflow-x-auto">
-                 <table className="w-full text-left font-black uppercase text-xs tracking-widest">
-                    <thead className="border-b border-[color:var(--border)]"><tr><th className="py-4">Rozmiar</th><th className="py-4">Klatka</th><th className="py-4">Długość</th><th className="py-4">Rękaw</th></tr></thead>
-                    <tbody className="divide-y divide-[color:var(--border)]">{sizeTable.map(s => (<tr key={s.size}><td className="py-4 font-black">{s.size}</td><td className="py-4 opacity-40">{s.chest}</td><td className="py-4 opacity-40">{s.length}</td><td className="py-4 opacity-40">{s.sleeve}</td></tr>))}</tbody>
                  </table>
               </div>
               <p className="mt-8 text-[10px] font-bold opacity-30 uppercase tracking-[0.2em] text-[color:var(--foreground)]">*WYMIARY MIERZONE NA PŁASKO. TOLERANCJA +/- 2CM.</p>
