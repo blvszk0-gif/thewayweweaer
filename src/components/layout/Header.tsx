@@ -181,6 +181,14 @@ export const Header = () => {
                 >
                   Haft na zamówienie
                 </button>
+
+                <Link
+                  href="/account"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="bg-black text-white px-6 py-4 rounded-full text-center text-sm font-black uppercase tracking-widest hover:scale-105 transition-transform mt-4"
+                >
+                  Podgląd Konta
+                </Link>
               </div>
 
               <div className="mt-auto pt-12 text-[10px] font-bold text-[color:var(--foreground)]/50 tracking-widest uppercase">
