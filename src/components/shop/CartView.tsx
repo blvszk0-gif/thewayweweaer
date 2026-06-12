@@ -26,7 +26,7 @@ export const CartView = () => {
                 <div className="mt-4 flex justify-between items-end">
                    <div className="flex border border-[color:var(--border)] rounded-full px-4 py-1 gap-4 items-center">
                       <button className="opacity-50 hover:opacity-100">-</button>
-                      <span className="font-bold text-sm">1</span>
+                      <span className="font-bold text-[18px]">1</span>
                       <button className="opacity-50 hover:opacity-100">+</button>
                    </div>
                    <span className="font-black text-xl tracking-tighter">349 PLN</span>

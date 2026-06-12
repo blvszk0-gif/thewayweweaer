@@ -30,7 +30,7 @@ export default function UnboxingPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-[color:var(--foreground)]/50 to-transparent z-10" />
               <div className="relative z-20 text-center text-[color:var(--surface)] px-12">
                  <h2 className="text-4xl font-black italic mb-4">SZTUKA PAKOWANIA</h2>
-                 <p className="text-xs font-bold uppercase tracking-[0.2em] opacity-60">Każda sztuka jest traktowana jak artefakt.</p>
+                 <p className="text-base font-bold uppercase tracking-[0.2em] opacity-60">Każda sztuka jest traktowana jak artefakt.</p>
               </div>
               <div className="absolute inset-0 bg-[url('https://placehold.co/800x800/000000/FFFFFF?text=PREMIUM+BOX')] bg-cover opacity-20 group-hover:scale-110 transition-transform duration-1000" />
            </div>
@@ -51,7 +51,7 @@ export default function UnboxingPage() {
                     </div>
                     <div>
                        <h3 className="text-xl font-black italic uppercase tracking-tighter mb-2">{step.title}</h3>
-                       <p className="text-[10px] font-bold uppercase tracking-widest leading-loose opacity-40">{step.desc}</p>
+                       <p className="text-[13px] font-bold uppercase tracking-widest leading-loose opacity-40">{step.desc}</p>
                     </div>
                   </motion.div>
                 );
@@ -64,10 +64,10 @@ export default function UnboxingPage() {
            <div className="relative z-10">
               <Camera size={48} className="mx-auto mb-8 text-[color:var(--foreground)]/30" />
               <h2 className="text-4xl md:text-7xl font-black italic uppercase mb-8">Pokaż swój loot</h2>
-              <p className="text-sm md:text-base font-bold tracking-[0.3em] uppercase opacity-40 mb-12 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-[18px] md:text-base font-bold tracking-[0.3em] uppercase opacity-40 mb-12 max-w-2xl mx-auto leading-relaxed">
                 Nagraj unboxing, wrzuć na TikToka lub Instagrama z oznaczeniem #TWWW i zgarnij dodatkowe żetony do Koła Fortuny przy następnym dropie.
               </p>
-              <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black uppercase tracking-[0.4em] opacity-30">
+              <div className="flex flex-wrap justify-center gap-8 text-[13px] font-black uppercase tracking-[0.4em] opacity-30">
                  <span>#THEWAYWEWEAR</span>
                  <span>#SQUAD</span>
                  <span>#UNBOXING</span>

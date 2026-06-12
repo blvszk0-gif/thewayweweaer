@@ -41,7 +41,7 @@ const InputField = ({ type, placeholder, value, onChange }: { type: string, plac
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="text-red-500 text-[10px] font-black uppercase tracking-widest mt-2 ml-4"
+            className="text-red-500 text-[13px] font-black uppercase tracking-widest mt-2 ml-4"
           >
             Pole jest wymagane
           </motion.p>
@@ -69,6 +69,7 @@ export const LoginForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (email && password) {
+      localStorage.setItem('twww-auth', 'true');
       setIsSuccess(true);
     }
   };

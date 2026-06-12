@@ -125,7 +125,7 @@ export default function OrderStatusPage() {
                     >
                        <step.icon size={20} />
                     </motion.div>
-                    <p className={`mt-4 text-[8px] font-black uppercase tracking-widest text-center max-w-[80px] ${i <= currentStatus ? 'opacity-100' : 'opacity-20'}`}>
+                    <p className={`mt-4 text-[17px] font-black uppercase tracking-widest text-center max-w-[100px] ${i <= currentStatus ? 'opacity-100' : 'opacity-20'}`}>
                       {step.label}
                     </p>
                  </div>
@@ -135,20 +135,20 @@ export default function OrderStatusPage() {
 
           <div className="mt-20 pt-12 border-t border-[color:var(--border)] flex flex-col md:flex-row gap-12">
              <div className="flex-1">
-               <h3 className="text-xs font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
+               <h3 className="text-base font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
                  <MapPin size={16} /> Adres Dostawy
                </h3>
-               <p className="text-sm font-bold uppercase opacity-40 leading-relaxed">
+               <p className="text-[18px] font-bold uppercase opacity-40 leading-relaxed">
                  Jan Kowalski<br />
                  ul. Gamingowa 13/37<br />
                  00-001 Warszawa, Polska
                </p>
              </div>
              <div className="flex-1">
-               <h3 className="text-xs font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
+               <h3 className="text-base font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
                  <Truck size={16} /> Metoda Dostawy
                </h3>
-               <p className="text-sm font-bold uppercase opacity-40 leading-relaxed">
+               <p className="text-[18px] font-bold uppercase opacity-40 leading-relaxed">
                  Kurier TWWW Squad (InPost)<br />
                  Przewidywana dostawa: Jutro
                </p>
@@ -157,7 +157,7 @@ export default function OrderStatusPage() {
         </div>
 
         <div className="mt-8 text-center">
-           <button className="text-[10px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity underline underline-offset-4">
+           <button className="text-[17px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity underline underline-offset-4">
              Potrzebujesz pomocy? Skontaktuj się ze Squadem
            </button>
         </div>

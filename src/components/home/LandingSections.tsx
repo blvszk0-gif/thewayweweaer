@@ -80,7 +80,7 @@ export const LandingSections = () => {
                     <Star key={i} size={16} fill={i < rev.rating ? "currentColor" : "none"} />
                   ))}
                 </div>
-                <p className="text-sm font-bold uppercase leading-relaxed mb-6 flex-1 italic">&quot;{rev.text}&quot;</p>
+                <p className="text-[18px] font-bold uppercase leading-relaxed mb-6 flex-1 italic">&quot;{rev.text}&quot;</p>
 
                 {rev.photo && (
                   <div className="mb-6 aspect-[4/5] rounded-2xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 border border-[color:var(--border)] bg-[color:var(--surface-muted)]">
@@ -88,7 +88,7 @@ export const LandingSections = () => {
                   </div>
                 )}
 
-                <div className="text-[10px] font-black uppercase tracking-widest opacity-30">
+                <div className="text-[13px] font-black uppercase tracking-widest opacity-30">
                   — {rev.author}
                 </div>
               </motion.div>
@@ -149,7 +149,7 @@ export const LandingSections = () => {
                  </button>
               </div>
 
-              <button className="mt-8 text-[10px] font-black uppercase tracking-widest text-red-600 hover:text-red-700 transition-colors">
+              <button className="mt-8 text-[13px] font-black uppercase tracking-widest text-red-600 hover:text-red-700 transition-colors">
                 Anuluj subskrypcję
               </button>
            </div>
