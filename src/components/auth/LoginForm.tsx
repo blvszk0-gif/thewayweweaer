@@ -32,7 +32,7 @@ const InputField = ({ type, placeholder, value, onChange }: { type: string, plac
           value={value}
           onBlur={() => setTouched(true)}
           onChange={(e) => onChange(e.target.value)}
-          className={`w-full bg-[color:var(--surface-muted)] border rounded-2xl px-8 py-5 font-black uppercase text-xs focus:outline-none transition-all ${isEmpty ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'border-[color:var(--border)] focus:border-[color:var(--foreground)] text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/30'}`}
+          className={`w-full bg-[color:var(--surface-muted)] border rounded-2xl px-8 py-5 font-black uppercase text-base focus:outline-none transition-all ${isEmpty ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'border-[color:var(--border)] focus:border-[color:var(--foreground)] text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/30'}`}
         />
       </motion.div>
       <AnimatePresence>
@@ -88,7 +88,7 @@ export const LoginForm = () => {
               <Check size={40} />
             </div>
             <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4 text-[color:var(--foreground)]">Witaj w Squadzie!</h2>
-            <p className="text-[10px] font-bold uppercase opacity-40 tracking-widest leading-relaxed text-[color:var(--foreground)]">Pomyślnie zalogowano. Przekierowujemy Cię do bazy...</p>
+            <p className="text-[13px] font-bold uppercase opacity-40 tracking-widest leading-relaxed text-[color:var(--foreground)]">Pomyślnie zalogowano. Przekierowujemy Cię do bazy...</p>
           </motion.div>
         ) : (
           <motion.div
@@ -134,14 +134,14 @@ export const LoginForm = () => {
               </button>
 
               <div className="flex flex-col items-center gap-4 pt-4">
-                 <button type="button" className="text-[10px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity text-[color:var(--foreground)]">
+                 <button type="button" className="text-[13px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity text-[color:var(--foreground)]">
                    Zapomniałeś hasła?
                  </button>
                  {isLogin && (
                     <button
                       type="button"
                       onClick={() => setIsLogin(false)}
-                      className="text-[10px] font-black uppercase tracking-widest text-[color:var(--foreground)]/60 hover:text-[color:var(--foreground)] transition-colors"
+                      className="text-[13px] font-black uppercase tracking-widest text-[color:var(--foreground)]/60 hover:text-[color:var(--foreground)] transition-colors"
                     >
                       Nie masz konta? Zarejestruj je tutaj
                     </button>
@@ -151,14 +151,14 @@ export const LoginForm = () => {
 
             <div className="relative my-8">
               <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[color:var(--border)]"></div></div>
-              <div className="relative flex justify-center text-[10px] font-black uppercase tracking-widest text-[color:var(--foreground)]/20"><span className="bg-[color:var(--surface)] px-4">LUB</span></div>
+              <div className="relative flex justify-center text-[13px] font-black uppercase tracking-widest text-[color:var(--foreground)]/20"><span className="bg-[color:var(--surface)] px-4">LUB</span></div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-3 bg-black text-white py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-black/80 transition-all shadow-lg border border-white/5">
+              <button className="flex items-center justify-center gap-3 bg-black text-white py-4 rounded-2xl font-black uppercase text-[13px] tracking-widest hover:bg-black/80 transition-all shadow-lg border border-white/5">
                 <AppleIcon /> Apple
               </button>
-              <button className="flex items-center justify-center gap-3 bg-white text-black border border-black/10 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-black/5 transition-all shadow-lg">
+              <button className="flex items-center justify-center gap-3 bg-white text-black border border-black/10 py-4 rounded-2xl font-black uppercase text-[13px] tracking-widest hover:bg-black/5 transition-all shadow-lg">
                 <GoogleIcon /> Google
               </button>
             </div>

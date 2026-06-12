@@ -2,11 +2,13 @@
 > twww-premium-store@0.1.0 dev
 > next dev
 
+⚠ Port 3000 is in use by an unknown process, using available port 3002 instead.
 ▲ Next.js 16.2.9 (Turbopack)
-- Local:         http://localhost:3000
-- Network:       http://192.168.0.2:3000
-✓ Ready in 541ms
+- Local:         http://localhost:3002
+- Network:       http://192.168.0.2:3002
+✓ Ready in 605ms
 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
 
-○ Compiling / ...
- GET / 200 in 5.7s (next.js: 5.0s, proxy.ts: 127ms, application-code: 552ms)
+ GET / 200 in 916ms (next.js: 273ms, proxy.ts: 123ms, application-code: 520ms)
+ GET / 200 in 160ms (next.js: 7ms, proxy.ts: 7ms, application-code: 146ms)
+ GET /subjects 200 in 124ms (next.js: 24ms, proxy.ts: 7ms, application-code: 93ms)

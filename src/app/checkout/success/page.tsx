@@ -46,7 +46,7 @@ export default function SuccessPage() {
             <Check size={40} />
           </div>
           <h1 className="text-6xl font-black uppercase tracking-tighter italic">Dzięki za drop!</h1>
-          <p className="text-[color:var(--foreground)]/48 font-bold uppercase tracking-[0.3em] text-xs mt-4">Twoje zamówienie #TWWW-0001 jest już w bazie.</p>
+          <p className="text-[color:var(--foreground)]/48 font-bold uppercase tracking-[0.3em] text-base mt-4">Twoje zamówienie #TWWW-0001 jest już w bazie.</p>
         </div>
 
         <div className="bg-[color:var(--surface)] rounded-[50px] p-12 md:p-20 shadow-2xl border border-[color:var(--border)] relative overflow-hidden">
@@ -56,7 +56,7 @@ export default function SuccessPage() {
 
            <div className="relative z-10 text-center mb-16">
              <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-4">Koło Fortuny Squadu</h2>
-             <p className="text-[10px] font-black uppercase tracking-widest opacity-30">Masz 1 żeton. Każdy los wygrywa!</p>
+             <p className="text-[13px] font-black uppercase tracking-widest opacity-30">Masz 1 żeton. Każdy los wygrywa!</p>
            </div>
 
            <div className="flex flex-col items-center gap-12">
@@ -81,7 +81,7 @@ export default function SuccessPage() {
                       }}
                     >
                       <span
-                        className="absolute top-16 left-1/2 -translate-x-1/2 -rotate-[60deg] text-[color:var(--surface)] font-black uppercase text-[10px] tracking-widest text-center max-w-[60px]"
+                        className="absolute top-16 left-1/2 -translate-x-1/2 -rotate-[60deg] text-[color:var(--surface)] font-black uppercase text-[13px] tracking-widest text-center max-w-[60px]"
                         style={{ transform: 'translateX(-50%) rotate(30deg)', top: '15%', left: '75%' }}
                       >
                         {prize.label}
@@ -106,7 +106,7 @@ export default function SuccessPage() {
                    <div className="inline-flex items-center gap-4 bg-[color:var(--foreground)] text-[color:var(--surface)] px-10 py-5 rounded-full font-black uppercase tracking-widest shadow-2xl animate-bounce">
                      <Sparkles size={24} /> WYGRANA: {wonPrize}
                    </div>
-                   <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Kod wysłaliśmy na Twój e-mail!</p>
+                   <p className="text-[13px] font-black uppercase tracking-widest opacity-40">Kod wysłaliśmy na Twój e-mail!</p>
                  </motion.div>
                ) : (
                  <button
@@ -122,7 +122,7 @@ export default function SuccessPage() {
         </div>
 
         <div className="mt-12 text-center">
-          <button className="text-[10px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity underline underline-offset-4">
+          <button className="text-[13px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity underline underline-offset-4">
             Wróć do bazy produktów
           </button>
         </div>
