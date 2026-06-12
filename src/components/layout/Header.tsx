@@ -17,17 +17,6 @@ export const Header = () => {
   const [isHaftModalOpen, setIsHaftModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const checkLogin = () => {
-      const saved = localStorage.getItem('twww-auth');
-      setIsLoggedIn(!!saved);
-    };
-    checkLogin();
-    window.addEventListener('storage', checkLogin);
-    return () => window.removeEventListener('storage', checkLogin);
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -91,26 +80,20 @@ export const Header = () => {
           <div className="flex items-center gap-3 md:gap-6">
             <div className="hidden lg:flex items-center rounded px-3 py-1.5 gap-2 text-[color:var(--foreground)] border border-[color:var(--border)]">
               <Search size={18} className="opacity-50" />
-              <input type="text" placeholder="SZUKAJ..." className="bg-transparent border-none text-base focus:outline-none w-24 xl:w-32 uppercase font-black text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50" />
+              <input type="text" placeholder="SZUKAJ..." className="bg-transparent border-none text-xs focus:outline-none w-24 xl:w-32 uppercase font-black text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50" />
             </div>
-            <Link
-              href={isLoggedIn ? "/account" : "#"}
-              onClick={(e) => { if (!isLoggedIn) { e.preventDefault(); setIsLoginModalOpen(true); } }}
-              className="text-[color:var(--foreground)] outline-none"
-            >
-              <User size={20} className="md:w-[22px] md:h-[22px]" />
-            </Link>
+            <button onClick={() => setIsLoginModalOpen(true)} className="text-[color:var(--foreground)] outline-none"><User size={20} className="md:w-[22px] md:h-[22px]" /></button>
             <Link href="/wishlist" className="relative text-[color:var(--foreground)]">
               <Heart size={20} className="md:w-[22px] md:h-[22px]" />
               {wishlist.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[12px] md:text-[13px] font-black w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center font-antonio animate-pulse">
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] md:text-[10px] font-black w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center font-antonio animate-pulse">
                   {wishlist.length}
                 </span>
               )}
             </Link>
             <Link href="/cart" className="relative text-[color:var(--foreground)]">
               <ShoppingBag size={20} className="md:w-[22px] md:h-[22px]" />
-              <span className="absolute -top-2 -right-2 bg-[color:var(--foreground)] text-[color:var(--surface)] text-[12px] md:text-[13px] font-black w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center font-antonio">
+              <span className="absolute -top-2 -right-2 bg-[color:var(--foreground)] text-[color:var(--surface)] text-[9px] md:text-[10px] font-black w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center font-antonio">
                 {cart.reduce((acc, item) => acc + item.quantity, 0)}
               </span>
             </Link>
@@ -157,11 +140,11 @@ export const Header = () => {
 
               <div className="flex items-center rounded-xl px-4 py-3 gap-3 mb-8 bg-[color:var(--surface-muted)] border border-[color:var(--border)]">
                 <Search size={20} className="opacity-50" />
-                <input type="text" placeholder="SZUKAJ PRODUKTU..." className="bg-transparent border-none text-[18px] focus:outline-none flex-1 uppercase font-black text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50" />
+                <input type="text" placeholder="SZUKAJ PRODUKTU..." className="bg-transparent border-none text-sm focus:outline-none flex-1 uppercase font-black text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50" />
               </div>
 
               <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-tighter overflow-y-auto no-scrollbar font-antonio text-[color:var(--foreground)]">
-                <div className="text-base text-[color:var(--foreground)] font-bold opacity-70 mb-2 font-antonio">Project: TWWW // Subject:</div>
+                <div className="text-xs text-[color:var(--foreground)] font-bold opacity-70 mb-2 font-antonio">Project: TWWW // Subject:</div>
 
                 <Link href="/shop/bluzy" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Bluzy</Link>
                 <Link href="/shop/koszulki" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic">Koszulki</Link>
@@ -202,13 +185,13 @@ export const Header = () => {
                 <Link
                   href="/account"
                   onClick={() => setIsMenuOpen(false)}
-                  className="bg-black text-white px-6 py-4 rounded-full text-center text-[18px] font-black uppercase tracking-widest hover:scale-105 transition-transform mt-4"
+                  className="bg-black text-white px-6 py-4 rounded-full text-center text-sm font-black uppercase tracking-widest hover:scale-105 transition-transform mt-4"
                 >
                   Podgląd Konta
                 </Link>
               </div>
 
-              <div className="mt-auto pt-12 text-[13px] font-bold text-[color:var(--foreground)]/50 tracking-widest uppercase">
+              <div className="mt-auto pt-12 text-[10px] font-bold text-[color:var(--foreground)]/50 tracking-widest uppercase">
                 © 2026 THE WAY WE WEAR
               </div>
             </motion.div>

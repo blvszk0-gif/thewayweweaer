@@ -23,7 +23,7 @@ export default function MaintenancePage() {
           <span className="text-[color:var(--foreground)]/20">Is Preparing.</span>
         </h1>
 
-        <p className="text-[13px] md:text-base font-black uppercase tracking-[0.4em] text-[color:var(--foreground)]/40 mb-12 leading-relaxed px-12">
+        <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[color:var(--foreground)]/40 mb-12 leading-relaxed px-12">
           Strona jest obecnie w trybie prywatnym. Przygotowujemy dla Was coś wyjątkowego. Premiera wkrótce.
         </p>
 
@@ -36,11 +36,11 @@ export default function MaintenancePage() {
                 transition={{ duration: 2, ease: "circOut" }}
               />
            </div>
-           <p className="text-[13px] font-bold uppercase tracking-widest opacity-20">Squad Deployment: 70% Complete</p>
+           <p className="text-[10px] font-bold uppercase tracking-widest opacity-20">Squad Deployment: 70% Complete</p>
         </div>
 
         <div className="mt-20 pt-12 border-t border-[color:var(--border)]/20">
-           <p className="text-[12px] font-black uppercase tracking-[0.2em] opacity-40">© 2026 THE WAY WE WEAR // SQUAD ONLY</p>
+           <p className="text-[9px] font-black uppercase tracking-[0.2em] opacity-40">© 2026 THE WAY WE WEAR // SQUAD ONLY</p>
         </div>
       </motion.div>
 

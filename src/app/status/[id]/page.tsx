@@ -58,10 +58,10 @@ export default function OrderStatusPage() {
 
           <div className="flex justify-between items-start mb-16 relative z-10">
             <div>
-              <p className="text-[17px] font-black uppercase tracking-[0.3em] text-[color:var(--foreground)]/30 mb-2">Order Tracking // ID: {id}</p>
-              <h1 className="text-5xl font-black uppercase tracking-tighter italic">Status Twojej Paczki</h1>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[color:var(--foreground)]/30 mb-2">Order Tracking // ID: {id}</p>
+              <h1 className="text-4xl font-black uppercase tracking-tighter italic">Status Twojej Paczki</h1>
             </div>
-            <div className="bg-[color:var(--foreground)] text-[color:var(--surface)] px-6 py-2 rounded-full text-[17px] font-black uppercase tracking-widest">
+            <div className="bg-[color:var(--foreground)] text-[color:var(--surface)] px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">
               Live Update
             </div>
           </div>
@@ -88,7 +88,7 @@ export default function OrderStatusPage() {
                         transition={{ type: "spring", damping: 15 }}
                       />
                       <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/40 to-transparent flex items-end justify-center pb-8">
-                         <p className="text-[17px] font-black uppercase tracking-widest text-[color:var(--surface)]/80 max-w-[200px]">
+                         <p className="text-[8px] font-black uppercase tracking-widest text-[color:var(--surface)]/80 max-w-[150px]">
                            {statusSteps[currentStatus].catDesc}
                          </p>
                       </div>

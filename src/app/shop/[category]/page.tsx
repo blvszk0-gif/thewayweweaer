@@ -40,12 +40,8 @@ export default function CategoryPage() {
             name: item.name,
             price: Number(item.price),
             image: pb.files.getUrl(item, item.image || (item.images && item.images[0])),
-            category: item.category,
-            colors: item.colors || [], // Mock or real colors
-            sizes: item.sizes || ['S', 'M', 'L', 'XL']
-          }));
-          setProducts(mapped);
-          setFilteredProducts(mapped);
+            category: item.category
+          })));
         }
       } catch {
         console.log('PocketBase not reachable, using mocks');
@@ -71,7 +67,7 @@ export default function CategoryPage() {
 
       <div className="pt-32 pb-20 container mx-auto px-6">
         <header className="mb-16">
-           <p className="text-[17px] font-black uppercase tracking-[0.4em] text-[color:var(--foreground)]/45 mb-2">Project: TWWW // Subject:</p>
+           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[color:var(--foreground)]/45 mb-2">Project: TWWW // Subject:</p>
            <h1 className="text-6xl font-black uppercase tracking-tighter italic">{category}</h1>
         </header>
 
@@ -104,15 +100,15 @@ export default function CategoryPage() {
            </div>
 
            <div className="flex items-center gap-6">
-              <p className="text-[17px] font-black uppercase tracking-widest text-[color:var(--foreground)]/30">
-                Wyświetlono {Math.min(displayCount, filteredProducts.length)} z {filteredProducts.length} produktów
+              <p className="text-[10px] font-black uppercase tracking-widest text-[color:var(--foreground)]/30">
+                Wyświetlono {Math.min(displayCount, products.length)} z {products.length} produktów
               </p>
            </div>
         </div>
 
         {/* Product Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-           {filteredProducts.slice(0, displayCount).map((p) => (
+           {products.slice(0, displayCount).map((p) => (
              <ProductCard key={p.id} {...p} category={category} />
            ))}
         </div>
@@ -121,7 +117,7 @@ export default function CategoryPage() {
           <div className="mt-20 flex justify-center">
             <button
               onClick={() => setDisplayCount(prev => prev + 4)}
-              className="px-12 py-5 border-2 border-[color:var(--border)] rounded-full font-black uppercase tracking-widest text-lg text-[color:var(--foreground)] hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all"
+              className="px-12 py-5 border-2 border-[color:var(--border)] rounded-full font-black uppercase tracking-widest text-xs text-[color:var(--foreground)] hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all"
             >
               Załaduj więcej
             </button>

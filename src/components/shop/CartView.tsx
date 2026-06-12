@@ -22,7 +22,7 @@ export const CartView = () => {
               </div>
               <div className="flex-1">
                 <h3 className="font-black uppercase tracking-tighter text-xl">Oversize Hoodie "SQUAD" V1</h3>
-                <p className="text-[color:var(--foreground)]/30 text-base font-bold uppercase tracking-widest mt-1">Rozmiar: M</p>
+                <p className="text-[color:var(--foreground)]/30 text-xs font-bold uppercase tracking-widest mt-1">Rozmiar: M</p>
                 <div className="mt-4 flex justify-between items-end">
                    <div className="flex border border-[color:var(--border)] rounded-full px-4 py-1 gap-4 items-center">
                       <button className="opacity-50 hover:opacity-100">-</button>
@@ -42,18 +42,18 @@ export const CartView = () => {
             <h2 className="text-2xl font-black uppercase tracking-tighter italic">Podsumowanie</h2>
 
 <div className="space-y-3 border-b border-[color:var(--border)] pb-6">
-              <div className="flex justify-between text-[18px] font-bold uppercase tracking-widest text-[color:var(--foreground)]/50">
+              <div className="flex justify-between text-sm font-bold uppercase tracking-widest text-[color:var(--foreground)]/50">
                 <span>Artykuły</span>
                 <span className="text-[color:var(--foreground)]">349 PLN</span>
               </div>
-              <div className="flex justify-between text-[18px] font-bold uppercase tracking-widest text-[color:var(--foreground)]/50">
+              <div className="flex justify-between text-sm font-bold uppercase tracking-widest text-[color:var(--foreground)]/50">
                 <span>Dostawa</span>
                 <span className="text-[color:var(--foreground)] font-black italic">+ CENA DOSTAWY</span>
               </div>
             </div>
 
             <div className="flex justify-between items-end">
-               <span className="text-base font-bold text-[color:var(--foreground)]/30 uppercase tracking-[0.2em]">Suma całkowita</span>
+               <span className="text-xs font-bold text-[color:var(--foreground)]/30 uppercase tracking-[0.2em]">Suma całkowita</span>
                <span className="text-4xl font-black tracking-tighter underline underline-offset-8">349 PLN</span>
             </div>
 
@@ -65,7 +65,7 @@ export const CartView = () => {
           <div className="flex flex-col gap-4">
              <div className="flex items-center gap-4 bg-[color:var(--surface-muted)] p-6 rounded-2xl border border-[color:var(--border)]">
                 <Truck size={24} className="opacity-30" />
-                <span className="text-[13px] font-bold uppercase tracking-[0.2em] text-[color:var(--foreground)]/50 leading-relaxed">
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--foreground)]/50 leading-relaxed">
                   Darmowa dostawa przy zamówieniach <br /> powyżej 500 PLN.
                 </span>
              </div>

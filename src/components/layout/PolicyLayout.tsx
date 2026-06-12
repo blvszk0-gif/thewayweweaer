@@ -8,7 +8,7 @@ export default function PolicyLayout({ title, children }: { title: string, child
       <Header />
       <div className="container mx-auto px-6 pt-40 pb-20 max-w-4xl">
         <h1 className="text-5xl font-black uppercase tracking-tighter italic mb-12">{title}</h1>
-        <div className="prose prose-sm max-w-none font-bold uppercase text-[13px] tracking-widest text-[color:var(--foreground)]/70 leading-relaxed space-y-8">
+        <div className="prose prose-sm max-w-none font-bold uppercase text-[10px] tracking-widest text-[color:var(--foreground)]/70 leading-relaxed space-y-8">
           {children}
         </div>
       </div>

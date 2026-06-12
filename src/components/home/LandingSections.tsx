@@ -24,7 +24,7 @@ const FAQItem = ({ q, a, i }: { q: string, a: string, i: number }) => {
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex justify-between items-center p-8 cursor-pointer text-[color:var(--foreground)] text-left focus:outline-none"
       >
-        <span className="font-black uppercase tracking-widest text-[18px]">{q}</span>
+        <span className="font-black uppercase tracking-widest text-sm">{q}</span>
         <motion.span
           animate={{ rotate: isOpen ? 45 : 0 }}
           className="w-8 h-8 rounded-full bg-[color:var(--surface-muted)] flex items-center justify-center shrink-0"
@@ -41,7 +41,7 @@ const FAQItem = ({ q, a, i }: { q: string, a: string, i: number }) => {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.04, 0.62, 0.23, 0.98] }}
           >
-            <div className="px-8 pb-8 text-[18px] font-bold uppercase opacity-70 leading-relaxed text-[color:var(--foreground)]">
+            <div className="px-8 pb-8 text-sm font-bold uppercase opacity-70 leading-relaxed text-[color:var(--foreground)]">
               {a}
             </div>
           </motion.div>
@@ -61,9 +61,9 @@ export const LandingSections = () => {
           <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-4 text-center md:text-left">
             <div>
               <h2 className="text-5xl font-black uppercase tracking-tighter italic">Głos Squadu</h2>
-              <p className="text-[color:var(--foreground)]/70 font-bold uppercase tracking-widest text-base mt-2">Wasze opinie o naszych dropach</p>
+              <p className="text-[color:var(--foreground)]/70 font-bold uppercase tracking-widest text-xs mt-2">Wasze opinie o naszych dropach</p>
             </div>
-            <button className="w-full md:w-auto flex items-center justify-center gap-2 text-base font-black uppercase tracking-widest border border-[color:var(--border)] px-6 py-3 rounded-full hover:bg-[color:var(--surface-muted)] hover:text-[color:var(--foreground)] transition-all">
+            <button className="w-full md:w-auto flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest border border-[color:var(--border)] px-6 py-3 rounded-full hover:bg-[color:var(--surface-muted)] hover:text-[color:var(--foreground)] transition-all">
               <Camera size={16} /> Dodaj swoją opinię
             </button>
           </div>
@@ -100,7 +100,7 @@ export const LandingSections = () => {
         <div className="mb-48 max-w-4xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-5xl font-black uppercase tracking-tighter italic mb-4">FAQ</h2>
-            <p className="text-[color:var(--foreground)]/40 font-bold uppercase tracking-widest text-base">Najczęściej zadawane pytania</p>
+            <p className="text-[color:var(--foreground)]/40 font-bold uppercase tracking-widest text-xs">Najczęściej zadawane pytania</p>
           </div>
 
           <div className="space-y-6">
@@ -142,7 +142,7 @@ export const LandingSections = () => {
                  <input
                   type="email"
                   placeholder="TWOJA@POCZTA.COM"
-                  className="flex-1 bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-full px-10 py-6 font-black uppercase text-[18px] focus:outline-none focus:border-[color:var(--foreground)] transition-all text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50"
+                  className="flex-1 bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-full px-10 py-6 font-black uppercase text-sm focus:outline-none focus:border-[color:var(--foreground)] transition-all text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50"
                  />
                  <button className="bg-[color:var(--foreground)] text-[color:var(--surface)] px-12 py-6 rounded-full font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-xl">
                    Zapisz się

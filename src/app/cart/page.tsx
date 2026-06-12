@@ -32,15 +32,15 @@ export default function CartPage() {
                     <div className="flex-1 flex flex-col justify-between py-2">
                       <div>
                         <div className="flex justify-between items-start mb-2">
-                           <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter leading-tight max-w-[200px] md:max-w-none">{item.name}</h3>
+                           <h3 className="text-lg md:text-xl font-black uppercase tracking-tighter leading-tight max-w-[200px] md:max-w-none">{item.name}</h3>
                            <button
                             onClick={() => removeFromCart(item.id)}
                             className="text-[color:var(--foreground)]/40 hover:text-red-500 transition-colors"
                            >
-                             <Trash2 size={24} />
+                             <Trash2 size={20} />
                            </button>
                         </div>
-                        <p className="text-[17px] font-black uppercase tracking-widest text-[color:var(--foreground)]/50">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-[color:var(--foreground)]/50">
                           {item.size && `Rozmiar: ${item.size}`} {item.color && `// Kolor: ${item.color}`}
                         </p>
                       </div>
@@ -52,15 +52,15 @@ export default function CartPage() {
                             >
                               <Minus size={16} />
                             </button>
-                            <span className="text-[22px] font-black w-4 text-center">{item.quantity}</span>
+                            <span className="text-sm font-black w-4 text-center">{item.quantity}</span>
                             <button
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
                               className="opacity-40 hover:opacity-100 transition-opacity"
                             >
-                              <Plus size={20} />
+                              <Plus size={16} />
                             </button>
                          </div>
-                         <span className="text-2xl font-black">{item.price * item.quantity} PLN</span>
+                         <span className="text-xl font-black">{item.price * item.quantity} PLN</span>
                       </div>
                     </div>
                   </div>
@@ -70,12 +70,12 @@ export default function CartPage() {
               <div className="py-20 text-center bg-[color:var(--surface-muted)] rounded-[40px] border border-dashed border-[color:var(--border)]">
                  <ShoppingBag size={48} className="mx-auto mb-6 opacity-10" />
                  <p className="text-xl font-black uppercase tracking-tighter opacity-40 italic">Koszyk jest pusty</p>
-                 <Link href="/shop/bluzy" className="inline-block mt-8 border-b-2 border-[color:var(--foreground)] pb-1 font-black uppercase tracking-widest text-base hover:pb-2 transition-all">Wróć do sklepu</Link>
+                 <Link href="/shop/bluzy" className="inline-block mt-8 border-b-2 border-[color:var(--foreground)] pb-1 font-black uppercase tracking-widest text-xs hover:pb-2 transition-all">Wróć do sklepu</Link>
               </div>
             )}
 
             <div className="mt-12 p-8 bg-[color:var(--surface-muted)] rounded-[30px] border border-[color:var(--border)] shadow-sm">
-               <h4 className="text-base font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
+               <h4 className="text-xs font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
                  <ShieldCheck size={16} /> Gwarancja Squadu
                </h4>
                <p className="text-[17px] font-bold uppercase leading-relaxed opacity-50">
@@ -98,7 +98,7 @@ export default function CartPage() {
                      <span className="opacity-40">Dostawa</span>
                      <span className="opacity-60">Gratis</span>
                   </div>
-                  <div className="pt-6 border-t border-[color:var(--border)] flex justify-between text-3xl font-black italic tracking-tighter">
+                  <div className="pt-6 border-t border-[color:var(--border)] flex justify-between text-2xl font-black italic tracking-tighter">
                      <span>Razem</span>
                      <span>{total} PLN</span>
                   </div>
@@ -106,13 +106,13 @@ export default function CartPage() {
 
                <button
                 disabled={cart.length === 0}
-                className={`w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-6 rounded-full font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-2xl mb-8 disabled:opacity-20 disabled:cursor-not-allowed text-[22px]`}
+                className={`w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-6 rounded-full font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-2xl mb-8 disabled:opacity-20 disabled:cursor-not-allowed`}
                >
-                 Przejdź do płatności <ArrowRight size={24} />
+                 Przejdź do płatności <ArrowRight size={20} />
                </button>
 
                <div className="space-y-4">
-                  <p className="text-[17px] font-black uppercase tracking-widest opacity-30 text-center">Zamówienie zostanie sfinalizowane w następnym kroku.</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest opacity-30 text-center">Zamówienie zostanie sfinalizowane w następnym kroku.</p>
                </div>
             </div>
           </div>

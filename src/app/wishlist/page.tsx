@@ -13,7 +13,6 @@ interface WishlistItem {
   name: string;
   price: number;
   images: string[];
-  image?: string; // Compatibility with store
   inStock: boolean;
   category: string;
   isNotified?: boolean;
@@ -127,7 +126,7 @@ const WishlistProductCard = ({ item, onRemove, onNotify, onNotifyPromo }: { item
 
         {!item.inStock && (
           <div className="absolute inset-0 bg-[color:var(--foreground)]/15 backdrop-blur-[2px] flex items-center justify-center pointer-events-none z-10">
-             <span className="bg-[color:var(--surface)] text-[color:var(--foreground)] px-6 py-2 rounded-full text-[17px] font-black uppercase tracking-widest shadow-xl">Brak w magazynie</span>
+             <span className="bg-[color:var(--surface)] text-[color:var(--foreground)] px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl">Brak w magazynie</span>
           </div>
         )}
 
@@ -139,42 +138,42 @@ const WishlistProductCard = ({ item, onRemove, onNotify, onNotifyPromo }: { item
       </div>
 
       <div className="p-8 flex-1 flex flex-col">
-         <p className="text-[17px] font-black uppercase tracking-widest text-[color:var(--foreground)]/40 mb-2">{item.category}</p>
+         <p className="text-[10px] font-black uppercase tracking-widest text-[color:var(--foreground)]/40 mb-2">{item.category}</p>
          <Link href={`/product/${item.id}`} className="hover:opacity-60 transition-opacity">
-          <h3 className="text-2xl font-black uppercase tracking-tighter italic mb-4 leading-none text-[color:var(--foreground)]">{item.name}</h3>
+          <h3 className="text-xl font-black uppercase tracking-tighter italic mb-4 leading-none text-[color:var(--foreground)]">{item.name}</h3>
          </Link>
          <div className="flex justify-between items-center mb-8">
-           <span className="text-xl font-black text-[color:var(--foreground)]">{item.price} PLN</span>
+           <span className="text-lg font-black text-[color:var(--foreground)]">{item.price} PLN</span>
          </div>
 
          <div className="space-y-3 mt-auto">
            {item.inStock ? (
              <button
               onClick={handleAddToCart}
-              className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-full font-black uppercase tracking-widest text-[17px] flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all shadow-lg group/btn"
+              className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all shadow-lg group/btn"
              >
-               <ShoppingBag size={18} className="group-hover/btn:scale-110 transition-transform" /> Dodaj do koszyka
+               <ShoppingBag size={14} className="group-hover/btn:scale-110 transition-transform" /> Dodaj do koszyka
              </button>
            ) : (
              <button
               onClick={() => onNotify(item.id)}
-              className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-full font-black uppercase tracking-widest text-[17px] flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all shadow-lg"
+              className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)] border border-[color:var(--border)] py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all shadow-lg"
              >
                {item.isNotified ? (
                  <>Powiadomimy Cię o zapasie</>
                ) : (
-                 <><Bell size={18} /> Powiadom o zapasie</>
+                 <><Bell size={14} /> Powiadom o zapasie</>
                )}
              </button>
            )}
            <button
             onClick={() => onNotifyPromo(item.id)}
-            className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)]/60 py-4 rounded-full font-black uppercase tracking-widest text-[17px] flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all border border-transparent hover:border-[color:var(--border)]"
+            className="w-full bg-[color:var(--surface-muted)] text-[color:var(--foreground)]/60 py-4 rounded-full font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all border border-transparent hover:border-[color:var(--border)]"
            >
               {item.isPromoNotified ? (
                 <>Powiadomimy Cię o promocji</>
               ) : (
-                <><Bell size={18} /> Powiadom o promocji</>
+                <><Bell size={14} /> Powiadom o promocji</>
               )}
            </button>
          </div>
@@ -184,7 +183,6 @@ const WishlistProductCard = ({ item, onRemove, onNotify, onNotifyPromo }: { item
 };
 
 export default function WishlistPage() {
-  const { wishlist, removeFromWishlist } = useStore();
   const [items, setItems] = useState(wishlistItemsData);
   const [filter, setFilter] = useState('Wszystko');
   const [emailPrompt, setEmailPrompt] = useState<{ id: string, type: 'stock' | 'promo' } | null>(null);
@@ -194,33 +192,11 @@ export default function WishlistPage() {
   const [newsletterSaved, setNewsletterSaved] = useState(false);
   const [notifiedItems, setNotifiedItems] = useState<string[]>([]);
   const [promoNotifiedItems, setPromoNotifiedItems] = useState<string[]>([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  React.useEffect(() => {
-    const saved = localStorage.getItem('twww-auth');
-    setIsLoggedIn(!!saved);
-  }, []);
-
-  // Merge store wishlist with local mock items for richer display in this demo
-  const allItems = React.useMemo(() => {
-    const storeItems: WishlistItem[] = wishlist.map(wi => ({
-      ...wi,
-      images: [wi.image],
-      inStock: true,
-    }));
-    // Remove duplicates by ID
-    const merged = [...storeItems];
-    wishlistItemsData.forEach(mock => {
-      if (!merged.find(m => m.id === mock.id)) {
-        merged.push(mock);
-      }
-    });
-    return merged;
-  }, [wishlist]);
+  const [isLoggedIn] = useState(false); // Mock
 
   const filteredItems = filter === 'Wszystko'
-    ? allItems
-    : allItems.filter(i => i.category === filter);
+    ? items
+    : items.filter(i => i.category === filter);
 
   const handleNotify = (id: string) => {
     if (isLoggedIn) {
@@ -239,7 +215,6 @@ export default function WishlistPage() {
   };
 
   const removeItem = (id: string) => {
-    removeFromWishlist(id);
     setItems(items.filter(i => i.id !== id));
   };
 
@@ -251,7 +226,7 @@ export default function WishlistPage() {
         <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
           <div>
             <h1 className="text-6xl font-black uppercase tracking-tighter italic text-[color:var(--foreground)]">Twoja Wishlista</h1>
-            <p className="text-[color:var(--foreground)]/70 font-bold uppercase tracking-[0.3em] text-base mt-4">Przedmioty, które skradły Twoje serce</p>
+            <p className="text-[color:var(--foreground)]/70 font-bold uppercase tracking-[0.3em] text-xs mt-4">Przedmioty, które skradły Twoje serce</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
              <div className="flex flex-wrap justify-center gap-2 bg-[color:var(--surface-muted)]/70 backdrop-blur rounded-full p-1 border border-[color:var(--border)]">
@@ -259,13 +234,13 @@ export default function WishlistPage() {
                   <button
                     key={cat}
                     onClick={() => setFilter(cat)}
-                    className={`px-5 py-2 rounded-full text-[17px] font-black uppercase tracking-widest transition-all ${filter === cat ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] shadow-xl' : 'text-[color:var(--foreground)]/40 hover:text-[color:var(--foreground)]'}`}
+                    className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${filter === cat ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] shadow-xl' : 'text-[color:var(--foreground)]/40 hover:text-[color:var(--foreground)]'}`}
                   >
                     {cat}
                   </button>
                 ))}
              </div>
-             <div className="text-[17px] font-black uppercase tracking-widest opacity-30">
+             <div className="text-[10px] font-black uppercase tracking-widest opacity-30">
                {filteredItems.length} Przedmioty
              </div>
           </div>
@@ -319,20 +294,20 @@ export default function WishlistPage() {
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative bg-[color:var(--surface)] text-[color:var(--foreground)] rounded-[40px] p-12 max-w-md w-full shadow-2xl border border-[color:var(--border)] text-center">
               <button onClick={() => setEmailPrompt(null)} className="absolute top-8 right-8 text-[color:var(--foreground)]/40 hover:text-[color:var(--foreground)]"><X size={24} /></button>
               <div className="w-16 h-16 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center mx-auto mb-8"><Bell size={32} /></div>
-              <h3 className="text-3xl font-black uppercase tracking-tighter italic mb-4">Daj nam znać</h3>
-              <p className="text-[17px] font-bold uppercase opacity-40 tracking-widest leading-relaxed mb-8">
+              <h3 className="text-2xl font-black uppercase tracking-tighter italic mb-4">Daj nam znać</h3>
+              <p className="text-[10px] font-bold uppercase opacity-40 tracking-widest leading-relaxed mb-8">
                 {emailPrompt.type === 'stock'
                   ? 'Zostaw swój e-mail, a wyślemy Ci powiadomienie gdy tylko produkt wróci na stan.'
                   : 'Zostaw swój e-mail, a damy Ci znać gdy tylko ten produkt trafi na promocję.'}
               </p>
-              <input type="email" placeholder="TWOJA@POCZTA.COM" className="w-full bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-2xl px-6 py-4 font-black uppercase text-base mb-4 focus:outline-none focus:border-[color:var(--foreground)] text-[color:var(--foreground)]" />
+              <input type="email" placeholder="TWOJA@POCZTA.COM" className="w-full bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-2xl px-6 py-4 font-black uppercase text-xs mb-4 focus:outline-none focus:border-[color:var(--foreground)] text-[color:var(--foreground)]" />
               <button
                 onClick={() => {
                   if (emailPrompt.type === 'stock') setNotifiedItems([...notifiedItems, emailPrompt.id]);
                   else setPromoNotifiedItems([...promoNotifiedItems, emailPrompt.id]);
                   setEmailPrompt(null);
                 }}
-                className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-5 rounded-full font-black uppercase tracking-widest text-base shadow-xl"
+                className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-5 rounded-full font-black uppercase tracking-widest text-xs shadow-xl"
               >
                 Powiadom mnie
               </button>
@@ -348,20 +323,20 @@ export default function WishlistPage() {
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative bg-[color:var(--surface)] text-[color:var(--foreground)] rounded-[40px] p-12 max-w-md w-full shadow-2xl border border-[color:var(--border)] text-center">
               <button onClick={() => setNewsletterModalOpen(false)} className="absolute top-8 right-8 text-[color:var(--foreground)]/40 hover:text-[color:var(--foreground)]"><X size={24} /></button>
               <div className="w-16 h-16 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center mx-auto mb-8"><Heart size={32} /></div>
-              <h3 className="text-3xl font-black uppercase tracking-tighter italic mb-4">Zapisz się do Newslettera</h3>
-              <p className="text-[17px] font-bold uppercase opacity-40 tracking-widest leading-relaxed mb-8">Potwierdź adres e-mail lub wprowadź inny, aby otrzymywać informacje o nowych dropach.</p>
+              <h3 className="text-2xl font-black uppercase tracking-tighter italic mb-4">Zapisz się do Newslettera</h3>
+              <p className="text-[10px] font-bold uppercase opacity-40 tracking-widest leading-relaxed mb-8">Potwierdź adres e-mail lub wprowadź inny, aby otrzymywać informacje o nowych dropach.</p>
               <input
                 type="email"
                 value={newsletterEmail}
                 onChange={(e) => setNewsletterEmail(e.target.value)}
-                className="w-full bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-2xl px-6 py-4 font-black uppercase text-base mb-4 focus:outline-none focus:border-[color:var(--foreground)] text-[color:var(--foreground)]"
+                className="w-full bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-2xl px-6 py-4 font-black uppercase text-xs mb-4 focus:outline-none focus:border-[color:var(--foreground)] text-[color:var(--foreground)]"
               />
               <button
                 onClick={() => {
                   setNewsletterSaved(true);
                   setNewsletterModalOpen(false);
                 }}
-                className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-5 rounded-full font-black uppercase tracking-widest text-base shadow-xl"
+                className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-5 rounded-full font-black uppercase tracking-widest text-xs shadow-xl"
               >
                 Potwierdź e-mail
               </button>
@@ -372,7 +347,7 @@ export default function WishlistPage() {
 
       <AnimatePresence>
         {newsletterSaved && !newsletterModalOpen && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] px-6 py-4 bg-[color:var(--surface)] rounded-full shadow-2xl border border-[color:var(--border)] text-[color:var(--foreground)] text-[18px] font-black uppercase tracking-[0.2em]">
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] px-6 py-4 bg-[color:var(--surface)] rounded-full shadow-2xl border border-[color:var(--border)] text-[color:var(--foreground)] text-sm font-black uppercase tracking-[0.2em]">
             Zapisano do newslettera: {newsletterEmail}
           </div>
         )}

@@ -53,17 +53,17 @@ export const ProductCard = ({ id, name, price, image, category }: ProductCardPro
 
       <div className="p-6 flex flex-col flex-1">
         <Link href={`/product/${id}`}>
-          <h3 className="text-lg font-black uppercase tracking-widest mb-1 opacity-40">Project: TWWW</h3>
-          <p className="text-xl font-black uppercase tracking-tighter mb-4 italic leading-tight text-[color:var(--foreground)]">{name}</p>
-          <p className="text-2xl font-black text-[color:var(--foreground)]">{price} PLN</p>
+          <h3 className="text-xs font-black uppercase tracking-widest mb-1 opacity-40">Project: TWWW</h3>
+          <p className="text-lg font-black uppercase tracking-tighter mb-4 italic leading-tight text-[color:var(--foreground)]">{name}</p>
+          <p className="text-xl font-black text-[color:var(--foreground)]">{price} PLN</p>
         </Link>
 
         <div className="mt-auto space-y-4 pt-6">
           <button
             onClick={handleAddToCart}
-            className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-full font-black uppercase tracking-widest text-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg"
+            className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-full font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg"
           >
-            <ShoppingBag size={20} /> Dodaj do koszyka
+            <ShoppingBag size={16} /> Dodaj do koszyka
           </button>
 
           <div className="flex items-center justify-center gap-4 opacity-20 py-2 text-[color:var(--foreground)]">

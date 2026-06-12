@@ -47,7 +47,7 @@ export default function CatalogPage() {
 
       <div className="container mx-auto px-6 pt-40 pb-20 min-h-[80vh] flex flex-col items-center justify-center">
         <div className="mb-8 text-center">
-          <p className="text-[13px] font-black uppercase tracking-[0.5em] text-[color:var(--foreground)]/30 mb-2">Digital Lookbook // 2026</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-[color:var(--foreground)]/30 mb-2">Digital Lookbook // 2026</p>
           <h1 className="text-5xl font-black uppercase tracking-tighter italic">Katalog TWWW</h1>
         </div>
 
@@ -71,7 +71,7 @@ export default function CatalogPage() {
                  <div className="relative z-10 text-center">
                     <img src={PAGES[currentPage].image} className="w-full h-64 object-cover grayscale mb-8 shadow-xl" alt="" />
                     <h2 className="text-2xl font-black uppercase italic">{PAGES[currentPage].title}</h2>
-                    <p className="text-base font-bold opacity-40 uppercase tracking-widest mt-4">{PAGES[currentPage].content}</p>
+                    <p className="text-xs font-bold opacity-40 uppercase tracking-widest mt-4">{PAGES[currentPage].content}</p>
                  </div>
               </div>
            </div>
@@ -92,7 +92,7 @@ export default function CatalogPage() {
                 <ChevronLeft size={24} />
               </button>
               <div className="flex flex-col items-center">
-                <span className="text-base font-black uppercase tracking-widest">{currentPage + 1} / {PAGES.length}</span>
+                <span className="text-xs font-black uppercase tracking-widest">{currentPage + 1} / {PAGES.length}</span>
                 <div className="w-32 h-1 bg-[color:var(--border)] rounded-full mt-2 overflow-hidden">
                    <motion.div
                     className="h-full bg-[color:var(--foreground)]"
@@ -113,7 +113,7 @@ export default function CatalogPage() {
 
         <div className="mt-40 max-w-2xl text-center">
            <BookOpen size={32} className="mx-auto mb-6 opacity-20" />
-           <p className="text-[13px] font-bold uppercase tracking-widest opacity-40 leading-relaxed">
+           <p className="text-[10px] font-bold uppercase tracking-widest opacity-40 leading-relaxed">
              Ten katalog jest wyrazem naszej pasji do minimalizmu i nowoczesności. Każda strona to kolejna historia, którą chcemy z Tobą dzielić. Przewracaj strony, aby odkryć nasz świat.
            </p>
         </div>

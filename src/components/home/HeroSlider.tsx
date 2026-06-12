@@ -64,7 +64,7 @@ export const HeroSlider = () => {
     <section className="relative w-full overflow-hidden bg-[color:var(--surface)] pt-24 pb-12 font-antonio">
       <div className="container mx-auto px-6 mb-8">
         <Link href="/shop/stare" className="group inline-flex flex-col">
-          <span className="text-[13px] font-black text-[color:var(--foreground)]/30 tracking-[0.3em] uppercase mb-1">Project: TWWW // Subject:</span>
+          <span className="text-[10px] font-black text-[color:var(--foreground)]/30 tracking-[0.3em] uppercase mb-1">Project: TWWW // Subject:</span>
           <span className="text-3xl md:text-5xl font-black uppercase tracking-tighter group-hover:pl-4 transition-all duration-500 italic font-antonio text-[color:var(--foreground)]">
             {collection.name}
           </span>
@@ -117,7 +117,7 @@ export const HeroSlider = () => {
 
           {/* Caption with forced contrast based on SLIDE color */}
           <div className={`absolute bottom-6 left-6 sm:bottom-10 sm:left-10 transition-all duration-500 p-6 rounded-[2rem] backdrop-blur-xl border border-white/10 z-10 ${slide.dark ? 'bg-black/40 text-white shadow-[0_0_50px_rgba(0,0,0,0.3)]' : 'bg-white/40 text-black shadow-[0_0_50px_rgba(255,255,255,0.3)]'}`}>
-             <p className={`text-[13px] sm:text-[13px] font-black uppercase tracking-[0.4em] mb-2 ${slide.dark ? 'text-white/40' : 'text-black/40'}`}>Slide 0{current + 1} / 0{collection.items.length}</p>
+             <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] mb-2 ${slide.dark ? 'text-white/40' : 'text-black/40'}`}>Slide 0{current + 1} / 0{collection.items.length}</p>
              <h3 className="text-base sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-antonio">{slide.name}</h3>
           </div>
         </div>

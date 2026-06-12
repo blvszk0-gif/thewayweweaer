@@ -20,7 +20,7 @@ export default function UnboxingPage() {
 
       <div className="container mx-auto px-6 pt-40 pb-20">
         <div className="text-center max-w-4xl mx-auto mb-24">
-           <span className="text-[13px] font-black tracking-[0.5em] text-[color:var(--foreground)]/20 uppercase mb-4 block">ADHD Premium Experience</span>
+           <span className="text-[10px] font-black tracking-[0.5em] text-[color:var(--foreground)]/20 uppercase mb-4 block">ADHD Premium Experience</span>
            <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter italic mb-8">Doświadczenie Unboxingu</h1>
            <p className="text-xl md:text-2xl font-bold opacity-40 uppercase leading-relaxed italic">To nie jest zwykła paczka. To bilet wstępu do naszego Squadu.</p>
         </div>
