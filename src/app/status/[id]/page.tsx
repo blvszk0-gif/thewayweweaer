@@ -50,24 +50,24 @@ export default function OrderStatusPage() {
   }, [id]);
 
   return (
-    <main className="min-h-screen bg-[#dcdcdc] font-abel shadow-[inset_0_0_100px_rgba(0,0,0,0.1)]">
+    <main className="min-h-screen bg-[color:var(--surface)] font-antonio shadow-[inset_0_0_100px_rgba(0,0,0,0.1)]">
       <Header />
 
       <div className="container mx-auto px-6 pt-40 pb-20 max-w-4xl">
-        <div className="bg-white/90 backdrop-blur-md rounded-[50px] p-12 shadow-2xl relative overflow-hidden border border-white/20">
+        <div className="bg-[color:var(--surface)]/95 backdrop-blur-md rounded-[50px] p-12 shadow-2xl relative overflow-hidden border border-[color:var(--border)]">
 
           <div className="flex justify-between items-start mb-16 relative z-10">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30 mb-2">Order Tracking // ID: {id}</p>
-              <h1 className="text-4xl font-black uppercase tracking-tighter italic">Status Twojej Paczki</h1>
+              <p className="text-[17px] font-black uppercase tracking-[0.3em] text-[color:var(--foreground)]/30 mb-2">Order Tracking // ID: {id}</p>
+              <h1 className="text-5xl font-black uppercase tracking-tighter italic">Status Twojej Paczki</h1>
             </div>
-            <div className="bg-black text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">
+            <div className="bg-[color:var(--foreground)] text-[color:var(--surface)] px-6 py-2 rounded-full text-[17px] font-black uppercase tracking-widest">
               Live Update
             </div>
           </div>
 
           {/* Cat Animation Zone */}
-          <div className="mb-20 aspect-video bg-black/5 rounded-[40px] flex items-center justify-center relative overflow-hidden group border border-black/5 shadow-inner">
+          <div className="mb-20 aspect-video bg-[color:var(--surface-muted)] rounded-[40px] flex items-center justify-center relative overflow-hidden group border border-[color:var(--border)] shadow-inner">
              <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-repeat" />
 
              <AnimatePresence mode="wait">
@@ -82,13 +82,13 @@ export default function OrderStatusPage() {
                       <motion.img
                         src="/cat.jpg"
                         alt="Cat Status"
-                        className="w-full h-full object-cover rounded-full border-8 border-white shadow-2xl grayscale brightness-110 contrast-125"
+                        className="w-full h-full object-cover rounded-full border-8 border-[color:var(--surface)] shadow-2xl grayscale brightness-110 contrast-125"
                         initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
                         transition={{ type: "spring", damping: 15 }}
                       />
                       <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/40 to-transparent flex items-end justify-center pb-8">
-                         <p className="text-[8px] font-black uppercase tracking-widest text-white/80 max-w-[150px]">
+                         <p className="text-[17px] font-black uppercase tracking-widest text-[color:var(--surface)]/80 max-w-[200px]">
                            {statusSteps[currentStatus].catDesc}
                          </p>
                       </div>
@@ -108,9 +108,9 @@ export default function OrderStatusPage() {
 
           {/* Stepper */}
           <div className="relative px-4">
-            <div className="absolute top-6 left-12 right-12 h-1 bg-black/5" />
+            <div className="absolute top-6 left-12 right-12 h-1 bg-[color:var(--border)]" />
             <motion.div
-              className="absolute top-6 left-12 h-1 bg-black origin-left"
+              className="absolute top-6 left-12 h-1 bg-[color:var(--foreground)] origin-left"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: (currentStatus / (statusSteps.length - 1)) }}
               transition={{ duration: 1, ease: "circOut" }}
@@ -119,13 +119,13 @@ export default function OrderStatusPage() {
                {statusSteps.map((step, i) => (
                  <div key={step.id} className="flex flex-col items-center relative z-10">
                     <motion.div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border-2 ${i <= currentStatus ? 'bg-black text-white border-black shadow-xl' : 'bg-white text-black/20 border-black/5'}`}
+                      className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border-2 ${i <= currentStatus ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)] shadow-xl' : 'bg-[color:var(--surface)] text-[color:var(--foreground)]/40 border-[color:var(--border)]'}`}
                       animate={i === currentStatus ? { scale: [1, 1.2, 1] } : {}}
                       transition={{ repeat: Infinity, duration: 2 }}
                     >
                        <step.icon size={20} />
                     </motion.div>
-                    <p className={`mt-4 text-[8px] font-black uppercase tracking-widest text-center max-w-[80px] ${i <= currentStatus ? 'opacity-100' : 'opacity-20'}`}>
+                    <p className={`mt-4 text-[17px] font-black uppercase tracking-widest text-center max-w-[100px] ${i <= currentStatus ? 'opacity-100' : 'opacity-20'}`}>
                       {step.label}
                     </p>
                  </div>
@@ -133,22 +133,22 @@ export default function OrderStatusPage() {
             </div>
           </div>
 
-          <div className="mt-20 pt-12 border-t border-black/5 flex flex-col md:flex-row gap-12">
+          <div className="mt-20 pt-12 border-t border-[color:var(--border)] flex flex-col md:flex-row gap-12">
              <div className="flex-1">
-               <h3 className="text-xs font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
+               <h3 className="text-base font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
                  <MapPin size={16} /> Adres Dostawy
                </h3>
-               <p className="text-sm font-bold uppercase opacity-40 leading-relaxed">
+               <p className="text-[18px] font-bold uppercase opacity-40 leading-relaxed">
                  Jan Kowalski<br />
                  ul. Gamingowa 13/37<br />
                  00-001 Warszawa, Polska
                </p>
              </div>
              <div className="flex-1">
-               <h3 className="text-xs font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
+               <h3 className="text-base font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
                  <Truck size={16} /> Metoda Dostawy
                </h3>
-               <p className="text-sm font-bold uppercase opacity-40 leading-relaxed">
+               <p className="text-[18px] font-bold uppercase opacity-40 leading-relaxed">
                  Kurier TWWW Squad (InPost)<br />
                  Przewidywana dostawa: Jutro
                </p>
@@ -157,7 +157,7 @@ export default function OrderStatusPage() {
         </div>
 
         <div className="mt-8 text-center">
-           <button className="text-[10px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity underline underline-offset-4">
+           <button className="text-[17px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity underline underline-offset-4">
              Potrzebujesz pomocy? Skontaktuj się ze Squadem
            </button>
         </div>

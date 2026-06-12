@@ -7,10 +7,20 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        abel: ["var(--font-abel)"],
-        montserrat: ["var(--font-montserrat)"],
+        antonio: ["var(--font-antonio)"],
       },
+      perspective: {
+        '2000': '2000px',
+      }
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.perspective-2000': {
+          perspective: '2000px',
+        },
+      })
+    }
+  ],
 };
