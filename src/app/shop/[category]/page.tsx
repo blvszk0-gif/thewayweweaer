@@ -35,15 +35,17 @@ export default function CategoryPage() {
           filter: `category = "${category}"`,
         });
         if (records.items.length > 0) {
-          const mapped = records.items.map(item => ({
-            id: item.id,
-            name: item.name,
-            price: Number(item.price),
-            image: pb.files.getUrl(item, item.image || (item.images && item.images[0])),
-            category: item.category,
-            colors: item.colors || [], // Mock or real colors
-            sizes: item.sizes || ['S', 'M', 'L', 'XL']
-          }));
+          const mapped = records.items.map(item => {
+            return {
+              id: item.id,
+              name: item.name,
+              price: Number(item.price),
+              image: pb.files.getUrl(item, item.image || (item.images && item.images[0])),
+              category: item.category,
+              colors: item.colors || [],
+              sizes: item.sizes || ['S', 'M', 'L', 'XL']
+            };
+          });
           setProducts(mapped);
           setFilteredProducts(mapped);
         }

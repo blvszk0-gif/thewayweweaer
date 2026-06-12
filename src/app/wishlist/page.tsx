@@ -203,11 +203,13 @@ export default function WishlistPage() {
 
   // Merge store wishlist with local mock items for richer display in this demo
   const allItems = React.useMemo(() => {
-    const storeItems: WishlistItem[] = wishlist.map(wi => ({
-      ...wi,
-      images: [wi.image],
-      inStock: true,
-    }));
+    const storeItems: WishlistItem[] = wishlist.map(wi => {
+      return {
+        ...wi,
+        images: [wi.image],
+        inStock: true,
+      };
+    });
     // Remove duplicates by ID
     const merged = [...storeItems];
     wishlistItemsData.forEach(mock => {
