@@ -12,7 +12,6 @@ import {
   Settings,
   LogOut,
   ChevronRight,
-  Camera,
   Trash2,
   BellOff,
   CheckCircle2,
@@ -20,7 +19,8 @@ import {
   Truck,
   Box,
   XCircle,
-  RefreshCcw
+  RefreshCcw,
+  Lock
 } from 'lucide-react';
 
 const mockOrders = [
@@ -29,12 +29,12 @@ const mockOrders = [
 ];
 
 const prizes = [
-  { label: 'Darmowa dostawa', color: '#000000' },
-  { label: 'Kod -10%', color: '#1a1a1a' },
-  { label: 'Wlepki Squad', color: '#333333' },
-  { label: 'Kod Valorant', color: '#000000' },
-  { label: 'Darmowa koszulka', color: '#1a1a1a' },
-  { label: 'Kod Fortnite', color: '#333333' },
+  { label: '1', color: '#000000', text: 'Darmowa dostawa' },
+  { label: '2', color: '#1a1a1a', text: '5% rabatu na kolejne zamówienie' },
+  { label: '3', color: '#333333', text: 'Dodatkowa naklejka przy następnym zamówieniu' },
+  { label: '4', color: '#000000', text: 'Dodatkowa słodkość przy następnym zamówieniu' },
+  { label: '5', color: '#1a1a1a', text: '50 zł PaySafeCard' },
+  { label: '6', color: '#333333', text: 'Darmowa dostawa' },
 ];
 
 export default function AccountPage() {
@@ -43,11 +43,20 @@ export default function AccountPage() {
   const [rotation, setRotation] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
   const [wonPrize, setWonPrize] = useState<string | null>(null);
+  const [accessCode, setAccessCode] = useState('');
+  const [hasAccess, setHasAccess] = useState(false);
+  const [deliveryMethod, setDeliveryMethod] = useState('InPost');
+  const [isDeliveryConfirmed, setIsDeliveryConfirmed] = useState(false);
 
   // UseEffect to check login (mocked)
   useEffect(() => {
     const saved = localStorage.getItem('twww-auth');
     if (saved) setIsLoggedIn(true);
+
+    // Check if coming from a tab link
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    if (tab === 'orders') setActiveTab('zamowienia');
   }, []);
 
   const spin = () => {
@@ -108,12 +117,8 @@ export default function AccountPage() {
              <div className="bg-[color:var(--surface-muted)] p-8 rounded-[40px] border border-[color:var(--border)] shadow-xl text-center group relative overflow-hidden">
                 <div className="w-24 h-24 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center mx-auto mb-6 text-3xl font-black relative overflow-hidden">
                    KG
-                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-                      <Camera size={24} className="text-white" />
-                   </div>
                 </div>
                 <h2 className="text-3xl font-black uppercase tracking-tighter italic">Kamil Gamer</h2>
-                <p className="text-lg font-bold opacity-40 uppercase tracking-widest mt-1">Squad Veteran</p>
              </div>
 
              <div className="bg-[color:var(--surface)] p-4 rounded-[30px] border border-[color:var(--border)] space-y-2 shadow-sm">
@@ -163,9 +168,27 @@ export default function AccountPage() {
                      </div>
                      <div className="space-y-6 pt-6 border-t border-[color:var(--border)]">
                         <p className="text-[17px] font-black uppercase opacity-40 ml-4">Preferowana metoda dostawy</p>
-                        <div className="flex gap-4">
-                           <button className="flex-1 bg-[color:var(--foreground)] text-[color:var(--surface)] py-5 rounded-2xl font-black uppercase text-lg shadow-lg">Paczkomat InPost</button>
-                           <button className="flex-1 bg-[color:var(--surface)] border border-[color:var(--border)] py-5 rounded-2xl font-black uppercase text-lg hover:bg-[color:var(--surface-muted)] transition-all">Kurier do domu</button>
+                        <div className="flex flex-col gap-4">
+                           <div className="flex gap-4">
+                              <button
+                                onClick={() => { setDeliveryMethod('InPost'); setIsDeliveryConfirmed(false); }}
+                                className={`flex-1 py-5 rounded-2xl font-black uppercase text-lg transition-all border ${deliveryMethod === 'InPost' ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)] shadow-xl scale-105' : 'bg-[color:var(--surface)] border-[color:var(--border)] hover:bg-[color:var(--surface-muted)]'}`}
+                              >
+                                Paczkomat InPost
+                              </button>
+                              <button
+                                onClick={() => { setDeliveryMethod('Kurier'); setIsDeliveryConfirmed(false); }}
+                                className={`flex-1 py-5 rounded-2xl font-black uppercase text-lg transition-all border ${deliveryMethod === 'Kurier' ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)] shadow-xl scale-105' : 'bg-[color:var(--surface)] border-[color:var(--border)] hover:bg-[color:var(--surface-muted)]'}`}
+                              >
+                                Kurier do domu
+                              </button>
+                           </div>
+                           <button
+                            onClick={() => setIsDeliveryConfirmed(true)}
+                            className={`w-full py-4 rounded-xl font-black uppercase tracking-widest text-[13px] transition-all border ${isDeliveryConfirmed ? 'bg-green-500 text-white border-green-500' : 'bg-transparent border-[color:var(--border)] opacity-40 hover:opacity-100'}`}
+                           >
+                             {isDeliveryConfirmed ? 'METODA POTWIERDZONA ✓' : 'POTWIERDŹ WYBÓR'}
+                           </button>
                         </div>
                      </div>
                   </motion.div>
@@ -231,25 +254,73 @@ export default function AccountPage() {
                 {activeTab === 'kolo' && (
                   <motion.div
                     key="kolo" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-                    className="bg-[color:var(--surface)] rounded-[50px] p-12 border border-[color:var(--border)] shadow-2xl flex flex-col items-center"
+                    className="bg-[color:var(--surface)] rounded-[50px] p-8 md:p-12 border border-[color:var(--border)] shadow-2xl flex flex-col items-center"
                   >
-                    <h3 className="text-3xl font-black uppercase italic mb-8">Zakręć za kod</h3>
-                    <div className="relative w-72 h-72 md:w-80 md:h-80 mb-12">
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 w-8 h-10 bg-[color:var(--foreground)]" style={{ clipPath: 'polygon(50% 100%, 0 0, 100% 0)' }} />
-                      <motion.div className="w-full h-full rounded-full border-[8px] border-[color:var(--foreground)] relative overflow-hidden" animate={{ rotate: rotation }} transition={{ duration: 4, ease: [0.1, 0, 0, 1] }}>
-                        {prizes.map((p, i) => (
-                          <div key={i} className="absolute top-0 left-0 w-full h-full origin-center" style={{ transform: `rotate(${i * 60}deg)`, backgroundColor: p.color, clipPath: 'polygon(50% 50%, 50% 0, 100% 0, 93.3% 25%)' }}>
-                            <span className="absolute top-[15%] left-[75%] -translate-x-1/2 rotate-[30deg] text-white font-black uppercase text-[13px] tracking-widest text-center max-w-[60px] leading-tight">{p.label}</span>
-                          </div>
-                        ))}
-                      </motion.div>
-                    </div>
-                    {wonPrize ? (
-                      <div className="text-center animate-bounce bg-[color:var(--foreground)] text-[color:var(--surface)] px-10 py-5 rounded-full font-black uppercase tracking-widest text-[22px]">WYGRANA: {wonPrize}</div>
+                    {!hasAccess ? (
+                      <div className="text-center py-20 max-w-sm">
+                         <div className="w-20 h-20 bg-[color:var(--surface-muted)] rounded-full flex items-center justify-center mx-auto mb-8 border border-[color:var(--border)]">
+                            <Lock size={32} className="opacity-20" />
+                         </div>
+                         <h3 className="text-3xl font-black uppercase italic mb-6">Wymagane Zamówienie</h3>
+                         <p className="text-[17px] font-bold opacity-50 uppercase tracking-widest mb-8 leading-relaxed">Aby zakręcić kołem, wpisz 6-cyfrowy kod ze swojego ostatniego zamówienia.</p>
+                         <input
+                          type="text"
+                          placeholder="ABC123"
+                          maxLength={6}
+                          value={accessCode}
+                          onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
+                          className="w-full bg-[color:var(--surface-muted)] px-8 py-5 rounded-full border border-[color:var(--border)] font-black uppercase text-center text-lg focus:outline-none focus:border-[color:var(--foreground)] mb-6"
+                         />
+                         <button
+                          onClick={() => { if (accessCode === 'ABC123') setHasAccess(true); }}
+                          className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-5 rounded-full font-black uppercase tracking-widest text-lg shadow-xl"
+                         >
+                            Aktywuj
+                         </button>
+                      </div>
                     ) : (
-                      <div className="flex flex-col gap-6 w-full max-w-sm">
-                         <input type="text" placeholder="WPISZ KOD CYFROWY..." className="w-full bg-[color:var(--surface-muted)] px-8 py-5 rounded-full border border-[color:var(--border)] font-black uppercase text-center text-lg focus:outline-none focus:border-[color:var(--foreground)]" />
-                         <button onClick={spin} disabled={isSpinning} className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-6 rounded-full font-black uppercase tracking-widest text-[22px] shadow-xl">Graj o dropy</button>
+                      <div className="flex flex-col lg:flex-row gap-12 items-center w-full">
+                        <div className="flex-1 flex flex-col items-center">
+                          <h3 className="text-3xl font-black uppercase italic mb-12">Zakręć i wygraj jedną z wielu nagród!</h3>
+                          <div className="relative w-72 h-72 md:w-80 md:h-80 mb-12">
+                            <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 w-8 h-10 bg-[color:var(--foreground)]" style={{ clipPath: 'polygon(50% 100%, 0 0, 100% 0)' }} />
+                            <motion.div className="w-full h-full rounded-full border-[8px] border-[color:var(--foreground)] relative overflow-hidden" animate={{ rotate: rotation }} transition={{ duration: 4, ease: [0.1, 0, 0, 1] }}>
+                              {prizes.map((p, i) => (
+                                <div key={i} className="absolute top-0 left-0 w-full h-full origin-center" style={{ transform: `rotate(${i * 60}deg)`, backgroundColor: p.color, clipPath: 'polygon(50% 50%, 50% 0, 100% 0, 93.3% 25%)' }}>
+                                  <span className="absolute top-[25%] left-[50%] -translate-x-1/2 text-white font-black uppercase text-3xl tracking-tighter text-center leading-none">{p.label}</span>
+                                </div>
+                              ))}
+                            </motion.div>
+                          </div>
+
+                          {wonPrize ? (
+                            <div className="text-center animate-bounce bg-[color:var(--foreground)] text-[color:var(--surface)] px-10 py-5 rounded-full font-black uppercase tracking-widest text-[22px]">WYGRANA: {wonPrize}</div>
+                          ) : (
+                            <button
+                              onClick={spin}
+                              disabled={isSpinning}
+                              className="w-full max-w-sm bg-[color:var(--foreground)] text-[color:var(--surface)] py-6 rounded-full font-black uppercase tracking-widest text-[22px] shadow-xl hover:scale-105 transition-all"
+                            >
+                              Zakręć!
+                            </button>
+                          )}
+                        </div>
+
+                        <div className="w-full lg:w-80">
+                           <div className="bg-[color:var(--surface-muted)] rounded-3xl p-8 border border-[color:var(--border)]">
+                              <h4 className="text-[17px] font-black uppercase tracking-tighter italic mb-6 leading-tight">Nagrody do zdobycia, które otrzymasz mailem:</h4>
+                              <table className="w-full text-left font-bold uppercase tracking-widest text-[11px]">
+                                 <thead>
+                                    <tr className="border-b border-[color:var(--border)] opacity-30"><th className="pb-3">Lp.</th><th className="pb-3">Nagroda</th></tr>
+                                 </thead>
+                                 <tbody className="divide-y divide-[color:var(--border)]/5">
+                                    {prizes.slice(0, 5).map((p, i) => (
+                                       <tr key={i}><td className="py-3 opacity-30">{i + 1}.</td><td className="py-3">{p.text}</td></tr>
+                                    ))}
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
                       </div>
                     )}
                   </motion.div>

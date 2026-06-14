@@ -30,7 +30,6 @@ const collections: SubjectItem[] = [
   { id: 'roll', label: 'THE WAY WE ROLL', image: 'https://images.unsplash.com/photo-1539109132381-31a15b2c686a?auto=format&fit=crop&q=80&w=800', link: '/shop/roll', type: 'link' },
   { id: 'bloom', label: 'THE WAY WE BLOOM', image: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&q=80&w=800', link: '/shop/bloom', type: 'link' },
   { id: 'fly', label: 'THE WAY WE FLY', image: 'https://images.unsplash.com/photo-1475189778702-5ec9941484ae?auto=format&fit=crop&q=80&w=800', link: '/shop/fly', type: 'link' },
-  { id: 'back', label: '< WRÓĆ', image: 'https://images.unsplash.com/photo-1534126511673-b6899157a88a?auto=format&fit=crop&q=80&w=800', link: '/subjects', type: 'link' },
 ];
 
 function SubjectsContent() {
@@ -46,7 +45,10 @@ function SubjectsContent() {
       <Header />
 
       <div className="container mx-auto px-6 pt-40 pb-20 relative z-10">
-        <header className="mb-20 text-center lg:text-left">
+        <header className="mb-20 text-center lg:text-left relative">
+           {isCollections && (
+             <Link href="/subjects" className="absolute -top-12 left-0 text-[13px] font-black uppercase tracking-widest border border-[color:var(--border)] px-4 py-2 rounded-full hover:bg-[color:var(--surface-muted)] transition-all">← Wróć</Link>
+           )}
            <p className="text-[17px] font-black uppercase tracking-[0.4em] text-[color:var(--foreground)]/30 mb-4">Project: TWWW // Subject:</p>
            <h1 className="text-7xl font-black uppercase tracking-tighter italic leading-none">
              {isCollections ? 'Wybierz Kolekcję' : 'Wybierz Kategorię'}

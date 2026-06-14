@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { motion } from 'framer-motion';
@@ -38,49 +38,65 @@ const blogPosts = [
 ];
 
 export default function BlogPage() {
+  const [visiblePosts, setVisiblePosts] = React.useState(blogPosts);
+
+  // Mock infinite scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+        setVisiblePosts(prev => [...prev, ...blogPosts.map(p => ({ ...p, id: `${p.id}-${Math.random()}` }))]);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <main className="min-h-screen bg-[color:var(--surface)] font-antonio">
       <Header />
 
-      <div className="container mx-auto px-6 pt-40 pb-20">
-        <div className="mb-20">
+      <div className="container mx-auto px-6 pt-40 pb-20 max-w-2xl">
+        <div className="mb-20 text-center">
            <span className="text-[13px] font-black tracking-[0.5em] text-[color:var(--foreground)]/20 uppercase mb-4 block">Archive // Journals</span>
-           <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter italic mb-8">Nasza Historia</h1>
-           <p className="text-xl font-bold opacity-40 uppercase max-w-2xl italic">Dziennik pokładowy squadu TWWW. Update'y, lore i życie społeczności.</p>
+           <h1 className="text-6xl font-black uppercase tracking-tighter italic mb-8">Nasza Historia</h1>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-           {blogPosts.map((post, i) => (
+        <div className="flex flex-col gap-24">
+           {visiblePosts.map((post, i) => (
              <motion.article
                key={post.id}
-               initial={{ opacity: 0, y: 20 }}
+               initial={{ opacity: 0, y: 50 }}
                whileInView={{ opacity: 1, y: 0 }}
-               transition={{ delay: i * 0.1 }}
-               className="group flex flex-col"
+               viewport={{ once: true }}
+               className="group flex flex-col border border-[color:var(--border)] rounded-[40px] overflow-hidden bg-[color:var(--surface)] shadow-2xl"
              >
-                <div className="aspect-[4/3] rounded-[40px] overflow-hidden bg-[color:var(--surface-muted)] mb-8 relative border border-[color:var(--border)]">
-                   <img src={post.image} alt={post.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
-                   <div className="absolute top-6 left-6 bg-[color:var(--surface)]/80 backdrop-blur-md px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-widest border border-[color:var(--border)]">
-                      {post.category}
+                <div className="flex items-center gap-4 p-6 border-b border-[color:var(--border)] bg-[color:var(--surface-muted)]/50">
+                   <div className="w-10 h-10 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center font-black">TW</div>
+                   <div>
+                      <p className="text-[15px] font-black uppercase tracking-tighter">THE WAY WE WEAR</p>
+                      <p className="text-[11px] font-bold opacity-40 uppercase tracking-widest">{post.category} // {post.date}</p>
                    </div>
                 </div>
 
-                <div className="flex items-center gap-6 text-[11px] font-black uppercase tracking-widest opacity-30 mb-4">
-                   <span className="flex items-center gap-2"><Calendar size={12} /> {post.date}</span>
-                   <span className="flex items-center gap-2"><User size={12} /> {post.author}</span>
+                <div className="aspect-square bg-[color:var(--surface-muted)] relative overflow-hidden">
+                   <img src={post.image} alt={post.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" />
                 </div>
 
-                <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4 group-hover:text-blue-500 transition-colors leading-none">
-                  {post.title}
-                </h2>
+                <div className="p-8">
+                   <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4 leading-none">
+                     {post.title}
+                   </h2>
 
-                <p className="text-[15px] font-bold opacity-40 uppercase tracking-widest leading-relaxed mb-8 flex-1">
-                  {post.excerpt}
-                </p>
+                   <p className="text-[17px] font-bold opacity-60 uppercase tracking-widest leading-relaxed mb-6">
+                     {post.excerpt}
+                   </p>
 
-                <Link href={`/blog/${post.id}`} className="inline-flex items-center gap-3 text-[13px] font-black uppercase tracking-[0.3em] group-hover:gap-6 transition-all">
-                  Czytaj Dalej <ArrowRight size={16} />
-                </Link>
+                   <div className="flex items-center gap-4 opacity-30 text-[11px] font-black uppercase tracking-widest">
+                      <span>{post.author}</span>
+                      <span>•</span>
+                      <span>42 LIKES</span>
+                   </div>
+                </div>
              </motion.article>
            ))}
         </div>

@@ -39,36 +39,11 @@ export default function UnboxingPage() {
                 Nagraj unboxing swojej paczki <span className="text-[color:var(--foreground)] opacity-100">TWWW</span>, wrzuć na TikToka lub Instagrama z oznaczeniem <span className="underline underline-offset-8">#TWWW</span> i zgarnij dodatkowe żetony do Koła Fortuny przy następnym dropie.
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 max-w-5xl mx-auto">
-                 {steps.slice(0, 3).map((step, i) => {
-                    const Icon = step.icon;
-                    return (
-                      <div key={i} className="p-8 rounded-[40px] bg-[color:var(--surface-muted)] border border-[color:var(--border)] hover:scale-[1.02] transition-transform">
-                         <Icon size={32} className="mx-auto mb-4 opacity-20" />
-                         <h3 className="text-lg font-black uppercase italic mb-2 tracking-tighter">{step.title}</h3>
-                         <p className="text-[11px] font-bold uppercase tracking-widest opacity-40">{step.desc}</p>
-                      </div>
-                    );
-                 })}
-              </div>
-
-              <div className="flex flex-wrap justify-center gap-12 text-[15px] font-black uppercase tracking-[0.5em] opacity-20">
+              <div className="flex flex-wrap justify-center gap-12 text-[15px] font-black uppercase tracking-[0.5em] opacity-20 mb-20">
                  <span className="hover:opacity-100 transition-opacity cursor-default">#THEWAYWEWEAR</span>
-                 <span className="hover:opacity-100 transition-opacity cursor-default">#SQUAD</span>
-                 <span className="hover:opacity-100 transition-opacity cursor-default">#UNBOXING</span>
-                 <span className="hover:opacity-100 transition-opacity cursor-default">#GEEKPREMIUM</span>
+                 <span className="hover:opacity-100 transition-opacity cursor-default">#TWWW</span>
               </div>
            </div>
-        </div>
-
-        <div className="mt-20 text-center">
-            <p className="text-[13px] font-black uppercase tracking-[0.5em] opacity-20 mb-8">Nasz Standard Pakowania</p>
-            <div className="flex justify-center items-center gap-12 opacity-30 grayscale hover:grayscale-0 transition-all duration-500">
-               <Package size={40} />
-               <Sparkles size={40} />
-               <Heart size={40} />
-               <Gift size={40} />
-            </div>
         </div>
       </div>
 

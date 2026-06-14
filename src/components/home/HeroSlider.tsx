@@ -9,11 +9,16 @@ import { useStore } from '@/context/StoreContext';
 const collection = {
   name: "The Way WE Stare",
   items: [
-    { id: 'twww-hoodie-01', name: "Detal haftu 1", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=DETAL+HAFTU+1", dark: true, price: 299, category: 'Bluzy' },
-    { id: 'twww-hoodie-02', name: "Detal haftu 2", img: "https://placehold.co/1200x1600/FFFFFF/000000?text=DETAL+HAFTU+2", dark: false, price: 299, category: 'Bluzy' },
-    { id: 'twww-hoodie-03', name: "Packshot Produktu", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=PACKSHOT+PRODUKTU", dark: true, price: 299, category: 'Bluzy' },
-    { id: 'twww-hoodie-04', name: "Metka Szyja", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=METKA+SZYJA", dark: true, price: 299, category: 'Bluzy' },
-    { id: 'twww-hoodie-05', name: "Metka Bok", img: "https://placehold.co/1200x1600/FFFFFF/000000?text=METKA+BOK", dark: false, price: 299, category: 'Bluzy' },
+    { id: 'twww-art-1-1', name: "Packshot (1)", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=PACKSHOT+(1)", dark: true, price: 299, category: 'Bluzy' },
+    { id: 'twww-art-1-2', name: "Detal haftu (1)1", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=DETAL+HAFTU+(1)1", dark: true, price: 299, category: 'Bluzy' },
+    { id: 'twww-art-1-3', name: "Detal haftu (1)2", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=DETAL+HAFTU+(1)2", dark: true, price: 299, category: 'Bluzy' },
+    { id: 'twww-art-1-4', name: "Metka Szyi (1)", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=METKA+SZYI+(1)", dark: true, price: 299, category: 'Bluzy' },
+    { id: 'twww-art-1-5', name: "Metka Bok (1)", img: "https://placehold.co/1200x1600/000000/FFFFFF?text=METKA+BOK+(1)", dark: true, price: 299, category: 'Bluzy' },
+    { id: 'twww-art-2-1', name: "Packshot (2)", img: "https://placehold.co/1200x1600/222222/FFFFFF?text=PACKSHOT+(2)", dark: true, price: 349, category: 'Bluzy' },
+    { id: 'twww-art-2-2', name: "Detal haftu (2)1", img: "https://placehold.co/1200x1600/222222/FFFFFF?text=DETAL+HAFTU+(2)1", dark: true, price: 349, category: 'Bluzy' },
+    { id: 'twww-art-2-3', name: "Detal haftu (2)2", img: "https://placehold.co/1200x1600/222222/FFFFFF?text=DETAL+HAFTU+(2)2", dark: true, price: 349, category: 'Bluzy' },
+    { id: 'twww-art-2-4', name: "Metka Szyi (2)", img: "https://placehold.co/1200x1600/222222/FFFFFF?text=METKA+SZYI+(2)", dark: true, price: 349, category: 'Bluzy' },
+    { id: 'twww-art-2-5', name: "Metka Bok (2)", img: "https://placehold.co/1200x1600/222222/FFFFFF?text=METKA+BOK+(2)", dark: true, price: 349, category: 'Bluzy' },
   ]
 };
 

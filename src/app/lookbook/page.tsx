@@ -43,7 +43,11 @@ export default function CatalogPage() {
   return (
     <main className="min-h-screen bg-[color:var(--surface)] font-antonio overflow-hidden">
       <Header />
-      <audio ref={audioRef} src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" />
+      <audio
+        ref={audioRef}
+        src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"
+        preload="auto"
+      />
 
       <div className="container mx-auto px-6 pt-40 pb-20 min-h-[80vh] flex flex-col items-center justify-center">
         <div className="mb-8 text-center">
@@ -51,28 +55,45 @@ export default function CatalogPage() {
           <h1 className="text-5xl font-black uppercase tracking-tighter italic">Katalog TWWW</h1>
         </div>
 
-        <div className="relative w-full max-w-5xl aspect-[16/10] perspective-2000">
+        <div className="relative w-full max-w-5xl aspect-[16/10] perspective-[2000px]">
            {/* Book Container */}
-           <div className="absolute inset-0 flex">
-              {/* Left Side (Static) */}
-              <div className="w-1/2 bg-[color:var(--surface)] border-r border-[color:var(--border)] shadow-2xl relative overflow-hidden flex items-center justify-center p-12">
-                 <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
-                 {currentPage > 0 && (
-                   <div className="relative z-10 text-center">
-                      <img src={PAGES[currentPage-1].image} className="w-full h-64 object-cover grayscale mb-8 shadow-xl" alt="" />
-                      <h2 className="text-2xl font-black uppercase italic">{PAGES[currentPage-1].title}</h2>
-                   </div>
-                 )}
+           <div className="absolute inset-0 flex shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] rounded-[20px] overflow-hidden">
+              {/* Left Side */}
+              <div className="w-1/2 bg-[color:var(--surface)] border-r border-black/10 relative overflow-hidden flex items-center justify-center p-12">
+                 <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+                 <AnimatePresence mode="wait">
+                    {currentPage > 0 && (
+                      <motion.div
+                        key={currentPage}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 20 }}
+                        className="relative z-10 text-center w-full"
+                      >
+                         <img src={PAGES[currentPage-1].image} className="w-full aspect-[4/5] object-cover grayscale mb-8 shadow-2xl rounded-lg" alt="" />
+                         <h2 className="text-2xl font-black uppercase italic">{PAGES[currentPage-1].title}</h2>
+                      </motion.div>
+                    )}
+                 </AnimatePresence>
               </div>
 
-              {/* Right Side (Static) */}
-              <div className="w-1/2 bg-[color:var(--surface)] shadow-2xl relative overflow-hidden flex items-center justify-center p-12">
-                 <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
-                 <div className="relative z-10 text-center">
-                    <img src={PAGES[currentPage].image} className="w-full h-64 object-cover grayscale mb-8 shadow-xl" alt="" />
-                    <h2 className="text-2xl font-black uppercase italic">{PAGES[currentPage].title}</h2>
-                    <p className="text-base font-bold opacity-40 uppercase tracking-widest mt-4">{PAGES[currentPage].content}</p>
-                 </div>
+              {/* Right Side (Active flipping page) */}
+              <div className="w-1/2 bg-[color:var(--surface)] relative overflow-hidden flex items-center justify-center p-12">
+                 <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+                 <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentPage}
+                      initial={{ opacity: 0, x: 20, rotateY: 45 }}
+                      animate={{ opacity: 1, x: 0, rotateY: 0 }}
+                      exit={{ opacity: 0, x: -20, rotateY: -45 }}
+                      transition={{ type: 'spring', damping: 20 }}
+                      className="relative z-10 text-center w-full origin-left"
+                    >
+                       <img src={PAGES[currentPage].image} className="w-full aspect-[4/5] object-cover grayscale mb-8 shadow-2xl rounded-lg" alt="" />
+                       <h2 className="text-2xl font-black uppercase italic">{PAGES[currentPage].title}</h2>
+                       <p className="text-base font-bold opacity-40 uppercase tracking-widest mt-4">{PAGES[currentPage].content}</p>
+                    </motion.div>
+                 </AnimatePresence>
               </div>
            </div>
 
@@ -113,9 +134,6 @@ export default function CatalogPage() {
 
         <div className="mt-40 max-w-2xl text-center">
            <BookOpen size={32} className="mx-auto mb-6 opacity-20" />
-           <p className="text-[13px] font-bold uppercase tracking-widest opacity-40 leading-relaxed">
-             Ten katalog jest wyrazem naszej pasji do minimalizmu i nowoczesności. Każda strona to kolejna historia, którą chcemy z Tobą dzielić. Przewracaj strony, aby odkryć nasz świat.
-           </p>
         </div>
       </div>
       <Footer />

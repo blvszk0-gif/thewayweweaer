@@ -20,31 +20,7 @@ interface WishlistItem {
   isPromoNotified?: boolean;
 }
 
-const wishlistItemsData: WishlistItem[] = [
-  {
-    id: 'twww-hoodie-01',
-    name: 'OVERSIZE HOODIE // THE WAY WE STARE',
-    price: 299,
-    images: [
-      'https://placehold.co/400x500/000000/FFFFFF?text=HOODIE+1',
-      'https://placehold.co/400x500/111111/FFFFFF?text=HOODIE+2',
-      'https://placehold.co/400x500/222222/FFFFFF?text=HOODIE+3'
-    ],
-    inStock: true,
-    category: 'Bluzy'
-  },
-  {
-    id: 'twww-tee-02',
-    name: 'LIMITLESS TEE // BLACK SQUAD',
-    price: 149,
-    images: [
-      'https://placehold.co/400x500/000000/FFFFFF?text=TEE+2',
-      'https://placehold.co/400x500/111111/FFFFFF?text=TEE+ALT'
-    ],
-    inStock: false,
-    category: 'Koszulki'
-  }
-];
+const wishlistItemsData: WishlistItem[] = [];
 
 const WishlistProductCard = ({ item, onRemove, onNotify, onNotifyPromo }: { item: WishlistItem, onRemove: (id: string) => void, onNotify: (id: string) => void, onNotifyPromo: (id: string) => void }) => {
   const { addToCart } = useStore();
