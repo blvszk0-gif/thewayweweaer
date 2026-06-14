@@ -1,104 +1,69 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { motion } from 'framer-motion';
-import { Calendar, User, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
+import { Book, History, Users, Heart } from 'lucide-react';
 
-const blogPosts = [
+const articles = [
   {
-    id: 'story-of-twww',
-    title: 'Dlaczego WE? Historia powstania marki',
-    excerpt: 'W świecie zdominowanym przez indywidualizm postawiliśmy na Squad. Poznaj historię The Way WE Wear.',
-    date: '20.03.2024',
-    author: 'ADMIN',
-    category: 'HISTORY',
-    image: 'https://placehold.co/800x600/000000/FFFFFF?text=OUR+STORY'
+    title: 'JAK TO SIĘ ZACZĘŁO?',
+    date: '12 STYCZNIA 2026',
+    excerpt: 'OD PIERWSZEJ MASZYNY DO SZYCIA W GARAŻU DO BUDOWANIA NAJWIĘKSZEJ SPOŁECZNOŚCI STREETWEAROWEJ W POLSCE.',
+    icon: History
   },
   {
-    id: 'anime-vibe-check',
-    title: 'Easter Eggi w nowej kolekcji Anime',
-    excerpt: 'Szukasz nawiązań do lore? Przygotowaliśmy dla Ciebie zestawienie wszystkich ukrytych smaczków.',
-    date: '15.03.2024',
-    author: 'SQUAD LEADER',
-    category: 'LORE',
-    image: 'https://placehold.co/800x600/000000/FFFFFF?text=ANIME+LORE'
+    title: 'MISJA SQUADU',
+    date: '05 LUTEGO 2026',
+    excerpt: 'DLACZEGO "WE" W NASZEJ NAZWIE JEST TAK WAŻNE? O BUDOWANIU RELACJI I WSPÓLNYCH PASJACH.',
+    icon: Users
   },
   {
-    id: 'setup-tour',
-    title: 'Top 5 setupów naszych graczy',
-    excerpt: 'Zestawienie najbardziej epickich biurek i monitorów od naszej społeczności. TWWW w akcji.',
-    date: '10.03.2024',
-    author: 'GEEK',
-    category: 'COMMUNITY',
-    image: 'https://placehold.co/800x600/000000/FFFFFF?text=SETUPS'
+    title: 'JAKOŚĆ PREMIUM',
+    date: '20 MARCA 2026',
+    excerpt: 'DETALE, KTÓRE ROBIĄ RÓŻNICĘ. PRZEWODNIK PO NASZYCH MATERIAŁACH I TECHNIKACH HAFTU.',
+    icon: Heart
   }
 ];
 
 export default function BlogPage() {
-  const [visiblePosts, setVisiblePosts] = React.useState(blogPosts);
-
-  // Mock infinite scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
-        setVisiblePosts(prev => [...prev, ...blogPosts.map(p => ({ ...p, id: `${p.id}-${Math.random()}` }))]);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <main className="min-h-screen bg-[color:var(--surface)] font-antonio">
       <Header />
 
-      <div className="container mx-auto px-6 pt-40 pb-20 max-w-2xl">
-        <div className="mb-20 text-center">
-           <span className="text-[13px] font-black tracking-[0.5em] text-[color:var(--foreground)]/20 uppercase mb-4 block">Archive // Journals</span>
-           <h1 className="text-6xl font-black uppercase tracking-tighter italic mb-8">Nasza Historia</h1>
-        </div>
+      <div className="container mx-auto px-6 pt-40 pb-40">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-24 text-center">
+            <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter italic mb-8">Nasza Historia</h1>
+            <p className="text-[22px] font-bold opacity-40 uppercase tracking-widest leading-relaxed">Poznaj korzenie The Way WE Wear</p>
+          </div>
 
-        <div className="flex flex-col gap-24">
-           {visiblePosts.map((post, i) => (
-             <motion.article
-               key={post.id}
-               initial={{ opacity: 0, y: 50 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true }}
-               className="group flex flex-col border border-[color:var(--border)] rounded-[40px] overflow-hidden bg-[color:var(--surface)] shadow-2xl"
-             >
-                <div className="flex items-center gap-4 p-6 border-b border-[color:var(--border)] bg-[color:var(--surface-muted)]/50">
-                   <div className="w-10 h-10 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center font-black">TW</div>
-                   <div>
-                      <p className="text-[15px] font-black uppercase tracking-tighter">THE WAY WE WEAR</p>
-                      <p className="text-[11px] font-bold opacity-40 uppercase tracking-widest">{post.category} // {post.date}</p>
+          <div className="space-y-12">
+            {articles.map((art, i) => (
+              <motion.article
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-[40px] p-12 hover:scale-[1.02] transition-transform cursor-pointer group shadow-xl"
+              >
+                <div className="flex flex-col md:flex-row gap-12 items-center">
+                   <div className="w-32 h-32 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-3xl flex items-center justify-center shrink-0 group-hover:rotate-6 transition-transform shadow-2xl">
+                      <art.icon size={48} />
+                   </div>
+                   <div className="space-y-4">
+                      <p className="text-[13px] font-black uppercase tracking-[0.4em] opacity-30">{art.date}</p>
+                      <h2 className="text-4xl font-black uppercase tracking-tighter italic">{art.title}</h2>
+                      <p className="text-xl font-bold opacity-60 uppercase leading-relaxed">{art.excerpt}</p>
+                      <button className="flex items-center gap-2 text-[15px] font-black uppercase tracking-widest border-b-2 border-[color:var(--foreground)] pb-1 hover:gap-4 transition-all">
+                        Czytaj dalej <Book size={16} />
+                      </button>
                    </div>
                 </div>
-
-                <div className="aspect-square bg-[color:var(--surface-muted)] relative overflow-hidden">
-                   <img src={post.image} alt={post.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" />
-                </div>
-
-                <div className="p-8">
-                   <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4 leading-none">
-                     {post.title}
-                   </h2>
-
-                   <p className="text-[17px] font-bold opacity-60 uppercase tracking-widest leading-relaxed mb-6">
-                     {post.excerpt}
-                   </p>
-
-                   <div className="flex items-center gap-4 opacity-30 text-[11px] font-black uppercase tracking-widest">
-                      <span>{post.author}</span>
-                      <span>•</span>
-                      <span>42 LIKES</span>
-                   </div>
-                </div>
-             </motion.article>
-           ))}
+              </motion.article>
+            ))}
+          </div>
         </div>
       </div>
 

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { ContactWizard } from './ContactWizard';
+import { NewsletterWizard } from './NewsletterWizard';
 
 export const Footer = () => {
   const [isContactOpen, setIsContactOpen] = useState(false);
@@ -65,7 +66,7 @@ export const Footer = () => {
       </div>
 
       <ContactWizard isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
-      <ContactWizard isOpen={isNewsletterWizardOpen} onClose={() => setIsNewsletterWizardOpen(false)} />
+      <NewsletterWizard isOpen={isNewsletterWizardOpen} onClose={() => setIsNewsletterWizardOpen(false)} />
 
       <div className="container mx-auto px-6 mt-24 pt-8 border-t border-[color:var(--border)] flex flex-col md:flex-row justify-between items-center gap-4 text-[13px] font-bold text-[color:var(--foreground)]/30 tracking-[0.4em] uppercase">
         <p>© 2026 THE WAY WE WEAR. ALL RIGHTS RESERVED.</p>

@@ -21,8 +21,8 @@ export default function UnboxingPage() {
       <div className="container mx-auto px-6 pt-40 pb-40">
         <div className="bg-[color:var(--surface)] text-[color:var(--foreground)] rounded-[60px] p-16 md:p-32 text-center relative group border border-[color:var(--border)] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.2)]">
            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,0,0,0.05)_0%,transparent_50%)]" />
-           <div className="absolute -top-12 -left-12 w-48 h-48 bg-blue-500/10 blur-[100px] rounded-full" />
-           <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-purple-500/10 blur-[100px] rounded-full" />
+           <div className="absolute top-0 left-0 w-48 h-48 bg-blue-500/10 blur-[100px] rounded-full -translate-x-1/2 -translate-y-1/2" />
+           <div className="absolute bottom-0 right-0 w-48 h-48 bg-purple-500/10 blur-[100px] rounded-full translate-x-1/2 translate-y-1/2" />
 
            <div className="relative z-10">
               <motion.div

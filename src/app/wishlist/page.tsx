@@ -119,10 +119,6 @@ const WishlistProductCard = ({ item, onRemove, onNotify, onNotifyPromo }: { item
          <Link href={`/product/${item.id}`} className="hover:opacity-60 transition-opacity">
           <h3 className="text-2xl font-black uppercase tracking-tighter italic mb-4 leading-none text-[color:var(--foreground)]">{item.name}</h3>
          </Link>
-         <div className="flex justify-between items-center mb-8">
-           <span className="text-xl font-black text-[color:var(--foreground)]">{item.price} PLN</span>
-         </div>
-
          <div className="space-y-3 mt-auto">
            {item.inStock ? (
              <button
@@ -160,7 +156,7 @@ const WishlistProductCard = ({ item, onRemove, onNotify, onNotifyPromo }: { item
 };
 
 export default function WishlistPage() {
-  const { wishlist, removeFromWishlist } = useStore();
+  const { wishlist, removeFromWishlist, addToCart } = useStore();
   const [items, setItems] = useState(wishlistItemsData);
   const [filter, setFilter] = useState('Wszystko');
   const [emailPrompt, setEmailPrompt] = useState<{ id: string, type: 'stock' | 'promo' } | null>(null);
@@ -229,40 +225,38 @@ export default function WishlistPage() {
         <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
           <div>
             <h1 className="text-6xl font-black uppercase tracking-tighter italic text-[color:var(--foreground)]">Twoja Wishlista</h1>
-            <p className="text-[color:var(--foreground)]/70 font-bold uppercase tracking-[0.3em] text-base mt-4">Przedmioty, które skradły Twoje serce</p>
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-             <div className="flex flex-wrap justify-center gap-2 bg-[color:var(--surface-muted)]/70 backdrop-blur rounded-full p-1 border border-[color:var(--border)]">
-                {['Wszystko', 'Bluzy', 'Koszulki'].map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setFilter(cat)}
-                    className={`px-5 py-2 rounded-full text-[17px] font-black uppercase tracking-widest transition-all ${filter === cat ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] shadow-xl' : 'text-[color:var(--foreground)]/40 hover:text-[color:var(--foreground)]'}`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-             </div>
-             <div className="text-[17px] font-black uppercase tracking-widest opacity-30">
-               {filteredItems.length} Przedmioty
-             </div>
           </div>
         </div>
 
         {filteredItems.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="max-w-4xl space-y-8">
             {filteredItems.map((item) => (
-              <WishlistProductCard
-                key={item.id}
-                item={{
-                  ...item,
-                  isNotified: notifiedItems.includes(item.id),
-                  isPromoNotified: promoNotifiedItems.includes(item.id)
-                }}
-                onRemove={removeItem}
-                onNotify={handleNotify}
-                onNotifyPromo={handleNotifyPromo}
-              />
+              <div key={item.id} className="flex gap-6 pb-8 border-b border-[color:var(--border)]">
+                 <div className="w-24 md:w-32 aspect-[3/4] bg-[color:var(--surface-muted)] rounded-xl overflow-hidden shadow-lg">
+                    <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+                 </div>
+                 <div className="flex-1 flex flex-col justify-between py-2">
+                    <div>
+                       <div className="flex justify-between items-start mb-2">
+                          <Link href={`/product/${item.id}`}>
+                             <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter leading-tight hover:opacity-60 transition-opacity">{item.name}</h3>
+                          </Link>
+                          <button onClick={() => removeItem(item.id)} className="text-[color:var(--foreground)]/40 hover:text-red-500 transition-colors">
+                             <Trash2 size={24} />
+                          </button>
+                       </div>
+                       <p className="text-[17px] font-black uppercase tracking-widest text-[color:var(--foreground)]/50">{item.category}</p>
+                    </div>
+                    <div className="flex justify-end gap-4">
+                       <button
+                        onClick={() => addToCart({ id: item.id, name: item.name, price: item.price, image: item.images[0], quantity: 1 })}
+                        className="bg-[color:var(--foreground)] text-[color:var(--surface)] px-8 py-3 rounded-full font-black uppercase tracking-widest text-[13px] hover:scale-105 transition-all shadow-xl"
+                       >
+                          Do koszyka
+                       </button>
+                    </div>
+                 </div>
+              </div>
             ))}
           </div>
         ) : (
@@ -272,18 +266,11 @@ export default function WishlistPage() {
              </div>
              <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4">Pusto tu...</h2>
 
-             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-               <Link href="/shop/bluzy" className="inline-flex items-center justify-center gap-2 bg-[color:var(--foreground)] text-[color:var(--surface)] px-4 py-4 rounded-full font-black uppercase tracking-[0.2em] hover:bg-[color:var(--foreground)]/80 transition-all">Sprawdź nasze Bluzy</Link>
-               <Link href="/shop/koszulki" className="inline-flex items-center justify-center gap-2 bg-[color:var(--foreground)] text-[color:var(--surface)] px-4 py-4 rounded-full font-black uppercase tracking-[0.2em] hover:bg-[color:var(--foreground)]/80 transition-all">Sprawdź nasze Koszulki</Link>
-               <Link href="/shop/akcesoria" className="inline-flex items-center justify-center gap-2 bg-[color:var(--foreground)] text-[color:var(--surface)] px-4 py-4 rounded-full font-black uppercase tracking-[0.2em] hover:bg-[color:var(--foreground)]/80 transition-all">Sprawdź nasze Akcesoria</Link>
-                 <Link href="/lookbook" className="inline-flex items-center justify-center gap-2 bg-[color:var(--foreground)] text-[color:var(--surface)] px-4 py-4 rounded-full font-black uppercase tracking-[0.2em] hover:bg-[color:var(--foreground)]/80 transition-all">Sprawdź nasz LOOKBOOK</Link>
+             <div className="flex justify-center mb-8">
+               <Link href="/subjects" className="inline-flex items-center justify-center gap-4 bg-[color:var(--foreground)] text-[color:var(--surface)] px-12 py-6 rounded-full font-black uppercase tracking-[0.3em] text-[18px] hover:scale-[1.05] transition-all shadow-2xl">
+                 Wróć do sklepu
+               </Link>
              </div>
-             <button
-               onClick={() => setNewsletterModalOpen(true)}
-               className="mt-2 inline-flex items-center justify-center gap-2 bg-[color:var(--foreground)] text-[color:var(--surface)] px-6 py-4 rounded-full font-black uppercase tracking-[0.2em] hover:bg-[color:var(--foreground)]/80 transition-all"
-             >
-               Zapisz się do Newslettera
-             </button>
           </div>
         )}
       </div>

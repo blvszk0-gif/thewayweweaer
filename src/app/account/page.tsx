@@ -114,13 +114,6 @@ export default function AccountPage() {
 
           {/* Tabs Sidebar */}
           <div className="lg:w-80 w-full shrink-0 space-y-4 lg:sticky lg:top-32">
-             <div className="bg-[color:var(--surface-muted)] p-8 rounded-[40px] border border-[color:var(--border)] shadow-xl text-center group relative overflow-hidden">
-                <div className="w-24 h-24 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center mx-auto mb-6 text-3xl font-black relative overflow-hidden">
-                   KG
-                </div>
-                <h2 className="text-3xl font-black uppercase tracking-tighter italic">Kamil Gamer</h2>
-             </div>
-
              <div className="bg-[color:var(--surface)] p-4 rounded-[30px] border border-[color:var(--border)] space-y-2 shadow-sm">
                 {tabs.map((tab) => (
                   <button
@@ -149,6 +142,8 @@ export default function AccountPage() {
                      <h3 className="text-4xl font-black uppercase italic tracking-tighter">Ustawienia Profilu</h3>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {[
+                          { label: 'Imię', val: 'Kamil' },
+                          { label: 'Nazwisko', val: 'Gamer' },
                           { label: 'E-mail', val: 'kamil@squad.pl' },
                           { label: 'Telefon', val: '+48 500 600 700' },
                           { label: 'Hasło', val: '••••••••••••', type: 'password' },
@@ -183,12 +178,28 @@ export default function AccountPage() {
                                 Kurier do domu
                               </button>
                            </div>
-                           <button
-                            onClick={() => setIsDeliveryConfirmed(true)}
-                            className={`w-full py-4 rounded-xl font-black uppercase tracking-widest text-[13px] transition-all border ${isDeliveryConfirmed ? 'bg-green-500 text-white border-green-500' : 'bg-transparent border-[color:var(--border)] opacity-40 hover:opacity-100'}`}
-                           >
-                             {isDeliveryConfirmed ? 'METODA POTWIERDZONA ✓' : 'POTWIERDŹ WYBÓR'}
-                           </button>
+                           <AnimatePresence>
+                             {(!isDeliveryConfirmed || deliveryMethod !== 'InPost') && ( // Simple logic for demo
+                               <motion.button
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                onClick={() => setIsDeliveryConfirmed(true)}
+                                className="w-full py-4 rounded-xl font-black uppercase tracking-widest text-[13px] transition-all border bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)] hover:scale-[1.02] active:scale-[0.98] shadow-xl"
+                               >
+                                 POTWIERDŹ WYBÓR
+                               </motion.button>
+                             )}
+                             {isDeliveryConfirmed && (
+                               <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="w-full py-4 rounded-xl font-black uppercase tracking-widest text-[13px] text-center text-green-500 border border-green-500/20"
+                               >
+                                 METODA POTWIERDZONA ✓
+                               </motion.div>
+                             )}
+                           </AnimatePresence>
                         </div>
                      </div>
                   </motion.div>
@@ -287,7 +298,12 @@ export default function AccountPage() {
                             <motion.div className="w-full h-full rounded-full border-[8px] border-[color:var(--foreground)] relative overflow-hidden" animate={{ rotate: rotation }} transition={{ duration: 4, ease: [0.1, 0, 0, 1] }}>
                               {prizes.map((p, i) => (
                                 <div key={i} className="absolute top-0 left-0 w-full h-full origin-center" style={{ transform: `rotate(${i * 60}deg)`, backgroundColor: p.color, clipPath: 'polygon(50% 50%, 50% 0, 100% 0, 93.3% 25%)' }}>
-                                  <span className="absolute top-[25%] left-[50%] -translate-x-1/2 text-white font-black uppercase text-3xl tracking-tighter text-center leading-none">{p.label}</span>
+                                  <span
+                                    className="absolute top-[18%] left-[65%] -translate-x-1/2 -translate-y-1/2 text-white font-black uppercase text-3xl tracking-tighter text-center leading-none"
+                                    style={{ transform: `rotate(30deg)` }}
+                                  >
+                                    {p.label}
+                                  </span>
                                 </div>
                               ))}
                             </motion.div>
