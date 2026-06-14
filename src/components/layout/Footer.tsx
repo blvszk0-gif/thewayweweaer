@@ -1,9 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { ContactWizard } from './ContactWizard';
 
 export const Footer = () => {
+  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isNewsletterWizardOpen, setIsNewsletterWizardOpen] = useState(false);
+
   return (
     <footer className="bg-[color:var(--surface-muted)] text-[color:var(--foreground)] py-24 border-t border-[color:var(--border)] font-antonio">
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16 md:gap-8">
@@ -11,9 +15,10 @@ export const Footer = () => {
         <div>
           <h4 className="text-lg font-black uppercase tracking-tighter mb-8 italic underline decoration-1 underline-offset-4 font-antonio">Pomoc</h4>
           <ul className="flex flex-col gap-4 text-[18px] font-bold text-[color:var(--foreground)]/70 uppercase tracking-widest">
-            <li><Link href="/moje-konto" className="hover:text-[color:var(--foreground)] transition-colors">Moje konto</Link></li>
-            <li><Link href="/moje-zakupy" className="hover:text-[color:var(--foreground)] transition-colors">Moje zakupy</Link></li>
+            <li><Link href="/account" className="hover:text-[color:var(--foreground)] transition-colors">Moje konto</Link></li>
+            <li><Link href="/account?tab=orders" className="hover:text-[color:var(--foreground)] transition-colors">Moje zakupy</Link></li>
             <li><Link href="/zwroty" className="hover:text-[color:var(--foreground)] transition-colors">Zwroty</Link></li>
+            <li><button onClick={() => setIsContactOpen(true)} className="hover:text-[color:var(--foreground)] transition-colors text-left uppercase">Wyślij zapytanie lub zgłoszenie</button></li>
           </ul>
         </div>
 
@@ -44,15 +49,13 @@ export const Footer = () => {
           <h4 className="text-lg font-black uppercase tracking-tighter mb-8 italic underline decoration-1 underline-offset-4 font-antonio">Konto</h4>
           <div className="flex flex-col gap-6">
             <div className="space-y-4">
-              <p className="text-[11px] font-black uppercase tracking-[0.3em] opacity-30 italic">Zapisz się do squadu:</p>
-              <div className="flex flex-col gap-2">
-                <input
-                  type="email"
-                  placeholder="TWOJA@POCZTA.COM"
-                  className="bg-transparent border-b border-[color:var(--border)] py-2 text-[14px] font-black uppercase tracking-widest focus:outline-none focus:border-[color:var(--foreground)] transition-colors"
-                />
-                <button className="text-[11px] font-black uppercase tracking-[0.4em] text-left hover:text-blue-500 transition-colors">Dołącz →</button>
-              </div>
+              <p className="text-[11px] font-black uppercase tracking-[0.3em] opacity-30 italic">Bądź częścią Squadu:</p>
+              <button
+                onClick={() => setIsNewsletterWizardOpen(true)}
+                className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-xl font-black uppercase tracking-[0.3em] text-[12px] shadow-lg hover:scale-[1.02] transition-transform"
+              >
+                Zapisz się do Newslettera
+              </button>
             </div>
             <ul className="flex flex-col gap-4 text-[18px] font-bold text-[color:var(--foreground)]/70 uppercase tracking-widest">
               <li><Link href="/usun-konto" className="hover:text-[color:var(--foreground)] transition-colors text-[14px]">Usuń swoje konto</Link></li>
@@ -60,6 +63,9 @@ export const Footer = () => {
           </div>
         </div>
       </div>
+
+      <ContactWizard isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      <ContactWizard isOpen={isNewsletterWizardOpen} onClose={() => setIsNewsletterWizardOpen(false)} />
 
       <div className="container mx-auto px-6 mt-24 pt-8 border-t border-[color:var(--border)] flex flex-col md:flex-row justify-between items-center gap-4 text-[13px] font-bold text-[color:var(--foreground)]/30 tracking-[0.4em] uppercase">
         <p>© 2026 THE WAY WE WEAR. ALL RIGHTS RESERVED.</p>

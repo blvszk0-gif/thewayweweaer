@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, User, ShoppingBag, Heart, Moon, ChevronRight, X } from 'lucide-react';
+import { User, ShoppingBag, Heart, Moon, ChevronRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HaftWizard } from '../shop/HaftWizard';
 import { LoginForm } from '../auth/LoginForm';
 import { useStore } from '@/context/StoreContext';
+import { SearchBar } from './SearchBar';
 
 export const Header = () => {
   const { cart, wishlist } = useStore();
@@ -89,9 +90,8 @@ export const Header = () => {
 
           {/* Right: Actions */}
           <div className="flex items-center gap-3 md:gap-6">
-            <div className="hidden lg:flex items-center rounded px-3 py-1.5 gap-2 text-[color:var(--foreground)] border border-[color:var(--border)]">
-              <Search size={18} className="opacity-50" />
-              <input type="text" placeholder="SZUKAJ..." className="bg-transparent border-none text-base focus:outline-none w-24 xl:w-32 uppercase font-black text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50" />
+            <div className="hidden lg:flex w-48 xl:w-64">
+              <SearchBar isHeader={true} />
             </div>
             <Link
               href={isLoggedIn ? "/account" : "#"}
@@ -155,9 +155,8 @@ export const Header = () => {
                 </button>
               </div>
 
-              <div className="flex items-center rounded-xl px-4 py-3 gap-3 mb-8 bg-[color:var(--surface-muted)] border border-[color:var(--border)]">
-                <Search size={20} className="opacity-50" />
-                <input type="text" placeholder="SZUKAJ PRODUKTU..." className="bg-transparent border-none text-[18px] focus:outline-none flex-1 uppercase font-black text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50" />
+              <div className="mb-8">
+                <SearchBar isHeader={false} />
               </div>
 
               <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-tighter overflow-y-auto no-scrollbar font-antonio text-[color:var(--foreground)]">
@@ -198,14 +197,6 @@ export const Header = () => {
                 >
                   HAFT NA ZAMÓWIENIE
                 </button>
-
-                <Link
-                  href="/account"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="bg-black text-white px-6 py-4 rounded-full text-center text-[18px] font-black uppercase tracking-widest hover:scale-105 transition-transform mt-4"
-                >
-                  Podgląd Konta
-                </Link>
               </div>
 
               <div className="mt-auto pt-12 text-[13px] font-bold text-[color:var(--foreground)]/50 tracking-widest uppercase">

@@ -182,19 +182,18 @@ export default function ProductPage() {
 
           <div className="lg:w-[45%]">
             <div className="relative group">
-               <AnimatePresence>
-                 {viewers > 0 && (
-                   <motion.div
-                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                    className="absolute -top-12 left-0 z-10 bg-[color:var(--surface)]/80 backdrop-blur-md px-4 py-2 rounded-full border border-[color:var(--border)] flex items-center gap-2 shadow-sm"
-                   >
-                    <span className="w-2 h-2 bg-[color:var(--foreground)] rounded-full animate-pulse" />
-                    <span className="text-[13px] font-black uppercase tracking-widest">{viewers} OSÓB OGLĄDAŁO W OSTATNIE 48H</span>
-                   </motion.div>
-                 )}
-               </AnimatePresence>
-
                <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-[color:var(--surface-muted)] relative shadow-2xl border border-[color:var(--border)]">
+                  <AnimatePresence>
+                    {viewers > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
+                        className="absolute top-4 left-4 z-20 bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 flex items-center gap-2 shadow-xl"
+                      >
+                        <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                        <span className="text-[11px] font-black uppercase tracking-widest text-white">{viewers} OSÓB OGLĄDAŁO W OSTATNIE 48H</span>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                   <AnimatePresence mode="wait">
                     <motion.img
                       key={currentImg} src={productData.images[currentImg]}

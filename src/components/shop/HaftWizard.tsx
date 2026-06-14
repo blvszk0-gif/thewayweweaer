@@ -190,7 +190,7 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                         <AlertCircle className="shrink-0" />
                         <div>
                           <p className="text-xl font-black uppercase mb-1">Zwroty</p>
-                          <p className="text-[17px] font-bold opacity-50 uppercase leading-relaxed text-justify">Artykuły z haftem na zamówienie są tworzone według Twojej indywidualnej specyfikacji. Zgodnie z art. 38 ustawy o prawach konsumenta, produkty personalizowane nie podlegają zwrotowi ani wymianie z tytułu rezygnacji. Prosimy o dokładne sprawdzenie przesłanego projektu oraz tabeli rozmiarów przed sfinalizowaniem zamówienia.</p>
+                          <p className="text-[17px] font-bold opacity-50 uppercase leading-relaxed text-justify">Artykuły z haftem na zamówienie są tworzone według Twojej indywidualnej specyfikacji. Zgodnie z art. 38 ust. 1 pkt 3 ustawy o prawach konsumenta, produkty personalizowane nie podlegają zwrotowi ani wymianie z tytułu rezygnacji. Prosimy o dokładne sprawdzenie przesłanego projektu oraz tabeli rozmiarów przed sfinalizowaniem zamówienia.</p>
                         </div>
                       </div>
                       <div className="flex gap-4 p-6 bg-[color:var(--surface-muted)] rounded-2xl border border-[color:var(--border)]">

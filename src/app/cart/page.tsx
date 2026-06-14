@@ -74,14 +74,6 @@ export default function CartPage() {
               </div>
             )}
 
-            <div className="mt-12 p-8 bg-[color:var(--surface-muted)] rounded-[30px] border border-[color:var(--border)] shadow-sm">
-               <h4 className="text-base font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
-                 <ShieldCheck size={16} /> Gwarancja Squadu
-               </h4>
-               <p className="text-[17px] font-bold uppercase leading-relaxed opacity-50">
-                 Wszystkie nasze ubrania są szyte i haftowane w Polsce. Masz 14 dni na zwrot, jeśli produkt nie spełni Twoich oczekiwań. Unboxing to nasza świętość - każda paczka to unikalne doświadczenie.
-               </p>
-            </div>
           </div>
 
           {/* Summary */}
