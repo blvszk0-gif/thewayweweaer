@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Zap } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const BackToTop = () => {
@@ -20,10 +20,14 @@ export const BackToTop = () => {
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
+    const scrollStep = -window.scrollY / (750 / 15); // Adjust duration here (750ms)
+    const scrollInterval = setInterval(() => {
+      if (window.scrollY !== 0) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
   };
 
   return (
@@ -34,10 +38,10 @@ export const BackToTop = () => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-[100] w-14 h-14 bg-black text-white flex items-center justify-center rounded-full shadow-2xl border border-white/10 hover:scale-110 transition-transform group"
+          className="fixed bottom-8 right-8 z-[100] w-12 h-12 bg-[color:var(--foreground)] text-[color:var(--surface)] flex items-center justify-center rounded-full shadow-2xl border border-[color:var(--border)] hover:scale-110 transition-transform group"
           aria-label="Back to top"
         >
-          <Zap size={24} fill="currentColor" className="group-hover:-translate-y-1 transition-transform" />
+          <ArrowUp size={24} className="group-hover:-translate-y-1 transition-transform" />
         </motion.button>
       )}
     </AnimatePresence>
