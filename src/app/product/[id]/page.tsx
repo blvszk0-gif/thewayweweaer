@@ -61,7 +61,6 @@ const productData = {
     { name: 'Powder Pink', hex: '#F2D2BD', stock: true, extra: 40 },
   ],
   sizes: [
-    { label: 'XS', stock: true },
     { label: 'S', stock: true },
     { label: 'M', stock: true },
     { label: 'L', stock: false },
