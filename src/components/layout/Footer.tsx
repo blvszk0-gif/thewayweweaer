@@ -73,9 +73,9 @@ export const Footer = () => {
         <div className="flex flex-col md:flex-row items-center gap-4">
           <div className="flex flex-wrap items-center gap-3 text-[color:var(--foreground)]/80 uppercase tracking-[0.4em] text-[13px]">
             <span>Zmień język na:</span>
-            <button className="px-3 py-2 rounded-full border border-[color:var(--border)] text-[color:var(--foreground)]/80 hover:text-[color:var(--foreground)] transition-colors">PL 🇵🇱</button>
-            <button className="px-3 py-2 rounded-full border border-[color:var(--border)] text-[color:var(--foreground)]/80 hover:text-[color:var(--foreground)] transition-colors">ENG 🇬🇧</button>
-            <button className="px-3 py-2 rounded-full border border-[color:var(--border)] text-[color:var(--foreground)]/80 hover:text-[color:var(--foreground)] transition-colors">UKR 🇺🇦</button>
+            <button className="px-4 py-2 rounded-full border border-[color:var(--border)] text-[color:var(--foreground)] font-black flex items-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all">PL <span className="text-xl">🇵🇱</span></button>
+            <button className="px-4 py-2 rounded-full border border-[color:var(--border)] text-[color:var(--foreground)] font-black flex items-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all">ENG <span className="text-xl">🇬🇧</span></button>
+            <button className="px-4 py-2 rounded-full border border-[color:var(--border)] text-[color:var(--foreground)] font-black flex items-center gap-2 hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all">UKR <span className="text-xl">🇺🇦</span></button>
           </div>
         </div>
       </div>

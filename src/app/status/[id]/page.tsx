@@ -13,28 +13,32 @@ const statusSteps = [
     label: 'ZAMÓWIENIE POTWIERDZONE',
     icon: CheckCircle2,
     animation: 'okejka',
-    catDesc: 'Kot daje okejke (jak ten gif z rudym dzieciakiem)'
+    catDesc: 'Kot daje okejke (jak ten gif z rudym dzieciakiem)',
+    catStyle: { x: 0, y: 0, scale: 1 }
   },
   {
     id: 'preparing',
     label: 'PRZYGOTOWANIE ZAMÓWIENIA',
     icon: Search,
     animation: 'kot_w_pudelku',
-    catDesc: 'Kot wskakuje do pudełka'
+    catDesc: 'Kot wskakuje do pudełka',
+    catStyle: { x: 0, y: 50, scale: 0.8 }
   },
   {
     id: 'sent',
     label: 'WYSYŁKA ZAMÓWIENIA',
     icon: Truck,
     animation: 'kot_okno',
-    catDesc: 'Kot patrzy przez okno i czeka'
+    catDesc: 'Kot patrzy przez okno i czeka',
+    catStyle: { x: -80, y: -20, scale: 1.1, rotate: -5 }
   },
   {
     id: 'delivered',
     label: 'ODEBRANO',
     icon: Package,
     animation: 'kot_biurko',
-    catDesc: 'Kot wskakuje na biurko na którym jest komputer i monitor'
+    catDesc: 'Kot wskakuje na biurko na którym jest komputer i monitor',
+    catStyle: { x: 50, y: -40, scale: 0.9, rotate: 10 }
   },
 ];
 
@@ -78,20 +82,41 @@ export default function OrderStatusPage() {
                   exit={{ opacity: 0, y: -20 }}
                   className="relative z-10 text-center flex flex-col items-center"
                 >
-                   <div className="relative w-72 h-72">
-                      <motion.img
-                        src="/cat.jpg"
-                        alt="Cat Status"
-                        className="w-full h-full object-cover rounded-full border-8 border-[color:var(--surface)] shadow-2xl grayscale brightness-110 contrast-125"
-                        initial={{ scale: 0.8 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: "spring", damping: 15 }}
-                      />
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/40 to-transparent flex items-end justify-center pb-8">
-                         <p className="text-[17px] font-black uppercase tracking-widest text-[color:var(--surface)]/80 max-w-[200px]">
-                           {statusSteps[currentStatus].catDesc}
-                         </p>
-                      </div>
+                   <div className="relative w-80 h-80 flex items-center justify-center">
+                      {/* Pixelated Backdrop for Cat */}
+                      <div className="absolute inset-0 bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10" />
+
+                      <motion.div
+                        className="relative z-10"
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{
+                           opacity: 1,
+                           scale: statusSteps[currentStatus].catStyle.scale,
+                           x: statusSteps[currentStatus].catStyle.x,
+                           y: statusSteps[currentStatus].catStyle.y,
+                           rotate: statusSteps[currentStatus].catStyle.rotate || 0
+                        }}
+                        transition={{ type: 'spring', damping: 12, stiffness: 90 }}
+                      >
+                        <img
+                          src="/cat.jpg"
+                          alt="Cat Status"
+                          className="w-64 h-64 object-contain rounded-2xl shadow-[0_0_80px_rgba(0,0,0,0.5)] border-4 border-white/20 pixelated"
+                          style={{ imageRendering: 'pixelated' }}
+                        />
+
+                        {/* Status Bubble */}
+                        <motion.div
+                           initial={{ opacity: 0, scale: 0 }}
+                           animate={{ opacity: 1, scale: 1 }}
+                           key={`bubble-${currentStatus}`}
+                           className="absolute -top-12 -right-12 bg-white text-black p-4 rounded-3xl rounded-bl-none shadow-2xl min-w-[200px]"
+                        >
+                           <p className="text-[13px] font-black uppercase tracking-widest leading-tight">
+                              {statusSteps[currentStatus].catDesc}
+                           </p>
+                        </motion.div>
+                      </motion.div>
                    </div>
                    <p className="mt-8 text-2xl font-black italic uppercase tracking-tighter">{statusSteps[currentStatus].label}</p>
                 </motion.div>

@@ -131,11 +131,11 @@ export const LandingSections = () => {
         </div>
 
         {/* Newsletter Section */}
-        <div className="bg-black text-white rounded-[50px] p-16 md:p-24 shadow-2xl relative overflow-hidden group border border-white/5">
-           <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-white/10 transition-all duration-1000" />
+        <div className="bg-[color:var(--surface)] text-[color:var(--foreground)] rounded-[50px] p-16 md:p-24 shadow-2xl relative overflow-hidden group border border-[color:var(--border)]">
+           <div className="absolute top-0 right-0 w-96 h-96 bg-[color:var(--foreground)]/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-[color:var(--foreground)]/10 transition-all duration-1000" />
            <div className="relative z-10 max-w-2xl">
               <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-8">Pozostańmy w kontakcie!</h3>
-              <p className="text-xl font-bold opacity-40 uppercase mb-12 tracking-wide text-white/60">Zapisz się już dziś do newslettera i bądź na bieżąco z dropami nowych kolekcji.</p>
+              <p className="text-xl font-bold opacity-40 uppercase mb-12 tracking-wide text-[color:var(--foreground)]/60">Zapisz się już dziś do newslettera i bądź na bieżąco z dropami nowych kolekcji.</p>
 
               <div className="flex flex-col md:flex-row gap-4">
                  <input

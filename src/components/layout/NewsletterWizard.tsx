@@ -105,8 +105,8 @@ export const NewsletterWizard = ({ isOpen, onClose }: NewsletterWizardProps) => 
                        <CheckCircle2 size={48} />
                     </div>
                     <div>
-                       <h2 className="text-4xl font-black uppercase italic tracking-tighter mb-4">Witamy w Squadzie!</h2>
-                       <p className="text-lg font-bold opacity-40 uppercase tracking-widest">Sprawdź swoją skrzynkę, wysłaliśmy Ci prezent na powitanie.</p>
+                       <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-4 leading-tight">Dziękuję za zapisanie się, od teraz będziesz otrzymywał od nas wiadomości na temat marki</h2>
+                       <p className="text-lg font-bold opacity-40 uppercase tracking-widest mt-6">Wypisać się możesz zawsze z poziomu konta</p>
                     </div>
                     <button
                       onClick={handleReset}

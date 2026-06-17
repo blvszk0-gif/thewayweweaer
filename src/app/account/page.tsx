@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import {
   User,
   Package,
@@ -226,9 +227,12 @@ export default function AccountPage() {
                                 <p className="text-2xl font-black">{order.total} PLN</p>
                                 <p className="text-[16px] font-bold text-green-500 uppercase tracking-[0.2em]">{order.status}</p>
                              </div>
-                             <button className="w-14 h-14 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                             <Link
+                                href={`/status/${order.id}`}
+                                className="w-14 h-14 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+                             >
                                 <ChevronRight size={24} />
-                             </button>
+                             </Link>
                           </div>
                        </div>
                      ))}
@@ -310,7 +314,9 @@ export default function AccountPage() {
                           </div>
 
                           {wonPrize ? (
-                            <div className="text-center animate-bounce bg-[color:var(--foreground)] text-[color:var(--surface)] px-10 py-5 rounded-full font-black uppercase tracking-widest text-[22px]">WYGRANA: {wonPrize}</div>
+                            <div className="text-center animate-bounce bg-[color:var(--foreground)] text-[color:var(--surface)] px-10 py-5 rounded-full font-black uppercase tracking-widest text-[18px] sm:text-[22px]">
+                               WYGRANA: {wonPrize}. {prizes.find(p => p.label === wonPrize)?.text}
+                            </div>
                           ) : (
                             <button
                               onClick={spin}

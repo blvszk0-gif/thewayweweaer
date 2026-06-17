@@ -20,7 +20,7 @@ export const BackToTop = () => {
   }, []);
 
   const scrollToTop = () => {
-    const scrollStep = -window.scrollY / (1500 / 15); // Adjust duration here (1500ms)
+    const scrollStep = -window.scrollY / (750 / 15); // Adjust duration here (750ms)
     const scrollInterval = setInterval(() => {
       if (window.scrollY !== 0) {
         window.scrollBy(0, scrollStep);

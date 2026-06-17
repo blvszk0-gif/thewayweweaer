@@ -57,7 +57,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   const addToCart = (item: CartItem) => {
     setCart(prev => {
       // Logic for Hero Slider / Unique items where we only want one per SKU
-      const isUniqueItem = item.id.includes('packshot') || item.id.includes('slide');
+      const isUniqueItem = item.id.includes('packshot') || item.id.includes('slide') || item.id.includes('twww-art');
       const existing = prev.find(i => i.id === item.id && i.size === item.size && i.color === item.color);
 
       if (existing) {

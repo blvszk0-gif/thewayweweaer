@@ -11,19 +11,19 @@ const articles = [
     title: 'JAK TO SIĘ ZACZĘŁO?',
     date: '12 STYCZNIA 2026',
     excerpt: 'OD PIERWSZEJ MASZYNY DO SZYCIA W GARAŻU DO BUDOWANIA NAJWIĘKSZEJ SPOŁECZNOŚCI STREETWEAROWEJ W POLSCE.',
-    icon: History
+    img: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=800'
   },
   {
     title: 'MISJA SQUADU',
     date: '05 LUTEGO 2026',
     excerpt: 'DLACZEGO "WE" W NASZEJ NAZWIE JEST TAK WAŻNE? O BUDOWANIU RELACJI I WSPÓLNYCH PASJACH.',
-    icon: Users
+    img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800'
   },
   {
     title: 'JAKOŚĆ PREMIUM',
     date: '20 MARCA 2026',
     excerpt: 'DETALE, KTÓRE ROBIĄ RÓŻNICĘ. PRZEWODNIK PO NASZYCH MATERIAŁACH I TECHNIKACH HAFTU.',
-    icon: Heart
+    img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800'
   }
 ];
 
@@ -32,38 +32,49 @@ export default function BlogPage() {
     <main className="min-h-screen bg-[color:var(--surface)] font-antonio">
       <Header />
 
-      <div className="container mx-auto px-6 pt-40 pb-40">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-24 text-center">
-            <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter italic mb-8">Nasza Historia</h1>
-            <p className="text-[22px] font-bold opacity-40 uppercase tracking-widest leading-relaxed">Poznaj korzenie The Way WE Wear</p>
-          </div>
+      <div className="container mx-auto px-4 pt-40 pb-40 max-w-2xl">
+        <div className="mb-20 text-center">
+          <h1 className="text-6xl md:text-7xl font-black uppercase tracking-tighter italic mb-4">Nasza Historia</h1>
+          <p className="text-base font-bold opacity-30 uppercase tracking-[0.3em]">The Way WE Wear // Feed</p>
+        </div>
 
-          <div className="space-y-12">
-            {articles.map((art, i) => (
-              <motion.article
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                className="bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-[40px] p-12 hover:scale-[1.02] transition-transform cursor-pointer group shadow-xl"
-              >
-                <div className="flex flex-col md:flex-row gap-12 items-center">
-                   <div className="w-32 h-32 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-3xl flex items-center justify-center shrink-0 group-hover:rotate-6 transition-transform shadow-2xl">
-                      <art.icon size={48} />
-                   </div>
-                   <div className="space-y-4">
-                      <p className="text-[13px] font-black uppercase tracking-[0.4em] opacity-30">{art.date}</p>
-                      <h2 className="text-4xl font-black uppercase tracking-tighter italic">{art.title}</h2>
-                      <p className="text-xl font-bold opacity-60 uppercase leading-relaxed">{art.excerpt}</p>
-                      <button className="flex items-center gap-2 text-[15px] font-black uppercase tracking-widest border-b-2 border-[color:var(--foreground)] pb-1 hover:gap-4 transition-all">
-                        Czytaj dalej <Book size={16} />
-                      </button>
-                   </div>
-                </div>
-              </motion.article>
-            ))}
-          </div>
+        <div className="space-y-24">
+          {articles.map((art, i) => (
+            <motion.article
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-3xl overflow-hidden shadow-2xl"
+            >
+               {/* Post Header */}
+               <div className="p-6 flex items-center gap-4 border-b border-[color:var(--border)]">
+                  <div className="w-10 h-10 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center font-black text-xs italic">WE</div>
+                  <div>
+                    <p className="text-sm font-black uppercase tracking-widest">TheWayWEWear</p>
+                    <p className="text-[10px] font-bold opacity-30 uppercase tracking-widest">{art.date}</p>
+                  </div>
+               </div>
+
+               {/* Post Image */}
+               <div className="aspect-square bg-[color:var(--surface-muted)] overflow-hidden">
+                  <img src={art.img} className="w-full h-full object-cover grayscale" alt="" />
+               </div>
+
+               {/* Post Content */}
+               <div className="p-8 space-y-4">
+                  <h2 className="text-2xl font-black uppercase italic tracking-tighter">{art.title}</h2>
+                  <p className="text-[17px] font-bold opacity-60 uppercase leading-relaxed tracking-wide">
+                    <span className="text-[color:var(--foreground)] opacity-100 mr-2">thewaywewear</span>
+                    {art.excerpt}
+                  </p>
+                  <div className="flex gap-4 text-[13px] font-black uppercase tracking-widest opacity-20 mt-6">
+                    <span>#TWWW</span>
+                    <span>#SQUAD</span>
+                    <span>#PREMIUM</span>
+                  </div>
+               </div>
+            </motion.article>
+          ))}
         </div>
       </div>
 

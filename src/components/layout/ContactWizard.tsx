@@ -122,10 +122,7 @@ export const ContactWizard = ({ isOpen, onClose, userEmail = "TWOJA@POCZTA.COM" 
                        />
                        <div className="flex justify-between items-center px-4">
                           <span className="text-[13px] font-black uppercase tracking-widest opacity-30">{message.length} / 5000</span>
-                          <label className="text-[13px] font-black uppercase tracking-widest underline cursor-pointer hover:opacity-100 opacity-40">
-                             Dodaj zdjęcie (opcjonalnie)
-                             <input type="file" className="hidden" accept="image/*" />
-                          </label>
+                          <span className="text-[13px] font-black uppercase tracking-widest opacity-20 italic">Wysyłanie plików tymczasowo wyłączone</span>
                        </div>
 
                        <div className="pt-6 border-t border-[color:var(--border)]">

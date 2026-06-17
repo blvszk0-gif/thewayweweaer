@@ -153,30 +153,17 @@ export const HaftWizard = ({ isOpen, onClose }: HaftWizardProps) => {
                 {step === 3 && (
                   <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
                     <h3 className="text-4xl font-black uppercase tracking-tighter italic mb-8">Prześlij projekt</h3>
-                    <div className={`bg-[color:var(--surface-muted)] border-2 border-dashed rounded-3xl p-12 flex flex-col items-center justify-center gap-6 relative transition-all ${fileError ? 'border-red-500 bg-red-50' : 'border-[color:var(--border)]'}`}>
-                      <div className={`w-20 h-20 rounded-full flex items-center justify-center transition-colors ${fileError ? 'bg-red-100 text-red-500' : 'bg-[color:var(--foreground)]/10'}`}>
+                    <div className="bg-[color:var(--surface-muted)] border-2 border-dashed rounded-3xl p-12 flex flex-col items-center justify-center gap-6 relative transition-all border-[color:var(--border)]">
+                      <div className="w-20 h-20 rounded-full flex items-center justify-center bg-[color:var(--foreground)]/10">
                         <Upload size={32} />
                       </div>
                       <div className="text-center">
-                        <p className="font-black uppercase text-lg mb-2">Kliknij aby przesłać plik</p>
-                        <p className="text-[17px] font-bold opacity-30 uppercase">PNG, SVG LUB TIFF (MAX 10MB)</p>
+                        <p className="font-black uppercase text-lg mb-2">Projektowanie wyłączone</p>
+                        <p className="text-[17px] font-bold opacity-30 uppercase">Przesyłanie plików tymczasowo wyłączone ze względów bezpieczeństwa</p>
                       </div>
-                      <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          const ext = file.name.split('.').pop()?.toLowerCase();
-                          if (['png', 'svg', 'tiff', 'tif'].includes(ext || '')) {
-                            setFileError(null);
-                            setFormData({...formData, file: file});
-                            nextStep();
-                          } else {
-                            setFileError('Nie obsługiwany format');
-                          }
-                        }
-                      }} />
                     </div>
-                    {fileError && <p className="text-red-500 text-[13px] font-black uppercase tracking-widest mt-4 text-center">{fileError}</p>}
-                    <div className="mt-8 flex justify-center">
+                    <div className="mt-8 flex flex-col items-center gap-4">
+                       <button onClick={nextStep} className="bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 px-12 rounded-full font-black uppercase tracking-widest shadow-xl">Pomiń ten krok</button>
                        <button onClick={prevStep} className="py-2 px-8 font-black uppercase tracking-widest text-[13px] opacity-40 hover:opacity-100 transition-opacity">Wróć</button>
                     </div>
                   </motion.div>

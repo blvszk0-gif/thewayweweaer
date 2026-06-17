@@ -65,6 +65,8 @@ const productData = {
     { label: 'M', stock: true },
     { label: 'L', stock: false },
     { label: 'XL', stock: true },
+    { label: '2XL', stock: true },
+    { label: '3XL', stock: true },
   ],
   images: [
     "https://placehold.co/1200x1600/000000/FFFFFF?text=DETAL+HAFTU+1",
@@ -77,35 +79,33 @@ const productData = {
 };
 
 const sizeTable = [
+  { size: 'XS', chest: '54 cm', length: '68 cm', sleeve: '58 cm' },
   { size: 'S', chest: '57 cm', length: '70 cm', sleeve: '60 cm' },
   { size: 'M', chest: '60 cm', length: '72 cm', sleeve: '62 cm' },
   { size: 'L', chest: '63 cm', length: '74 cm', sleeve: '64 cm' },
   { size: 'XL', chest: '66 cm', length: '76 cm', sleeve: '66 cm' },
+  { size: '2XL', chest: '69 cm', length: '78 cm', sleeve: '68 cm' },
+  { size: '3XL', chest: '72 cm', length: '80 cm', sleeve: '70 cm' },
 ];
 
 const LaundryIcon = ({ icon: Icon, label, detail, active, onToggle }: { icon: React.ComponentType, label: string, detail: string, active: boolean, onToggle: () => void }) => {
   return (
-    <div className="relative">
-      <button
+    <div className="relative perspective-[1000px]">
+      <motion.button
         onClick={onToggle}
-        className={`w-12 h-12 border rounded-xl flex items-center justify-center transition-all ${active ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)] shadow-xl scale-110' : 'bg-[color:var(--surface)] text-[color:var(--foreground)]/40 border-[color:var(--border)] hover:border-[color:var(--foreground)]'}`}
+        animate={{ rotateY: active ? 180 : 0 }}
+        transition={{ duration: 0.6, type: 'spring', damping: 20 }}
+        className="w-16 h-16 relative preserve-3d cursor-pointer"
       >
-        <Icon />
-      </button>
-      <AnimatePresence>
-        {active && (
-          <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.9 }}
-            className="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-56 bg-[color:var(--foreground)] text-[color:var(--surface)] p-4 rounded-2xl text-[13px] font-black uppercase tracking-[0.2em] z-20 text-center shadow-2xl"
-          >
-            <p className="mb-2 opacity-50">{label}</p>
-            <p className="leading-relaxed">{detail}</p>
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-[color:var(--foreground)] rotate-45" />
-          </motion.div>
-        )}
-      </AnimatePresence>
+         {/* Front */}
+         <div className={`absolute inset-0 backface-hidden border rounded-xl flex items-center justify-center bg-[color:var(--surface)] text-[color:var(--foreground)]/40 border-[color:var(--border)]`}>
+            <Icon />
+         </div>
+         {/* Back */}
+         <div className={`absolute inset-0 backface-hidden border rounded-xl flex items-center justify-center bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)] rotate-y-180 p-2 text-center`}>
+            <p className="text-[8px] font-black uppercase leading-tight tracking-tighter">{detail}</p>
+         </div>
+      </motion.button>
     </div>
   );
 };
@@ -268,7 +268,7 @@ export default function ProductPage() {
                     <h3 className="text-[13px] font-black uppercase tracking-[0.3em] text-[color:var(--foreground)]/48 italic">Rozmiar</h3>
                     <button onClick={() => setIsSizeTableOpen(true)} className="text-[13px] font-black uppercase tracking-widest underline underline-offset-4 flex items-center gap-2"><Ruler size={12} /> Tabela rozmiarów</button>
                   </div>
-                  <div className="grid grid-cols-4 gap-2 mb-6">
+                  <div className="grid grid-cols-4 sm:grid-cols-7 gap-2 mb-6">
                     {productData.sizes.map((size) => (
                       <button
                         key={size.label}
@@ -382,12 +382,12 @@ export default function ProductPage() {
               <button onClick={() => { setIsNotifyModalOpen(false); setIsNotifySuccess(false); }} className="absolute top-8 right-8 text-[color:var(--foreground)]/20 hover:text-[color:var(--foreground)] transition-colors"><X size={32} /></button>
 
               {isNotifySuccess ? (
-                <div className="py-8">
+                <div className="py-8 px-6">
                   <div className="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
                     <ShoppingBag size={40} />
                   </div>
-                  <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4">ZAPISANO!</h2>
-                  <p className="text-[17px] font-bold opacity-50 uppercase tracking-widest leading-relaxed">Damy Ci znać gdy rozmiar {notifySize} wróci do bazy.</p>
+                  <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4 text-green-500">ZAPISANO!</h2>
+                  <p className="text-[18px] font-bold opacity-70 uppercase tracking-widest leading-relaxed">Jak uzupełnimy tylko stock tego rozmiaru to damy Ci znać!</p>
                 </div>
               ) : (
                 <>
