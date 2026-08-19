@@ -165,7 +165,7 @@ export default function OrderStatusPage() {
                </h3>
                <p className="text-[18px] font-bold uppercase opacity-40 leading-relaxed">
                  Jan Kowalski<br />
-                 ul. Gamingowa 13/37<br />
+                 ul. Modowa 13/37<br />
                  00-001 Warszawa, Polska
                </p>
              </div>
@@ -174,7 +174,7 @@ export default function OrderStatusPage() {
                  <Truck size={16} /> Metoda Dostawy
                </h3>
                <p className="text-[18px] font-bold uppercase opacity-40 leading-relaxed">
-                 Kurier TWWW Squad (InPost)<br />
+                 Kurier TWWW (InPost)<br />
                  Przewidywana dostawa: Jutro
                </p>
              </div>
@@ -183,7 +183,7 @@ export default function OrderStatusPage() {
 
         <div className="mt-8 text-center">
            <button className="text-[17px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity underline underline-offset-4">
-             Potrzebujesz pomocy? Skontaktuj się ze Squadem
+             Potrzebujesz pomocy? Skontaktuj się z nami
            </button>
         </div>
       </div>

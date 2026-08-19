@@ -9,7 +9,6 @@ const searchRegistry = [
   { keywords: ['bluza', 'hoodie', 'sweatshirt', 'sweter'], route: '/shop/bluzy' },
   { keywords: ['koszulka', 't-shirt', 'tee', 'tshirt'], route: '/shop/koszulki' },
   { keywords: ['akcesoria', 'dodatki', 'gadżety', 'sticker', 'czapka'], route: '/shop/akcesoria' },
-  { keywords: ['haft', 'custom', 'embroidery', 'projekt'], route: '/subjects?open=haft' },
   { keywords: ['lookbook', 'katalog', 'zdjęcia'], route: '/lookbook' },
   { keywords: ['stare', 'stare', 'we stare'], route: '/shop/stare' },
   { keywords: ['roll', 'roll', 'we roll'], route: '/shop/roll' },

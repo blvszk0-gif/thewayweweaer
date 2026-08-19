@@ -58,8 +58,8 @@ export const NewsletterWizard = ({ isOpen, onClose }: NewsletterWizardProps) => 
                     <div className="w-16 h-16 bg-white text-black rounded-2xl flex items-center justify-center mb-4">
                        <Mail size={32} />
                     </div>
-                    <h2 className="text-4xl font-black uppercase italic tracking-tighter">Dołącz do Squadu</h2>
-                    <p className="text-lg font-bold opacity-40 uppercase tracking-widest leading-relaxed">Zostaw swój e-mail, aby otrzymywać powiadomienia o nowych dropach i ekskluzywne kody.</p>
+                    <h2 className="text-4xl font-black uppercase italic tracking-tighter">Dołącz do TWWW Club</h2>
+                    <p className="text-lg font-bold opacity-40 uppercase tracking-widest leading-relaxed">Zostaw swój e-mail, aby otrzymywać powiadomienia o nowych kolekcjach i ekskluzywnych ofertach.</p>
                     <div className="space-y-4">
                        <input
                          type="email"
