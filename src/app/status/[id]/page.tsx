@@ -6,39 +6,36 @@ import { Footer } from '@/components/layout/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Package, Truck, CheckCircle2, MapPin, Search } from 'lucide-react';
 import { useParams } from 'next/navigation';
+import { CatOrderConfirmed } from '@/components/animations/CatOrderConfirmed';
+import { CatPreparingOrder } from '@/components/animations/CatPreparingOrder';
+import { CatShippingOrder } from '@/components/animations/CatShippingOrder';
+import { CatDelivered } from '@/components/animations/CatDelivered';
+import { PixelBackdrop } from '@/components/animations/PixelBackdrop';
 
 const statusSteps = [
   {
     id: 'confirmed',
     label: 'ZAMÓWIENIE POTWIERDZONE',
     icon: CheckCircle2,
-    animation: 'okejka',
-    catDesc: 'Kot daje okejke (jak ten gif z rudym dzieciakiem)',
-    catStyle: { x: 0, y: 0, scale: 1 }
+    component: CatOrderConfirmed,
   },
   {
     id: 'preparing',
     label: 'PRZYGOTOWANIE ZAMÓWIENIA',
     icon: Search,
-    animation: 'kot_w_pudelku',
-    catDesc: 'Kot wskakuje do pudełka',
-    catStyle: { x: 0, y: 50, scale: 0.8 }
+    component: CatPreparingOrder,
   },
   {
     id: 'sent',
     label: 'WYSYŁKA ZAMÓWIENIA',
     icon: Truck,
-    animation: 'kot_okno',
-    catDesc: 'Kot patrzy przez okno i czeka',
-    catStyle: { x: -80, y: -20, scale: 1.1, rotate: -5 }
+    component: CatShippingOrder,
   },
   {
     id: 'delivered',
     label: 'ODEBRANO',
     icon: Package,
-    animation: 'kot_biurko',
-    catDesc: 'Kot wskakuje na biurko na którym jest komputer i monitor',
-    catStyle: { x: 50, y: -40, scale: 0.9, rotate: 10 }
+    component: CatDelivered,
   },
 ];
 
@@ -71,64 +68,22 @@ export default function OrderStatusPage() {
           </div>
 
           {/* Cat Animation Zone */}
-          <div className="mb-20 aspect-video bg-[color:var(--surface-muted)] rounded-[40px] flex items-center justify-center relative overflow-hidden group border border-[color:var(--border)] shadow-inner">
-             <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-repeat" />
-
-             <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentStatus}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="relative z-10 text-center flex flex-col items-center"
-                >
-                   <div className="relative w-80 h-80 flex items-center justify-center">
-                      {/* Pixelated Backdrop for Cat */}
-                      <div className="absolute inset-0 bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10" />
-
-                      <motion.div
-                        className="relative z-10"
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        animate={{
-                           opacity: 1,
-                           scale: statusSteps[currentStatus].catStyle.scale,
-                           x: statusSteps[currentStatus].catStyle.x,
-                           y: statusSteps[currentStatus].catStyle.y,
-                           rotate: statusSteps[currentStatus].catStyle.rotate || 0
-                        }}
-                        transition={{ type: 'spring', damping: 12, stiffness: 90 }}
-                      >
-                        <img
-                          src="/cat.jpg"
-                          alt="Cat Status"
-                          className="w-64 h-64 object-contain rounded-2xl shadow-[0_0_80px_rgba(0,0,0,0.5)] border-4 border-white/20 pixelated"
-                          style={{ imageRendering: 'pixelated' }}
-                        />
-
-                        {/* Status Bubble */}
-                        <motion.div
-                           initial={{ opacity: 0, scale: 0 }}
-                           animate={{ opacity: 1, scale: 1 }}
-                           key={`bubble-${currentStatus}`}
-                           className="absolute -top-12 -right-12 bg-white text-black p-4 rounded-3xl rounded-bl-none shadow-2xl min-w-[200px]"
-                        >
-                           <p className="text-[13px] font-black uppercase tracking-widest leading-tight">
-                              {statusSteps[currentStatus].catDesc}
-                           </p>
-                        </motion.div>
-                      </motion.div>
-                   </div>
-                   <p className="mt-8 text-2xl font-black italic uppercase tracking-tighter">{statusSteps[currentStatus].label}</p>
-                </motion.div>
-             </AnimatePresence>
-
-             {/* Background Truck Animation */}
-             <motion.img
-               src="/truck_anim.png"
-               className="absolute bottom-8 right-0 w-32 grayscale opacity-10"
-               animate={{ x: [-200, 1000] }}
-               transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-             />
+          <div className="mb-20 flex flex-col items-center justify-center relative">
+             <PixelBackdrop statusLabel={statusSteps[currentStatus].label}>
+               <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentStatus}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.4 }}
+                    className="relative z-10 w-full h-full flex items-center justify-center"
+                  >
+                     {React.createElement(statusSteps[currentStatus].component)}
+                  </motion.div>
+               </AnimatePresence>
+             </PixelBackdrop>
+             <p className="mt-6 text-2xl font-black italic uppercase tracking-tighter text-center">{statusSteps[currentStatus].label}</p>
           </div>
 
           {/* Stepper */}
@@ -142,7 +97,7 @@ export default function OrderStatusPage() {
             />
             <div className="relative flex justify-between">
                {statusSteps.map((step, i) => (
-                 <div key={step.id} className="flex flex-col items-center relative z-10">
+                 <button key={step.id} onClick={() => setCurrentStatus(i)} className="flex flex-col items-center relative z-10 cursor-pointer">
                     <motion.div
                       className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border-2 ${i <= currentStatus ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)] shadow-xl' : 'bg-[color:var(--surface)] text-[color:var(--foreground)]/40 border-[color:var(--border)]'}`}
                       animate={i === currentStatus ? { scale: [1, 1.2, 1] } : {}}
@@ -153,7 +108,7 @@ export default function OrderStatusPage() {
                     <p className={`mt-4 text-[17px] font-black uppercase tracking-widest text-center max-w-[100px] ${i <= currentStatus ? 'opacity-100' : 'opacity-20'}`}>
                       {step.label}
                     </p>
-                 </div>
+                 </button>
                ))}
             </div>
           </div>
