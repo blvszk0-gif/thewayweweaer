@@ -75,6 +75,15 @@ export default function AccountPage() {
     }, 4000);
   };
 
+  const [userEmail, setUserEmail] = useState('zamowieniathewaywewear@gmail.com');
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('twww-user-email');
+    if (storedEmail) {
+      setUserEmail(storedEmail);
+    }
+  }, []);
+
   const tabs = [
     { id: 'profil', label: 'Profil', icon: User },
     { id: 'zamowienia', label: 'Zamówienia', icon: Package },
@@ -119,7 +128,7 @@ export default function AccountPage() {
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => tab.id === 'logout' ? (localStorage.removeItem('twww-auth'), window.location.reload()) : setActiveTab(tab.id)}
+                    onClick={() => tab.id === 'logout' ? (localStorage.removeItem('twww-auth'), localStorage.removeItem('twww-user-email'), window.location.reload()) : setActiveTab(tab.id)}
                     className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all group ${activeTab === tab.id ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] shadow-lg' : 'hover:bg-[color:var(--surface-muted)]'}`}
                   >
                      <div className="flex items-center gap-4">
@@ -143,9 +152,9 @@ export default function AccountPage() {
                      <h3 className="text-4xl font-black uppercase italic tracking-tighter">Ustawienia Profilu</h3>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {[
-                          { label: 'Imię', val: 'Kamil' },
-                          { label: 'Nazwisko', val: 'Gamer' },
-                          { label: 'E-mail', val: 'kamil@twww.pl' },
+                          { label: 'Imię', val: 'Jan' },
+                          { label: 'Nazwisko', val: 'Kowalski' },
+                          { label: 'E-mail', val: userEmail },
                           { label: 'Adres Dostawy', val: 'ul. Modowa 13/37, 00-001 Warszawa' },
                           { label: 'Hasło', val: '••••••••••••', type: 'password' },
                         ].map((field, i) => (

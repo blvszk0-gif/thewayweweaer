@@ -70,6 +70,7 @@ export const LoginForm = () => {
     e.preventDefault();
     if (email && password) {
       localStorage.setItem('twww-auth', 'true');
+      localStorage.setItem('twww-user-email', email.trim());
       setIsSuccess(true);
     }
   };
