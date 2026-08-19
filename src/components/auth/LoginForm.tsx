@@ -87,7 +87,7 @@ export const LoginForm = () => {
             <div className="w-20 h-20 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
               <Check size={40} />
             </div>
-            <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4 text-[color:var(--foreground)]">Witaj w Squadzie!</h2>
+            <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4 text-[color:var(--foreground)]">Witaj w TWWW Club!</h2>
             <p className="text-[13px] font-bold uppercase opacity-40 tracking-widest leading-relaxed text-[color:var(--foreground)]">Pomyślnie zalogowano. Przekierowujemy Cię do bazy...</p>
           </motion.div>
         ) : (
@@ -130,7 +130,7 @@ export const LoginForm = () => {
                 type="submit"
                 className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-6 rounded-full font-black uppercase tracking-[0.2em] shadow-xl hover:opacity-90 transition-all mt-4"
               >
-                {isLogin ? 'Zaloguj się' : 'Dołącz do squadu'}
+                {isLogin ? 'Zaloguj się' : 'Dołącz do TWWW Club'}
               </button>
 
               <div className="flex flex-col items-center gap-4 pt-4">

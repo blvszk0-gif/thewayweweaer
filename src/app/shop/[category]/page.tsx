@@ -12,11 +12,11 @@ const mockProducts = [
   { id: '1', name: 'OVERSIZE HOODIE // STARE', price: 299, image: 'https://placehold.co/600x800/000000/FFFFFF?text=HOODIE+1', colors: ['CZARNY', 'SZARY'], sizes: ['M', 'L', 'XL'] },
   { id: '2', name: 'GRAFIC T-SHIRT // ROLL', price: 149, image: 'https://placehold.co/600x800/000000/FFFFFF?text=TEE+1', colors: ['BIAŁY'], sizes: ['S', 'M'] },
   { id: '3', name: 'CARGO PANTS // BLOOM', price: 349, image: 'https://placehold.co/600x800/000000/FFFFFF?text=PANTS+1', colors: ['CZARNY'], sizes: ['L', 'XL'] },
-  { id: '4', name: 'SQUAD CAP // FLY', price: 99, image: 'https://placehold.co/600x800/000000/FFFFFF?text=CAP+1', colors: ['CZARNY', 'BIAŁY'], sizes: ['XXL'] },
+  { id: '4', name: 'TWWW CAP // FLY', price: 99, image: 'https://placehold.co/600x800/000000/FFFFFF?text=CAP+1', colors: ['CZARNY', 'BIAŁY'], sizes: ['XXL'] },
   { id: '5', name: 'OVERSIZE HOODIE // ROLL', price: 299, image: 'https://placehold.co/600x800/000000/FFFFFF?text=HOODIE+2', colors: ['RÓŻOWY'], sizes: ['XS', 'S'] },
   { id: '6', name: 'GRAFIC T-SHIRT // STARE', price: 149, image: 'https://placehold.co/600x800/000000/FFFFFF?text=TEE+2', colors: ['SZARY'], sizes: ['M', 'L'] },
   { id: '7', name: 'CARGO PANTS // FLY', price: 349, image: 'https://placehold.co/600x800/000000/FFFFFF?text=PANTS+2', colors: ['CZARNY'], sizes: ['S', 'M', 'L'] },
-  { id: '8', name: 'SQUAD CAP // BLOOM', price: 99, image: 'https://placehold.co/600x800/000000/FFFFFF?text=CAP+2', colors: ['BIAŁY'], sizes: ['M'] },
+  { id: '8', name: 'TWWW CAP // BLOOM', price: 99, image: 'https://placehold.co/600x800/000000/FFFFFF?text=CAP+2', colors: ['BIAŁY'], sizes: ['M'] },
 ];
 
 export default function CategoryPage() {

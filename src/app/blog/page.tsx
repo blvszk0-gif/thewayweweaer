@@ -14,7 +14,7 @@ const articles = [
     img: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=800'
   },
   {
-    title: 'MISJA SQUADU',
+    title: 'NASZA MISJA',
     date: '05 LUTEGO 2026',
     excerpt: 'DLACZEGO "WE" W NASZEJ NAZWIE JEST TAK WAŻNE? O BUDOWANIU RELACJI I WSPÓLNYCH PASJACH.',
     img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800'
@@ -69,7 +69,7 @@ export default function BlogPage() {
                   </p>
                   <div className="flex gap-4 text-[13px] font-black uppercase tracking-widest opacity-20 mt-6">
                     <span>#TWWW</span>
-                    <span>#SQUAD</span>
+                    <span>#CLUB</span>
                     <span>#PREMIUM</span>
                   </div>
                </div>

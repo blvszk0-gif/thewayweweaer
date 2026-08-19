@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { User, ShoppingBag, Heart, Moon, ChevronRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HaftWizard } from '../shop/HaftWizard';
 import { LoginForm } from '../auth/LoginForm';
 import { useStore } from '@/context/StoreContext';
 import { SearchBar } from './SearchBar';
@@ -15,7 +14,6 @@ export const Header = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [expandedKolekcje, setExpandedKolekcje] = useState(false);
-  const [isHaftModalOpen, setIsHaftModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -190,13 +188,6 @@ export const Header = () => {
                     )}
                    </AnimatePresence>
                 </div>
-
-                <button
-                  onClick={() => { setIsMenuOpen(false); setIsHaftModalOpen(true); }}
-                  className="text-left hover:pl-4 transition-all italic uppercase font-black"
-                >
-                  HAFT NA ZAMÓWIENIE
-                </button>
               </div>
 
               <div className="mt-auto pt-12 text-[13px] font-bold text-[color:var(--foreground)]/50 tracking-widest uppercase">
@@ -206,11 +197,6 @@ export const Header = () => {
           </>
         )}
       </AnimatePresence>
-
-      <HaftWizard
-        isOpen={isHaftModalOpen}
-        onClose={() => setIsHaftModalOpen(false)}
-      />
 
       {/* Login Modal */}
       <AnimatePresence>

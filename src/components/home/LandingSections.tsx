@@ -110,7 +110,7 @@ export const LandingSections = () => {
               },
               {
                 q: "CZY MOGĘ ZWRÓCIĆ TOWAR?",
-                a: "Tak, masz 14 dni na zwrot nieużywanego towaru bez podania przyczyny. Produkty z własnym haftem nie podlegają zwrotowi."
+                a: "Tak, masz 14 dni na zwrot nieużywanego towaru bez podania przyczyny. Produkty muszą być nieużywane i posiadać oryginalne metki."
               },
               {
                 q: "JAK DBAĆ O UBRANIA TWWW?",
@@ -121,8 +121,8 @@ export const LandingSections = () => {
                 a: "Obecnie wysyłamy na terenie całej Unii Europejskiej. Koszt wysyłki zagranicznej jest obliczany przy checkoutcie."
               },
               {
-                q: "CO TO JEST SQUAD POINTS?",
-                a: "To nasz system lojalnościowy. Za każde zakupy zbierasz punkty, które wymienisz na zniżki lub dostęp do tajnych dropów."
+                q: "CO TO JEST TWWW CLUB?",
+                a: "To nasz system lojalnościowy. Za każde zakupy zbierasz punkty, które wymienisz na zniżki lub dostęp do limitowanych kolekcji."
               }
             ].map((item, i) => (
               <FAQItem key={i} q={item.q} a={item.a} i={i} />

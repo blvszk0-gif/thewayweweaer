@@ -18,10 +18,10 @@ export const CartView = () => {
           <div className="space-y-8 border-t border-[color:var(--border)] pt-8">
             <div className="flex gap-6 items-center">
               <div className="w-24 h-32 bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-2xl overflow-hidden grayscale">
-                <img src="https://placehold.co/400x500/000000/FFFFFF?text=SQUAD+V1" className="w-full h-full object-cover" />
+                <img src="https://placehold.co/400x500/000000/FFFFFF?text=TWWW+V1" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1">
-                <h3 className="font-black uppercase tracking-tighter text-xl">Oversize Hoodie "SQUAD" V1</h3>
+                <h3 className="font-black uppercase tracking-tighter text-xl">Oversize Hoodie "ATELIER" V1</h3>
                 <p className="text-[color:var(--foreground)]/30 text-base font-bold uppercase tracking-widest mt-1">Rozmiar: M</p>
                 <div className="mt-4 flex justify-between items-end">
                    <div className="flex border border-[color:var(--border)] rounded-full px-4 py-1 gap-4 items-center">

@@ -93,7 +93,7 @@ export default function AccountPage() {
               <div className="w-24 h-24 bg-[color:var(--surface-muted)] rounded-full flex items-center justify-center mx-auto border border-[color:var(--border)] shadow-xl">
                  <User size={40} className="opacity-20" />
               </div>
-              <h1 className="text-4xl font-black uppercase italic tracking-tighter">Strefa Squadu</h1>
+              <h1 className="text-4xl font-black uppercase italic tracking-tighter">Strefa Klienta</h1>
               <p className="text-[22px] font-bold opacity-50 uppercase leading-relaxed">Zaloguj się, aby uzyskać dostęp do swojego konta, zamówień i nagród.</p>
               <button
                 onClick={() => { localStorage.setItem('twww-auth', 'true'); window.location.reload(); }}
@@ -145,10 +145,9 @@ export default function AccountPage() {
                         {[
                           { label: 'Imię', val: 'Kamil' },
                           { label: 'Nazwisko', val: 'Gamer' },
-                          { label: 'E-mail', val: 'kamil@squad.pl' },
-                          { label: 'Telefon', val: '+48 500 600 700' },
+                          { label: 'E-mail', val: 'kamil@twww.pl' },
+                          { label: 'Adres Dostawy', val: 'ul. Modowa 13/37, 00-001 Warszawa' },
                           { label: 'Hasło', val: '••••••••••••', type: 'password' },
-                          { label: 'Adres Dostawy', val: 'ul. Gamingowa 13/37, 00-001 Warszawa' },
                         ].map((field, i) => (
                           <div key={i} className="space-y-3">
                              <p className="text-[17px] font-black uppercase opacity-40 ml-4">{field.label}</p>
@@ -257,7 +256,7 @@ export default function AccountPage() {
                      <div className="bg-black text-white p-10 rounded-[40px] shadow-2xl relative overflow-hidden group">
                         <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:rotate-12 transition-transform duration-700"><Ticket size={100} /></div>
                         <p className="text-[16px] font-black uppercase tracking-[0.4em] text-white/40 mb-2">Twój aktywny rabat</p>
-                        <h3 className="text-5xl font-black italic tracking-tighter mb-8">-15% SQUAD</h3>
+                        <h3 className="text-5xl font-black italic tracking-tighter mb-8">-15% TWWW CLUB</h3>
                         <div className="bg-white/10 p-4 rounded-xl border border-white/5 flex justify-between items-center">
                            <span className="font-mono font-bold text-lg">WELCOME15</span>
                            <button className="text-[13px] font-black uppercase border-b border-white">Kopiuj</button>
