@@ -25,10 +25,15 @@ import {
 } from 'lucide-react';
 import pb from '@/lib/pocketbase';
 
-const mockOrders = [
-  { id: 'TWWW-0042', date: '10 Cze 2026', total: 299, statusKey: 'opłacone', icon: CheckCircle2 },
-  { id: 'TWWW-0012', date: '12 Maj 2026', total: 448, statusKey: 'zamówienie_odebrane', icon: Box },
-];
+interface OrderItem {
+  id: string;
+  date: string;
+  total: number;
+  statusKey: string;
+  icon: any;
+}
+
+const mockOrders: OrderItem[] = [];
 
 const prizes = [
   { label: '1', color: '#000000', textKey: 'Darmowa dostawa' },
@@ -88,20 +93,16 @@ export default function AccountPage() {
     deliveryMethod: string;
     inpostLocker?: string;
   }>({
-    firstName: 'Jan',
-    lastName: 'Kowalski',
-    email: 'zamowieniathewaywewear@gmail.com',
-    address: 'ul. Modowa 13/37, 00-001 Warszawa',
+    firstName: '',
+    lastName: '',
+    email: '',
+    address: '',
     deliveryMethod: 'InPost',
   });
-  const [isNewAccount, setIsNewAccount] = useState(false);
 
   useEffect(() => {
     const storedProfileStr = localStorage.getItem('twww-user-profile');
     const storedEmail = localStorage.getItem('twww-user-email');
-    const isNew = localStorage.getItem('twww-user-is-new') === 'true';
-
-    setIsNewAccount(isNew);
 
     if (storedProfileStr) {
       try {
@@ -185,23 +186,27 @@ export default function AccountPage() {
                      <h3 className="text-4xl font-black uppercase italic tracking-tighter">{tAccount('ustawienia_profilu')}</h3>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {[
-                          { labelKey: 'imię', val: userProfile.firstName },
-                          { labelKey: 'nazwisko', val: userProfile.lastName },
-                          { labelKey: 'E-mail', val: userProfile.email },
-                          { labelKey: 'adres_dostawy', val: userProfile.address },
-                          { labelKey: 'hasło', val: '••••••••••••', type: 'password' },
+                          { labelKey: 'imię', val: userProfile.firstName, key: 'firstName' },
+                          { labelKey: 'nazwisko', val: userProfile.lastName, key: 'lastName' },
+                          { labelKey: 'E-mail', val: userProfile.email, key: 'email' },
+                          { labelKey: 'adres_dostawy', val: userProfile.address, key: 'address' },
+                          { labelKey: 'hasło', val: '••••••••••••', type: 'password', key: 'password' },
                         ].map((field, i) => (
                           <div key={i} className="space-y-3">
                              <p className="text-[17px] font-black uppercase opacity-40 ml-4">{field.labelKey === 'E-mail' ? 'E-mail' : tAccount(field.labelKey as any)}</p>
                              <div className="relative">
                                <input
-                                value={field.val} onChange={(e) => {
+                                value={field.val}
+                                placeholder="Nie podano"
+                                onChange={(e) => {
                                   const newVal = e.target.value;
-                                  if (field.labelKey === 'imię') setUserProfile(p => ({ ...p, firstName: newVal }));
-                                  if (field.labelKey === 'nazwisko') setUserProfile(p => ({ ...p, lastName: newVal }));
-                                  if (field.labelKey === 'E-mail') setUserProfile(p => ({ ...p, email: newVal }));
-                                  if (field.labelKey === 'adres_dostawy') setUserProfile(p => ({ ...p, address: newVal }));
-                                }} type={field.type || 'text'}
+                                  setUserProfile((prev) => {
+                                    const updated = { ...prev, [field.key]: newVal };
+                                    localStorage.setItem('twww-user-profile', JSON.stringify(updated));
+                                    return updated;
+                                  });
+                                }}
+                                type={field.type || 'text'}
                                 className="w-full bg-[color:var(--surface)] px-6 py-4 rounded-2xl border border-[color:var(--border)] font-black uppercase text-lg focus:outline-none focus:border-[color:var(--foreground)]"
                                />
                                <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[13px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity">{tAccount('zmień')}</button>
@@ -258,7 +263,7 @@ export default function AccountPage() {
                     key="zamówienia" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
                     className="space-y-6"
                   >
-                     {isNewAccount ? (
+                     {mockOrders.length === 0 ? (
                        <div className="bg-[color:var(--surface-muted)] p-12 rounded-[50px] border border-[color:var(--border)] text-center py-24 space-y-4">
                           <Package size={48} className="mx-auto opacity-20" />
                           <h4 className="text-2xl font-black uppercase italic">Brak złożonych zamówień</h4>

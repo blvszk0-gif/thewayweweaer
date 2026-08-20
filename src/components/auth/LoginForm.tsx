@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, MapPin, Search } from 'lucide-react';
+import { Check, MapPin } from 'lucide-react';
 
 const AppleIcon = () => (
   <svg viewBox="0 0 384 512" width="20" height="20" fill="currentColor">
@@ -73,7 +73,7 @@ const InputField = ({
   );
 };
 
-const mockInpostLockers = [
+const inpostLockers = [
   { id: 'WAW-102A', name: 'Paczkomat WAW102A', address: 'ul. Marszałkowska 126, Warszawa' },
   { id: 'WAW-405B', name: 'Paczkomat WAW405B', address: 'ul. Aleje Jerozolimskie 54, Warszawa' },
   { id: 'KRA-881M', name: 'Paczkomat KRA881M', address: 'ul. Floriańska 15, Kraków' },
@@ -93,7 +93,7 @@ export const LoginForm = () => {
   const [address, setAddress] = useState('');
   const [password, setPassword] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState<'InPost' | 'Kurier'>('InPost');
-  const [selectedLocker, setSelectedLocker] = useState(mockInpostLockers[0].id);
+  const [selectedLocker, setSelectedLocker] = useState(inpostLockers[0].id);
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [newsletterConsent, setNewsletterConsent] = useState(false);
   const [termsConsent, setTermsConsent] = useState(false);
@@ -106,7 +106,7 @@ export const LoginForm = () => {
     if (isSuccess) {
       const timer = setTimeout(() => {
         window.location.reload();
-      }, 1500);
+      }, 1200);
       return () => clearTimeout(timer);
     }
   }, [isSuccess]);
@@ -114,9 +114,6 @@ export const LoginForm = () => {
   const handleGoogleLogin = () => {
     setIsLogin(false);
     setIsGoogleMode(true);
-    setEmail('google.user@gmail.com');
-    setFirstName('Jan');
-    setLastName('Kowalski');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -135,8 +132,8 @@ export const LoginForm = () => {
       }
 
       const userProfile = {
-        firstName: firstName || 'Użytkownik',
-        lastName: lastName || 'TWWW',
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
         email: email.trim(),
         address: address.trim(),
         deliveryMethod,
@@ -147,7 +144,6 @@ export const LoginForm = () => {
       localStorage.setItem('twww-auth', 'true');
       localStorage.setItem('twww-user-email', email.trim());
       localStorage.setItem('twww-user-profile', JSON.stringify(userProfile));
-      localStorage.setItem('twww-user-is-new', 'true');
 
       setActionType('register');
       setIsSuccess(true);
@@ -322,7 +318,7 @@ export const LoginForm = () => {
                         onChange={(e) => setSelectedLocker(e.target.value)}
                         className="w-full bg-[color:var(--surface)] border border-[color:var(--border)] rounded-xl px-4 py-3 text-xs font-black uppercase focus:outline-none"
                       >
-                        {mockInpostLockers.map((locker) => (
+                        {inpostLockers.map((locker) => (
                           <option key={locker.id} value={locker.id}>
                             {locker.name} ({locker.address})
                           </option>
