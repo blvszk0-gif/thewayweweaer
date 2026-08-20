@@ -90,7 +90,12 @@ export const LoginForm = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [city, setCity] = useState('');
+  const [voivodeship, setVoivodeship] = useState('');
+  const [street, setStreet] = useState('');
+  const [buildingNumber, setBuildingNumber] = useState('');
+  const [apartmentNumber, setApartmentNumber] = useState('');
   const [password, setPassword] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState<'InPost' | 'Kurier'>('InPost');
   const [selectedLocker, setSelectedLocker] = useState(inpostLockers[0].id);
@@ -127,15 +132,23 @@ export const LoginForm = () => {
         setIsSuccess(true);
       }
     } else {
-      if (!email || !address || !password || (deliveryMethod === 'InPost' && !selectedLocker) || !termsConsent) {
+      if (!email || !postalCode || !city || !street || !buildingNumber || !password || (deliveryMethod === 'InPost' && !selectedLocker) || !termsConsent) {
         return;
       }
+
+      const fullAddress = `${street.trim()} ${buildingNumber.trim()}${apartmentNumber.trim() ? '/' + apartmentNumber.trim() : ''}, ${postalCode.trim()} ${city.trim()}${voivodeship.trim() ? ', ' + voivodeship.trim() : ''}`;
 
       const userProfile = {
         firstName: firstName.trim(),
         lastName: lastName.trim(),
         email: email.trim(),
-        address: address.trim(),
+        address: fullAddress,
+        postalCode: postalCode.trim(),
+        city: city.trim(),
+        voivodeship: voivodeship.trim(),
+        street: street.trim(),
+        buildingNumber: buildingNumber.trim(),
+        apartmentNumber: apartmentNumber.trim(),
         deliveryMethod,
         inpostLocker: deliveryMethod === 'InPost' ? selectedLocker : '',
         newsletter: newsletterConsent,
@@ -254,11 +267,56 @@ export const LoginForm = () => {
                     disabled={isGoogleMode}
                   />
 
-                  <InputField
-                    placeholder={tAccount('adres_dostawy')}
-                    value={address}
-                    onChange={setAddress}
-                  />
+                  <div className="pt-2 border-t border-[color:var(--border)]">
+                    <p className="text-[12px] font-black uppercase opacity-40 tracking-widest mb-2 ml-1">
+                      Adres dostawy:
+                    </p>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        <InputField
+                          placeholder="Kod pocztowy (np. 00-001)"
+                          value={postalCode}
+                          onChange={setPostalCode}
+                          required={!isGoogleMode}
+                        />
+                        <InputField
+                          placeholder="Miasto"
+                          value={city}
+                          onChange={setCity}
+                          required={!isGoogleMode}
+                        />
+                      </div>
+
+                      <InputField
+                        placeholder="Województwo (opcjonalnie)"
+                        value={voivodeship}
+                        onChange={setVoivodeship}
+                        required={false}
+                      />
+
+                      <InputField
+                        placeholder="Ulica"
+                        value={street}
+                        onChange={setStreet}
+                        required={!isGoogleMode}
+                      />
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <InputField
+                          placeholder="Nr budynku"
+                          value={buildingNumber}
+                          onChange={setBuildingNumber}
+                          required={!isGoogleMode}
+                        />
+                        <InputField
+                          placeholder="Nr lokalu (opcjonalnie)"
+                          value={apartmentNumber}
+                          onChange={setApartmentNumber}
+                          required={false}
+                        />
+                      </div>
+                    </div>
+                  </div>
 
                   <InputField
                     type="password"
