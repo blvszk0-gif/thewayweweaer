@@ -75,12 +75,42 @@ export default function AccountPage() {
     }, 4000);
   };
 
-  const [userEmail, setUserEmail] = useState('zamowieniathewaywewear@gmail.com');
+  const [userProfile, setUserProfile] = useState<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    address: string;
+    deliveryMethod: string;
+    inpostLocker?: string;
+  }>({
+    firstName: 'Jan',
+    lastName: 'Kowalski',
+    email: 'zamowieniathewaywewear@gmail.com',
+    address: 'ul. Modowa 13/37, 00-001 Warszawa',
+    deliveryMethod: 'InPost',
+  });
+  const [isNewAccount, setIsNewAccount] = useState(false);
 
   useEffect(() => {
+    const storedProfileStr = localStorage.getItem('twww-user-profile');
     const storedEmail = localStorage.getItem('twww-user-email');
-    if (storedEmail) {
-      setUserEmail(storedEmail);
+    const isNew = localStorage.getItem('twww-user-is-new') === 'true';
+
+    setIsNewAccount(isNew);
+
+    if (storedProfileStr) {
+      try {
+        const parsed = JSON.parse(storedProfileStr);
+        setUserProfile((prev) => ({
+          ...prev,
+          ...parsed,
+          email: parsed.email || storedEmail || prev.email,
+        }));
+      } catch (e) {
+        // ignore JSON parse error
+      }
+    } else if (storedEmail) {
+      setUserProfile((prev) => ({ ...prev, email: storedEmail }));
     }
   }, []);
 
@@ -152,17 +182,23 @@ export default function AccountPage() {
                      <h3 className="text-4xl font-black uppercase italic tracking-tighter">Ustawienia Profilu</h3>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {[
-                          { label: 'Imię', val: 'Jan' },
-                          { label: 'Nazwisko', val: 'Kowalski' },
-                          { label: 'E-mail', val: userEmail },
-                          { label: 'Adres Dostawy', val: 'ul. Modowa 13/37, 00-001 Warszawa' },
+                          { label: 'Imię', val: userProfile.firstName },
+                          { label: 'Nazwisko', val: userProfile.lastName },
+                          { label: 'E-mail', val: userProfile.email },
+                          { label: 'Adres Dostawy', val: userProfile.address },
                           { label: 'Hasło', val: '••••••••••••', type: 'password' },
                         ].map((field, i) => (
                           <div key={i} className="space-y-3">
                              <p className="text-[17px] font-black uppercase opacity-40 ml-4">{field.label}</p>
                              <div className="relative">
                                <input
-                                defaultValue={field.val} type={field.type || 'text'}
+                                value={field.val} onChange={(e) => {
+                                  const newVal = e.target.value;
+                                  if (field.label === 'Imię') setUserProfile(p => ({ ...p, firstName: newVal }));
+                                  if (field.label === 'Nazwisko') setUserProfile(p => ({ ...p, lastName: newVal }));
+                                  if (field.label === 'E-mail') setUserProfile(p => ({ ...p, email: newVal }));
+                                  if (field.label === 'Adres Dostawy') setUserProfile(p => ({ ...p, address: newVal }));
+                                }} type={field.type || 'text'}
                                 className="w-full bg-[color:var(--surface)] px-6 py-4 rounded-2xl border border-[color:var(--border)] font-black uppercase text-lg focus:outline-none focus:border-[color:var(--foreground)]"
                                />
                                <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[13px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity">Zmień</button>
@@ -219,31 +255,39 @@ export default function AccountPage() {
                     key="zamowienia" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
                     className="space-y-6"
                   >
-                     {mockOrders.map((order) => (
-                       <div key={order.id} className="bg-[color:var(--surface)] p-8 rounded-[40px] border border-[color:var(--border)] shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 hover:scale-[1.01] transition-transform">
-                          <div className="flex items-center gap-6">
-                             <div className="w-16 h-16 bg-[color:var(--surface-muted)] rounded-2xl flex items-center justify-center text-[color:var(--foreground)]">
-                                <order.icon size={32} />
-                             </div>
-                             <div>
-                                <h4 className="text-xl font-black italic uppercase tracking-tighter">{order.id}</h4>
-                                <p className="text-[17px] font-bold opacity-40 uppercase tracking-widest">{order.date}</p>
-                             </div>
-                          </div>
-                          <div className="flex items-center gap-10">
-                             <div className="text-right">
-                                <p className="text-2xl font-black">{order.total} PLN</p>
-                                <p className="text-[16px] font-bold text-green-500 uppercase tracking-[0.2em]">{order.status}</p>
-                             </div>
-                             <Link
-                                href={`/status/${order.id}`}
-                                className="w-14 h-14 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-                             >
-                                <ChevronRight size={24} />
-                             </Link>
-                          </div>
+                     {isNewAccount ? (
+                       <div className="bg-[color:var(--surface-muted)] p-12 rounded-[50px] border border-[color:var(--border)] text-center py-24 space-y-4">
+                          <Package size={48} className="mx-auto opacity-20" />
+                          <h4 className="text-2xl font-black uppercase italic">Brak złożonych zamówień</h4>
+                          <p className="text-[15px] font-bold opacity-40 uppercase tracking-widest">Twoja historia zamówień jest obecnie pusta. Złóż swoje pierwsze zamówienie!</p>
                        </div>
-                     ))}
+                     ) : (
+                       mockOrders.map((order) => (
+                         <div key={order.id} className="bg-[color:var(--surface)] p-8 rounded-[40px] border border-[color:var(--border)] shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 hover:scale-[1.01] transition-transform">
+                            <div className="flex items-center gap-6">
+                               <div className="w-16 h-16 bg-[color:var(--surface-muted)] rounded-2xl flex items-center justify-center text-[color:var(--foreground)]">
+                                  <order.icon size={32} />
+                               </div>
+                               <div>
+                                  <h4 className="text-xl font-black italic uppercase tracking-tighter">{order.id}</h4>
+                                  <p className="text-[17px] font-bold opacity-40 uppercase tracking-widest">{order.date}</p>
+                               </div>
+                            </div>
+                            <div className="flex items-center gap-10">
+                               <div className="text-right">
+                                  <p className="text-2xl font-black">{order.total} PLN</p>
+                                  <p className="text-[16px] font-bold text-green-500 uppercase tracking-[0.2em]">{order.status}</p>
+                               </div>
+                               <Link
+                                  href={`/status/${order.id}`}
+                                  className="w-14 h-14 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+                               >
+                                  <ChevronRight size={24} />
+                               </Link>
+                            </div>
+                         </div>
+                       ))
+                     )}
                   </motion.div>
                 )}
 
