@@ -3,7 +3,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingBag, Heart, CreditCard } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
+import { useTranslations } from 'next-intl';
 import { useStore } from '@/context/StoreContext';
 
 interface ProductCardProps {
@@ -15,6 +16,7 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ id, name, price, image, category }: ProductCardProps) => {
+  const tCartWishlist = useTranslations('cart_wishlist');
   const { addToCart, addToWishlist, isInWishlist, removeFromWishlist } = useStore();
   const liked = isInWishlist(id);
 
@@ -33,7 +35,7 @@ export const ProductCard = ({ id, name, price, image, category }: ProductCardPro
   };
 
   return (
-    <div className="group flex flex-col bg-[color:var(--surface)] rounded-3xl overflow-hidden border border-[color:var(--border)] hover:shadow-2xl transition-all duration-500">
+    <div className="group flex flex-col bg-[color:var(--surface)] rounded-3xl overflow-hidden border border-[color:var(--border)] hover:shadow-2xl transition-all duration-500 font-antonio">
       <Link href={`/product/${id}`} className="relative aspect-[3/4] overflow-hidden bg-[color:var(--surface-muted)]">
         <motion.img
           src={image}
@@ -63,7 +65,7 @@ export const ProductCard = ({ id, name, price, image, category }: ProductCardPro
             onClick={handleAddToCart}
             className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-full font-black uppercase tracking-widest text-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg"
           >
-            <ShoppingBag size={20} /> Dodaj do koszyka
+            <ShoppingBag size={20} /> {tCartWishlist('dodaj_do_koszyka')}
           </button>
 
           <div className="flex items-center justify-center gap-4 opacity-20 py-2 text-[color:var(--foreground)]">

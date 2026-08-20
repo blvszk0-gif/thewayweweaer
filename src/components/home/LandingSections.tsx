@@ -1,14 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Star, Camera, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const reviews = [
-  { id: 1, author: 'Kamil G.', rating: 5, text: 'Najlepsza bluza jaką miałem. Materiał 340G robi robotę, czuć tę jakość od razu po wyjęciu z pudełka.', photo: 'https://placehold.co/400x500/000000/FFFFFF?text=OPINIA+1' },
-  { id: 2, author: 'Marta V.', rating: 5, text: 'Haft jest niesamowicie szczegółowy. Czekam na kolejny drop!', photo: null },
-  { id: 3, author: 'Alex_Gamer', rating: 4, text: 'Stylistyka 10/10. Rozmiarówka oversize idealnie trafiona.', photo: 'https://placehold.co/400x500/000000/FFFFFF?text=OPINIA+3' },
-];
 
 const FAQItem = ({ q, a, i }: { q: string, a: string, i: number }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,6 +47,37 @@ const FAQItem = ({ q, a, i }: { q: string, a: string, i: number }) => {
 };
 
 export const LandingSections = () => {
+  const tHome = useTranslations('home');
+
+  const reviews = [
+    { id: 1, author: 'Kamil G.', rating: 5, text: tHome('najlepsza_bluza_jaką_miałem_materiał_340'), photo: 'https://placehold.co/400x500/000000/FFFFFF?text=OPINIA+1' },
+    { id: 2, author: 'Marta V.', rating: 5, text: tHome('haft_jest_niesamowicie_szczegółowy_czeka'), photo: null },
+    { id: 3, author: 'Alex_Gamer', rating: 4, text: tHome('stylistyka_1010_rozmiarówka_oversize_ide'), photo: 'https://placehold.co/400x500/000000/FFFFFF?text=OPINIA+3' },
+  ];
+
+  const faqItems = [
+    {
+      q: tHome('jaki_jest_czas_realizacji_zamówienia'),
+      a: tHome('standardowy_czas_realizacji_to_35_dni_ro')
+    },
+    {
+      q: tHome('czy_mogę_zwrócić_towar'),
+      a: tHome('tak_masz_14_dni_na_zwrot_nieużywanego_to')
+    },
+    {
+      q: tHome('jak_dbać_o_ubrania_twww'),
+      a: tHome('zalecamy_pranie_w_30_stopniach_na_lewej')
+    },
+    {
+      q: tHome('czy_wysyłacie_za_granicę'),
+      a: tHome('obecnie_wysyłamy_na_terenie_całej_unii_e')
+    },
+    {
+      q: tHome('co_to_jest_twww_club'),
+      a: tHome('to_nasz_system_lojalnościowy_za_każde_za')
+    }
+  ];
+
   return (
     <section className="py-24 font-antonio">
       <div className="container mx-auto px-6">
@@ -60,10 +86,10 @@ export const LandingSections = () => {
         <div className="mb-48">
           <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-4 text-center md:text-left">
             <div>
-              <h2 className="text-5xl font-black uppercase tracking-tighter italic">Pochwal się tym co kupiłeś!</h2>
+              <h2 className="text-5xl font-black uppercase tracking-tighter italic">{tHome('pochwal_się_tym_co_kupiłeś')}</h2>
             </div>
             <button className="w-full md:w-auto flex items-center justify-center gap-2 text-base font-black uppercase tracking-widest border border-[color:var(--border)] px-6 py-3 rounded-full hover:bg-[color:var(--surface-muted)] hover:text-[color:var(--foreground)] transition-all">
-              <Camera size={16} /> Dodaj swoją opinię
+              <Camera size={16} /> {tHome('dodaj_swoją_opinię')}
             </button>
           </div>
 
@@ -99,32 +125,11 @@ export const LandingSections = () => {
         <div className="mb-48 max-w-4xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-5xl font-black uppercase tracking-tighter italic mb-4">FAQ</h2>
-            <p className="text-[color:var(--foreground)]/40 font-bold uppercase tracking-widest text-base">Najczęściej zadawane pytania</p>
+            <p className="text-[color:var(--foreground)]/40 font-bold uppercase tracking-widest text-base">{tHome('najczęściej_zadawane_pytania')}</p>
           </div>
 
           <div className="space-y-6">
-            {[
-              {
-                q: "JAKI JEST CZAS REALIZACJI ZAMÓWIENIA?",
-                a: "Standardowy czas realizacji to 3-5 dni roboczych. W przypadku dropów limitowanych czas ten może się wydłużyć do 10 dni."
-              },
-              {
-                q: "CZY MOGĘ ZWRÓCIĆ TOWAR?",
-                a: "Tak, masz 14 dni na zwrot nieużywanego towaru bez podania przyczyny. Produkty muszą być nieużywane i posiadać oryginalne metki."
-              },
-              {
-                q: "JAK DBAĆ O UBRANIA TWWW?",
-                a: "Zalecamy pranie w 30 stopniach na lewej stronie. Unikaj suszarek bębnowych, aby zachować jakość haftu na lata."
-              },
-              {
-                q: "CZY WYSYŁACIE ZA GRANICĘ?",
-                a: "Obecnie wysyłamy na terenie całej Unii Europejskiej. Koszt wysyłki zagranicznej jest obliczany przy checkoutcie."
-              },
-              {
-                q: "CO TO JEST TWWW CLUB?",
-                a: "To nasz system lojalnościowy. Za każde zakupy zbierasz punkty, które wymienisz na zniżki lub dostęp do limitowanych kolekcji."
-              }
-            ].map((item, i) => (
+            {faqItems.map((item, i) => (
               <FAQItem key={i} q={item.q} a={item.a} i={i} />
             ))}
           </div>
@@ -134,22 +139,22 @@ export const LandingSections = () => {
         <div className="bg-[color:var(--surface)] text-[color:var(--foreground)] rounded-[50px] p-16 md:p-24 shadow-2xl relative overflow-hidden group border border-[color:var(--border)]">
            <div className="absolute top-0 right-0 w-96 h-96 bg-[color:var(--foreground)]/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-[color:var(--foreground)]/10 transition-all duration-1000" />
            <div className="relative z-10 max-w-2xl">
-              <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-8">Pozostańmy w kontakcie!</h3>
-              <p className="text-xl font-bold opacity-40 uppercase mb-12 tracking-wide text-[color:var(--foreground)]/60">Zapisz się już dziś do newslettera i bądź na bieżąco z dropami nowych kolekcji.</p>
+              <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-8">{tHome('pozostańmy_w_kontakcie')}</h3>
+              <p className="text-xl font-bold opacity-40 uppercase mb-12 tracking-wide text-[color:var(--foreground)]/60">{tHome('zapisz_się_już_dziś_do_newslettera_i_bąd')}</p>
 
               <div className="flex flex-col md:flex-row gap-4">
                  <input
                   type="email"
-                  placeholder="TWOJA@POCZTA.COM"
+                  placeholder={tHome('twojapocztacom')}
                   className="flex-1 bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-full px-10 py-6 font-black uppercase text-[18px] focus:outline-none focus:border-[color:var(--foreground)] transition-all text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50"
                  />
                  <button className="bg-[color:var(--foreground)] text-[color:var(--surface)] px-12 py-6 rounded-full font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-xl">
-                   Zapisz się
+                   {tHome('zapisz_się')}
                  </button>
               </div>
 
               <button className="mt-8 text-[13px] font-black uppercase tracking-widest text-red-600 hover:text-red-700 transition-colors">
-                Anuluj subskrypcję
+                {tHome('anuluj_subskrypcję')}
               </button>
            </div>
         </div>

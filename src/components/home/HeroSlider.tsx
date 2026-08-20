@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Heart, ShoppingBag } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { useStore } from '@/context/StoreContext';
 
 const collection = {
@@ -90,7 +90,7 @@ export const HeroSlider = () => {
             />
           </AnimatePresence>
 
-          {/* Action Buttons Overlay - Theme Based Contrast */}
+          {/* Action Buttons Overlay */}
           <div className="absolute top-4 right-4 sm:top-8 sm:right-8 flex flex-col gap-3 opacity-0 group-hover/slider:opacity-100 transition-all duration-500 z-30 lg:flex md:flex">
              <button
               onClick={handleWishlist}
@@ -106,7 +106,7 @@ export const HeroSlider = () => {
              </button>
           </div>
 
-          {/* Navigation Controls - Hidden on mobile */}
+          {/* Navigation Controls */}
           <button
             onClick={prevSlide}
             className={`absolute left-4 top-1/2 -translate-y-1/2 transition-all p-2 rounded-full backdrop-blur-md border border-white/10 z-30 hidden sm:flex ${slide.dark ? 'text-white bg-black/20 hover:bg-black/40' : 'text-black bg-white/20 hover:bg-white/40'}`}
@@ -120,7 +120,7 @@ export const HeroSlider = () => {
             <ChevronRight size={32} strokeWidth={1} />
           </button>
 
-          {/* Caption - Smaller and moved to top-left on mobile to avoid covering buttons */}
+          {/* Caption */}
           <div className={`absolute top-4 left-4 sm:top-auto sm:bottom-10 sm:left-10 transition-all duration-500 p-3 sm:p-6 rounded-2xl sm:rounded-[2rem] backdrop-blur-xl border border-white/10 z-10 ${slide.dark ? 'bg-black/40 text-white shadow-[0_0_50px_rgba(0,0,0,0.3)]' : 'bg-white/40 text-black shadow-[0_0_50px_rgba(255,255,255,0.3)]'}`}>
              <p className={`text-[10px] sm:text-[13px] font-black uppercase tracking-[0.4em] mb-1 sm:mb-2 ${slide.dark ? 'text-white/40' : 'text-black/40'}`}>Slide 0{current + 1} / 0{collection.items.length}</p>
              <h3 className="text-xs sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-antonio">{(slide as any).slideName}</h3>

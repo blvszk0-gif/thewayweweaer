@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, MapPin, Search } from 'lucide-react';
 
@@ -80,9 +81,12 @@ const mockInpostLockers = [
 ];
 
 export const LoginForm = () => {
+  const tForms = useTranslations('forms');
+  const tAccount = useTranslations('account');
+  const tHome = useTranslations('home');
+
   const [isLogin, setIsLogin] = useState(true);
 
-  // Form states
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -94,7 +98,6 @@ export const LoginForm = () => {
   const [newsletterConsent, setNewsletterConsent] = useState(false);
   const [termsConsent, setTermsConsent] = useState(false);
 
-  // Status & Google SSO states
   const [isGoogleMode, setIsGoogleMode] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [actionType, setActionType] = useState<'login' | 'register'>('login');
@@ -109,7 +112,6 @@ export const LoginForm = () => {
   }, [isSuccess]);
 
   const handleGoogleLogin = () => {
-    // Google SSO simulation: provides email and name
     setIsLogin(false);
     setIsGoogleMode(true);
     setEmail('google.user@gmail.com');
@@ -128,9 +130,7 @@ export const LoginForm = () => {
         setIsSuccess(true);
       }
     } else {
-      // Registration validation
       if (!email || !address || !password || (deliveryMethod === 'InPost' && !selectedLocker) || !termsConsent) {
-        alert('Wypełnij wszystkie wymagane pola oraz zaakceptuj regulamin.');
         return;
       }
 
@@ -171,7 +171,7 @@ export const LoginForm = () => {
               {actionType === 'login' ? 'Logowanie..' : 'Rejestrowanie..'}
             </h2>
             <p className="text-[13px] font-bold uppercase opacity-40 tracking-widest leading-relaxed text-[color:var(--foreground)]">
-              Przekierowywanie do Twojego konta...
+              {tForms('pomyślnie_zalogowano_przekierowujemy_cię')}
             </p>
           </motion.div>
         ) : (
@@ -211,17 +211,16 @@ export const LoginForm = () => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {isLogin ? (
-                /* LOGIN FORM */
                 <>
                   <InputField
                     type="email"
-                    placeholder="TWOJA@POCZTA.COM"
+                    placeholder={tHome('twojapocztacom')}
                     value={email}
                     onChange={setEmail}
                   />
                   <InputField
                     type="password"
-                    placeholder="HASŁO"
+                    placeholder={tAccount('hasło')}
                     value={password}
                     onChange={setPassword}
                   />
@@ -230,28 +229,21 @@ export const LoginForm = () => {
                       type="button"
                       className="text-[12px] font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity text-[color:var(--foreground)]"
                     >
-                      Zapomniałeś hasła?
+                      {tForms('zapomniałeś_hasła')}
                     </button>
                   </div>
                 </>
               ) : (
-                /* REGISTRATION FORM */
                 <div className="space-y-3">
-                  {isGoogleMode && (
-                    <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-2xl text-[12px] font-black uppercase tracking-widest text-green-600 text-center">
-                      Zalogowano przez Google. Uzupełnij pozostałe dane delivery.
-                    </div>
-                  )}
-
                   <div className="grid grid-cols-2 gap-3">
                     <InputField
-                      placeholder="IMIĘ"
+                      placeholder={tAccount('imię')}
                       value={firstName}
                       onChange={setFirstName}
                       required={!isGoogleMode}
                     />
                     <InputField
-                      placeholder="NAZWISKO"
+                      placeholder={tAccount('nazwisko')}
                       value={lastName}
                       onChange={setLastName}
                       required={!isGoogleMode}
@@ -260,29 +252,28 @@ export const LoginForm = () => {
 
                   <InputField
                     type="email"
-                    placeholder="E-MAIL"
+                    placeholder={tHome('twojapocztacom')}
                     value={email}
                     onChange={setEmail}
                     disabled={isGoogleMode}
                   />
 
                   <InputField
-                    placeholder="ADRES DOSTAWY (ULICA, NUMER, MIASTO)"
+                    placeholder={tAccount('adres_dostawy')}
                     value={address}
                     onChange={setAddress}
                   />
 
                   <InputField
                     type="password"
-                    placeholder="HASŁO"
+                    placeholder={tAccount('hasło')}
                     value={password}
                     onChange={setPassword}
                   />
 
-                  {/* Delivery Method Selection */}
                   <div className="pt-2">
                     <p className="text-[12px] font-black uppercase opacity-40 tracking-widest mb-2 ml-1">
-                      Preferowana metoda dostawy:
+                      {tAccount('preferowana_metoda_dostawy')}:
                     </p>
                     <div className="grid grid-cols-2 gap-3">
                       <button
@@ -294,7 +285,7 @@ export const LoginForm = () => {
                             : 'bg-[color:var(--surface-muted)] border-[color:var(--border)] text-[color:var(--foreground)]'
                         }`}
                       >
-                        Paczkomat InPost
+                        {tAccount('paczkomat_inpost')}
                       </button>
                       <button
                         type="button"
@@ -305,18 +296,17 @@ export const LoginForm = () => {
                             : 'bg-[color:var(--surface-muted)] border-[color:var(--border)] text-[color:var(--foreground)]'
                         }`}
                       >
-                        Kurier do domu
+                        {tAccount('kurier_do_domu')}
                       </button>
                     </div>
                   </div>
 
-                  {/* InPost Locker Picker */}
                   {deliveryMethod === 'InPost' && (
                     <div className="p-4 bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-2xl space-y-3 mt-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <MapPin size={16} className="text-[color:var(--foreground)]" />
-                          <span className="text-[12px] font-black uppercase tracking-widest">Wybierz Paczkomat:</span>
+                          <span className="text-[12px] font-black uppercase tracking-widest">InPost:</span>
                         </div>
                         <button
                           type="button"
@@ -338,58 +328,9 @@ export const LoginForm = () => {
                           </option>
                         ))}
                       </select>
-
-                      {/* Interactive InPost Map Mock */}
-                      <AnimatePresence>
-                        {isMapOpen && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="bg-[color:var(--surface)] p-4 rounded-xl border border-[color:var(--border)] space-y-3"
-                          >
-                            <div className="flex items-center gap-2 bg-[color:var(--surface-muted)] px-3 py-2 rounded-lg border border-[color:var(--border)] text-xs">
-                              <Search size={14} className="opacity-40" />
-                              <span className="opacity-50 uppercase font-bold text-[11px]">Szukaj miasta lub adresu...</span>
-                            </div>
-
-                            <div className="h-32 bg-yellow-500/10 border border-yellow-500/30 rounded-lg flex flex-col items-center justify-center text-center p-2">
-                              <MapPin size={24} className="text-yellow-600 mb-1 animate-bounce" />
-                              <span className="text-[11px] font-black uppercase tracking-widest text-yellow-700">
-                                Mapa Punktów InPost
-                              </span>
-                              <span className="text-[9px] font-bold uppercase opacity-60">
-                                Kliknij punkt na mapie, aby przypisać do konta
-                              </span>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-2">
-                              {mockInpostLockers.map((locker) => (
-                                <button
-                                  key={locker.id}
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedLocker(locker.id);
-                                    setIsMapOpen(false);
-                                  }}
-                                  className={`p-2 rounded-lg text-left text-[10px] font-black uppercase border transition-all ${
-                                    selectedLocker === locker.id
-                                      ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)]'
-                                      : 'bg-[color:var(--surface-muted)] border-[color:var(--border)]'
-                                  }`}
-                                >
-                                  <p className="font-bold">{locker.id}</p>
-                                  <p className="opacity-70 truncate">{locker.address}</p>
-                                </button>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
                     </div>
                   )}
 
-                  {/* Consents */}
                   <div className="space-y-2 pt-2 text-[11px] font-bold uppercase tracking-wider">
                     <label className="flex items-center gap-3 cursor-pointer opacity-80 hover:opacity-100">
                       <input
@@ -398,7 +339,7 @@ export const LoginForm = () => {
                         onChange={(e) => setNewsletterConsent(e.target.checked)}
                         className="w-4 h-4 rounded border-[color:var(--border)] accent-[color:var(--foreground)] cursor-pointer"
                       />
-                      <span>Chcę otrzymywać Newsletter z promodropami</span>
+                      <span>{tForms('zgadzam_się_na_przetwarzanie_moich_danyc')}</span>
                     </label>
 
                     <label className="flex items-center gap-3 cursor-pointer opacity-80 hover:opacity-100">
@@ -415,7 +356,6 @@ export const LoginForm = () => {
                 </div>
               )}
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-5 rounded-full font-black uppercase tracking-[0.2em] text-sm shadow-xl hover:opacity-90 transition-all mt-4"
@@ -424,7 +364,6 @@ export const LoginForm = () => {
               </button>
             </form>
 
-            {/* Social Logins */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-[color:var(--border)]"></div>
