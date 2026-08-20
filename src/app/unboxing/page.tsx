@@ -33,10 +33,10 @@ export default function UnboxingPage() {
                 <Camera size={48} />
               </motion.div>
 
-              <h1 className="text-5xl md:text-9xl font-black italic uppercase mb-8 tracking-tighter leading-none">Pokaż swój loot</h1>
+              <h1 className="text-5xl md:text-9xl font-black italic uppercase mb-8 tracking-tighter leading-none">Pokaż swój styl</h1>
 
               <p className="text-xl md:text-2xl font-bold tracking-[0.2em] uppercase opacity-40 mb-16 max-w-3xl mx-auto leading-relaxed italic">
-                Nagraj unboxing swojej paczki <span className="text-[color:var(--foreground)] opacity-100">TWWW</span>, wrzuć na TikToka lub Instagrama z oznaczeniem <span className="underline underline-offset-8">#TWWW</span> i zgarnij dodatkowe żetony do Koła Fortuny przy następnym dropie.
+                Nagraj unboxing swojej paczki <span className="text-[color:var(--foreground)] opacity-100">TWWW</span>, wrzuć na TikToka lub Instagrama z oznaczeniem <span className="underline underline-offset-8">#TWWW</span> i zgarnij dodatkowe żetony do Koła Fortuny przy następnym zamówieniu.
               </p>
 
               <div className="flex flex-wrap justify-center gap-12 text-[15px] font-black uppercase tracking-[0.5em] opacity-20 mb-20">

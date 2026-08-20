@@ -11,10 +11,10 @@ const LOOKBOOKS = {
     name: 'TWWW // ORIGINAL',
     pages: [
       { title: 'THE WAY WE WEAR', content: 'SEASON 2026 // LOOKBOOK', image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800' },
-      { title: 'OVERSIZE CULTURE', content: 'STREETWEAR // GAMING // GEEK', image: 'https://images.unsplash.com/photo-1554412933-514a83d2f3c8?auto=format&fit=crop&q=80&w=800' },
+      { title: 'OVERSIZE CULTURE', content: 'STREETWEAR // PREMIUM // ATELIER', image: 'https://images.unsplash.com/photo-1554412933-514a83d2f3c8?auto=format&fit=crop&q=80&w=800' },
       { title: 'PREMIUM QUALITY', content: '80% BAWEŁNA CZESANA', image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&q=80&w=800' },
-      { title: 'CUSTOM EMBROIDERY', content: 'TWOJA GRAFIKA // NASZA PASJA', image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=800' },
-      { title: 'SQUAD ONLY', content: 'DOŁĄCZ DO NAS NA DISCORDZIE', image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=800' },
+      { title: 'AUTORSKI HAFT', content: 'PRECYZJA // NASZA PASJA', image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=800' },
+      { title: 'TWWW CLUB', content: 'DOŁĄCZ DO NASZEJ SPOŁECZNOŚCI', image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=800' },
       { title: 'TWWW // 2026', content: 'KONIEC KATALOGU', image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800' },
     ]
   },
@@ -29,9 +29,9 @@ const LOOKBOOKS = {
   roll: {
     name: 'THE WAY WE ROLL',
     pages: [
-      { title: 'ROLLING DEEP', content: 'SKATE // GAME // WEAR', image: 'https://images.unsplash.com/photo-1520006403909-838d6b92c22e?auto=format&fit=crop&q=80&w=800' },
+      { title: 'ROLLING DEEP', content: 'STREET // URBAN // WEAR', image: 'https://images.unsplash.com/photo-1520006403909-838d6b92c22e?auto=format&fit=crop&q=80&w=800' },
       { title: 'SPEED & STYLE', content: 'COLLECTION // 2026', image: 'https://images.unsplash.com/photo-1531938716357-224c16b5ade3?auto=format&fit=crop&q=80&w=800' },
-      { title: 'SQUAD ROLL', content: 'TWWW // ROLL', image: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&q=80&w=800' },
+      { title: 'URBAN ROLL', content: 'TWWW // ROLL', image: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&q=80&w=800' },
     ]
   }
 };

@@ -9,7 +9,7 @@ import { Check, Ticket, Gift, Sparkles, RefreshCcw } from 'lucide-react';
 const prizes = [
   { label: 'Darmowa dostawa', color: '#000000' },
   { label: 'Kod -10%', color: '#1a1a1a' },
-  { label: 'Wlepki Squad', color: '#333333' },
+  { label: 'Akcesoria TWWW', color: '#333333' },
   { label: 'Kod Valorant', color: '#000000' },
   { label: 'Darmowa koszulka', color: '#1a1a1a' },
   { label: 'Kod Fortnite', color: '#333333' },
@@ -45,7 +45,7 @@ export default function SuccessPage() {
           <div className="w-20 h-20 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
             <Check size={40} />
           </div>
-          <h1 className="text-6xl font-black uppercase tracking-tighter italic">Dzięki za drop!</h1>
+          <h1 className="text-6xl font-black uppercase tracking-tighter italic">Dziękujemy za zamówienie!</h1>
           <p className="text-[color:var(--foreground)]/48 font-bold uppercase tracking-[0.3em] text-base mt-4">Twoje zamówienie #TWWW-0001 jest już w bazie.</p>
         </div>
 
@@ -55,7 +55,7 @@ export default function SuccessPage() {
            </div>
 
            <div className="relative z-10 text-center mb-16">
-             <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-4">Koło Fortuny Squadu</h2>
+             <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-4">Koło Fortuny TWWW</h2>
              <p className="text-[13px] font-black uppercase tracking-widest opacity-30">Masz 1 żeton. Każdy los wygrywa!</p>
            </div>
 

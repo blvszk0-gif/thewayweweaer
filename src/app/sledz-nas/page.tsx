@@ -20,7 +20,7 @@ export default function FollowUsPage() {
       <div className="container mx-auto px-6 pt-40 pb-20 relative z-10">
         <header className="mb-20 text-center">
            <p className="text-[17px] font-black uppercase tracking-[0.4em] text-[color:var(--foreground)]/30 mb-4">Project: TWWW // Subject:</p>
-           <h1 className="text-7xl font-black uppercase tracking-tighter italic leading-none">Śledź nasz Squad</h1>
+           <h1 className="text-7xl font-black uppercase tracking-tighter italic leading-none">Śledź nasz Profil</h1>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

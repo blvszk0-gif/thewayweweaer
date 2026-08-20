@@ -36,11 +36,11 @@ export default function MaintenancePage() {
                 transition={{ duration: 2, ease: "circOut" }}
               />
            </div>
-           <p className="text-[13px] font-bold uppercase tracking-widest opacity-20">Squad Deployment: 70% Complete</p>
+           <p className="text-[13px] font-bold uppercase tracking-widest opacity-20">System Update: 70% Complete</p>
         </div>
 
         <div className="mt-20 pt-12 border-t border-[color:var(--border)]/20">
-           <p className="text-[12px] font-black uppercase tracking-[0.2em] opacity-40">© 2026 THE WAY WE WEAR // SQUAD ONLY</p>
+           <p className="text-[12px] font-black uppercase tracking-[0.2em] opacity-40">© 2026 THE WAY WE WEAR</p>
         </div>
       </motion.div>
 

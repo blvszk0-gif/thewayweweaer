@@ -21,8 +21,11 @@ import {
   Box,
   XCircle,
   RefreshCcw,
-  Lock
+  Lock,
+  AlertTriangle,
+  Check
 } from 'lucide-react';
+import pb from '@/lib/pocketbase';
 
 const mockOrders = [
   { id: 'TWWW-0042', date: '10 Cze 2026', total: 299, status: 'Opłacone', icon: CheckCircle2 },
@@ -48,6 +51,12 @@ export default function AccountPage() {
   const [hasAccess, setHasAccess] = useState(false);
   const [deliveryMethod, setDeliveryMethod] = useState('InPost');
   const [isDeliveryConfirmed, setIsDeliveryConfirmed] = useState(false);
+
+  // Modals for deletion & newsletter
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showUnsubscribeModal, setShowUnsubscribeModal] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [modalSuccessMessage, setModalSuccessMessage] = useState<string | null>(null);
 
   // UseEffect to check login (mocked)
   useEffect(() => {
@@ -75,6 +84,45 @@ export default function AccountPage() {
     }, 4000);
   };
 
+  const [userProfile, setUserProfile] = useState<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    address: string;
+    deliveryMethod: string;
+    inpostLocker?: string;
+  }>({
+    firstName: 'Jan',
+    lastName: 'Kowalski',
+    email: 'zamowieniathewaywewear@gmail.com',
+    address: 'ul. Modowa 13/37, 00-001 Warszawa',
+    deliveryMethod: 'InPost',
+  });
+  const [isNewAccount, setIsNewAccount] = useState(false);
+
+  useEffect(() => {
+    const storedProfileStr = localStorage.getItem('twww-user-profile');
+    const storedEmail = localStorage.getItem('twww-user-email');
+    const isNew = localStorage.getItem('twww-user-is-new') === 'true';
+
+    setIsNewAccount(isNew);
+
+    if (storedProfileStr) {
+      try {
+        const parsed = JSON.parse(storedProfileStr);
+        setUserProfile((prev) => ({
+          ...prev,
+          ...parsed,
+          email: parsed.email || storedEmail || prev.email,
+        }));
+      } catch (e) {
+        // ignore JSON parse error
+      }
+    } else if (storedEmail) {
+      setUserProfile((prev) => ({ ...prev, email: storedEmail }));
+    }
+  }, []);
+
   const tabs = [
     { id: 'profil', label: 'Profil', icon: User },
     { id: 'zamowienia', label: 'Zamówienia', icon: Package },
@@ -93,7 +141,7 @@ export default function AccountPage() {
               <div className="w-24 h-24 bg-[color:var(--surface-muted)] rounded-full flex items-center justify-center mx-auto border border-[color:var(--border)] shadow-xl">
                  <User size={40} className="opacity-20" />
               </div>
-              <h1 className="text-4xl font-black uppercase italic tracking-tighter">Strefa Squadu</h1>
+              <h1 className="text-4xl font-black uppercase italic tracking-tighter">Strefa Klienta</h1>
               <p className="text-[22px] font-bold opacity-50 uppercase leading-relaxed">Zaloguj się, aby uzyskać dostęp do swojego konta, zamówień i nagród.</p>
               <button
                 onClick={() => { localStorage.setItem('twww-auth', 'true'); window.location.reload(); }}
@@ -119,7 +167,7 @@ export default function AccountPage() {
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => tab.id === 'logout' ? (localStorage.removeItem('twww-auth'), window.location.reload()) : setActiveTab(tab.id)}
+                    onClick={() => tab.id === 'logout' ? (localStorage.removeItem('twww-auth'), localStorage.removeItem('twww-user-email'), window.location.reload()) : setActiveTab(tab.id)}
                     className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all group ${activeTab === tab.id ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] shadow-lg' : 'hover:bg-[color:var(--surface-muted)]'}`}
                   >
                      <div className="flex items-center gap-4">
@@ -143,18 +191,23 @@ export default function AccountPage() {
                      <h3 className="text-4xl font-black uppercase italic tracking-tighter">Ustawienia Profilu</h3>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {[
-                          { label: 'Imię', val: 'Kamil' },
-                          { label: 'Nazwisko', val: 'Gamer' },
-                          { label: 'E-mail', val: 'kamil@squad.pl' },
-                          { label: 'Telefon', val: '+48 500 600 700' },
+                          { label: 'Imię', val: userProfile.firstName },
+                          { label: 'Nazwisko', val: userProfile.lastName },
+                          { label: 'E-mail', val: userProfile.email },
+                          { label: 'Adres Dostawy', val: userProfile.address },
                           { label: 'Hasło', val: '••••••••••••', type: 'password' },
-                          { label: 'Adres Dostawy', val: 'ul. Gamingowa 13/37, 00-001 Warszawa' },
                         ].map((field, i) => (
                           <div key={i} className="space-y-3">
                              <p className="text-[17px] font-black uppercase opacity-40 ml-4">{field.label}</p>
                              <div className="relative">
                                <input
-                                defaultValue={field.val} type={field.type || 'text'}
+                                value={field.val} onChange={(e) => {
+                                  const newVal = e.target.value;
+                                  if (field.label === 'Imię') setUserProfile(p => ({ ...p, firstName: newVal }));
+                                  if (field.label === 'Nazwisko') setUserProfile(p => ({ ...p, lastName: newVal }));
+                                  if (field.label === 'E-mail') setUserProfile(p => ({ ...p, email: newVal }));
+                                  if (field.label === 'Adres Dostawy') setUserProfile(p => ({ ...p, address: newVal }));
+                                }} type={field.type || 'text'}
                                 className="w-full bg-[color:var(--surface)] px-6 py-4 rounded-2xl border border-[color:var(--border)] font-black uppercase text-lg focus:outline-none focus:border-[color:var(--foreground)]"
                                />
                                <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[13px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity">Zmień</button>
@@ -211,31 +264,39 @@ export default function AccountPage() {
                     key="zamowienia" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
                     className="space-y-6"
                   >
-                     {mockOrders.map((order) => (
-                       <div key={order.id} className="bg-[color:var(--surface)] p-8 rounded-[40px] border border-[color:var(--border)] shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 hover:scale-[1.01] transition-transform">
-                          <div className="flex items-center gap-6">
-                             <div className="w-16 h-16 bg-[color:var(--surface-muted)] rounded-2xl flex items-center justify-center text-[color:var(--foreground)]">
-                                <order.icon size={32} />
-                             </div>
-                             <div>
-                                <h4 className="text-xl font-black italic uppercase tracking-tighter">{order.id}</h4>
-                                <p className="text-[17px] font-bold opacity-40 uppercase tracking-widest">{order.date}</p>
-                             </div>
-                          </div>
-                          <div className="flex items-center gap-10">
-                             <div className="text-right">
-                                <p className="text-2xl font-black">{order.total} PLN</p>
-                                <p className="text-[16px] font-bold text-green-500 uppercase tracking-[0.2em]">{order.status}</p>
-                             </div>
-                             <Link
-                                href={`/status/${order.id}`}
-                                className="w-14 h-14 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-                             >
-                                <ChevronRight size={24} />
-                             </Link>
-                          </div>
+                     {isNewAccount ? (
+                       <div className="bg-[color:var(--surface-muted)] p-12 rounded-[50px] border border-[color:var(--border)] text-center py-24 space-y-4">
+                          <Package size={48} className="mx-auto opacity-20" />
+                          <h4 className="text-2xl font-black uppercase italic">Brak złożonych zamówień</h4>
+                          <p className="text-[15px] font-bold opacity-40 uppercase tracking-widest">Twoja historia zamówień jest obecnie pusta. Złóż swoje pierwsze zamówienie!</p>
                        </div>
-                     ))}
+                     ) : (
+                       mockOrders.map((order) => (
+                         <div key={order.id} className="bg-[color:var(--surface)] p-8 rounded-[40px] border border-[color:var(--border)] shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 hover:scale-[1.01] transition-transform">
+                            <div className="flex items-center gap-6">
+                               <div className="w-16 h-16 bg-[color:var(--surface-muted)] rounded-2xl flex items-center justify-center text-[color:var(--foreground)]">
+                                  <order.icon size={32} />
+                               </div>
+                               <div>
+                                  <h4 className="text-xl font-black italic uppercase tracking-tighter">{order.id}</h4>
+                                  <p className="text-[17px] font-bold opacity-40 uppercase tracking-widest">{order.date}</p>
+                               </div>
+                            </div>
+                            <div className="flex items-center gap-10">
+                               <div className="text-right">
+                                  <p className="text-2xl font-black">{order.total} PLN</p>
+                                  <p className="text-[16px] font-bold text-green-500 uppercase tracking-[0.2em]">{order.status}</p>
+                               </div>
+                               <Link
+                                  href={`/status/${order.id}`}
+                                  className="w-14 h-14 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+                               >
+                                  <ChevronRight size={24} />
+                               </Link>
+                            </div>
+                         </div>
+                       ))
+                     )}
                   </motion.div>
                 )}
 
@@ -257,7 +318,7 @@ export default function AccountPage() {
                      <div className="bg-black text-white p-10 rounded-[40px] shadow-2xl relative overflow-hidden group">
                         <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:rotate-12 transition-transform duration-700"><Ticket size={100} /></div>
                         <p className="text-[16px] font-black uppercase tracking-[0.4em] text-white/40 mb-2">Twój aktywny rabat</p>
-                        <h3 className="text-5xl font-black italic tracking-tighter mb-8">-15% SQUAD</h3>
+                        <h3 className="text-5xl font-black italic tracking-tighter mb-8">-15% TWWW CLUB</h3>
                         <div className="bg-white/10 p-4 rounded-xl border border-white/5 flex justify-between items-center">
                            <span className="font-mono font-bold text-lg">WELCOME15</span>
                            <button className="text-[13px] font-black uppercase border-b border-white">Kopiuj</button>
@@ -355,14 +416,20 @@ export default function AccountPage() {
                   >
                      <h3 className="text-4xl font-black uppercase italic tracking-tighter">Opcje Konta</h3>
                      <div className="flex flex-wrap gap-6">
-                        <button className="flex items-center gap-4 bg-[color:var(--surface)] border border-[color:var(--border)] px-10 py-6 rounded-[30px] hover:bg-red-500 hover:text-white transition-all group shadow-sm">
+                        <button
+                          onClick={() => setShowDeleteModal(true)}
+                          className="flex items-center gap-4 bg-[color:var(--surface)] border border-[color:var(--border)] px-10 py-6 rounded-[30px] hover:bg-red-500 hover:text-white transition-all group shadow-sm"
+                        >
                            <Trash2 size={24} className="text-red-500 group-hover:text-white" />
                            <div className="text-left">
                               <p className="font-black uppercase text-lg">Usuń moje konto</p>
                               <p className="text-[13px] font-bold opacity-40 uppercase tracking-widest group-hover:text-white/60">Bezpowrotne usunięcie danych</p>
                            </div>
                         </button>
-                        <button className="flex items-center gap-4 bg-[color:var(--surface)] border border-[color:var(--border)] px-10 py-6 rounded-[30px] hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all group shadow-sm">
+                        <button
+                          onClick={() => setShowUnsubscribeModal(true)}
+                          className="flex items-center gap-4 bg-[color:var(--surface)] border border-[color:var(--border)] px-10 py-6 rounded-[30px] hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all group shadow-sm"
+                        >
                            <BellOff size={24} className="opacity-40 group-hover:opacity-100 group-hover:text-[color:var(--surface)]" />
                            <div className="text-left">
                               <p className="font-black uppercase text-lg">Wypisz z newslettera</p>
@@ -377,6 +444,171 @@ export default function AccountPage() {
 
         </div>
       </div>
+
+      {/* Account Deletion Confirmation Modal */}
+      <AnimatePresence>
+        {showDeleteModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-[40px] p-8 sm:p-10 max-w-md w-full text-center space-y-6 shadow-2xl"
+            >
+              {modalSuccessMessage ? (
+                <div className="space-y-4 py-6">
+                  <div className="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <Check size={32} />
+                  </div>
+                  <h3 className="text-2xl font-black uppercase italic">{modalSuccessMessage}</h3>
+                </div>
+              ) : (
+                <>
+                  <div className="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto">
+                    <AlertTriangle size={32} />
+                  </div>
+                  <h3 className="text-2xl font-black uppercase italic">Czy na pewno chcesz usunąć konto?</h3>
+                  <p className="text-xs font-bold opacity-60 uppercase tracking-widest leading-relaxed">
+                    Operacja jest nieodwracalna. Twoje konto, historia zamówień i zapisane dane zostaną bezpowrotnie usunięte.
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-4 pt-4">
+                    <button
+                      type="button"
+                      onClick={() => setShowDeleteModal(false)}
+                      disabled={isProcessing}
+                      className="py-4 rounded-2xl font-black uppercase text-xs tracking-wider border border-[color:var(--border)] hover:bg-[color:var(--surface-muted)] transition-all"
+                    >
+                      Anuluj
+                    </button>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        setIsProcessing(true);
+                        try {
+                          if (pb.authStore.isValid && pb.authStore.model?.id) {
+                            await pb.collection('users').delete(pb.authStore.model.id);
+                            pb.authStore.clear();
+                          }
+                        } catch (err) {
+                          console.warn('PB Delete user note:', err);
+                        }
+
+                        localStorage.removeItem('twww-auth');
+                        localStorage.removeItem('twww-user-email');
+                        localStorage.removeItem('twww-user-profile');
+                        localStorage.removeItem('twww-user-is-new');
+
+                        setIsProcessing(false);
+                        setModalSuccessMessage('Konto zostało usunięte');
+                        setTimeout(() => {
+                          window.location.reload();
+                        }, 1500);
+                      }}
+                      disabled={isProcessing}
+                      className="py-4 rounded-2xl font-black uppercase text-xs tracking-wider bg-red-500 text-white hover:bg-red-600 transition-all shadow-lg"
+                    >
+                      {isProcessing ? 'Usuwanie...' : 'Tak, usuń'}
+                    </button>
+                  </div>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Newsletter Unsubscribe Confirmation Modal */}
+      <AnimatePresence>
+        {showUnsubscribeModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-[40px] p-8 sm:p-10 max-w-md w-full text-center space-y-6 shadow-2xl"
+            >
+              {modalSuccessMessage ? (
+                <div className="space-y-4 py-6">
+                  <div className="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <Check size={32} />
+                  </div>
+                  <h3 className="text-2xl font-black uppercase italic">{modalSuccessMessage}</h3>
+                </div>
+              ) : (
+                <>
+                  <div className="w-16 h-16 bg-[color:var(--surface-muted)] text-[color:var(--foreground)] rounded-full flex items-center justify-center mx-auto border border-[color:var(--border)]">
+                    <BellOff size={32} className="opacity-60" />
+                  </div>
+                  <h3 className="text-2xl font-black uppercase italic">Czy na pewno chcesz wypisać się z newslettera?</h3>
+                  <p className="text-xs font-bold opacity-60 uppercase tracking-widest leading-relaxed">
+                    Przestaniesz otrzymywać powiadomienia o nowych dropach i ekskluzywnych kodach rabatowych.
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-4 pt-4">
+                    <button
+                      type="button"
+                      onClick={() => setShowUnsubscribeModal(false)}
+                      disabled={isProcessing}
+                      className="py-4 rounded-2xl font-black uppercase text-xs tracking-wider border border-[color:var(--border)] hover:bg-[color:var(--surface-muted)] transition-all"
+                    >
+                      Anuluj
+                    </button>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        setIsProcessing(true);
+                        try {
+                          const userEmail = userProfile.email;
+                          if (userEmail) {
+                            const records = await pb.collection('newsletter').getList(1, 1, {
+                              filter: `email = "${userEmail}"`,
+                            }).catch(() => null);
+
+                            if (records && records.items && records.items.length > 0) {
+                              await pb.collection('newsletter').delete(records.items[0].id).catch(() => null);
+                            }
+                          }
+                        } catch (err) {
+                          console.warn('PB Newsletter unsubscribe note:', err);
+                        }
+
+                        // Update local user profile consent
+                        setUserProfile((prev) => {
+                          const updated = { ...prev, newsletter: false };
+                          localStorage.setItem('twww-user-profile', JSON.stringify(updated));
+                          return updated;
+                        });
+
+                        setIsProcessing(false);
+                        setModalSuccessMessage('Wypisano z newslettera');
+                        setTimeout(() => {
+                          setShowUnsubscribeModal(false);
+                          setModalSuccessMessage(null);
+                        }, 1500);
+                      }}
+                      disabled={isProcessing}
+                      className="py-4 rounded-2xl font-black uppercase text-xs tracking-wider bg-[color:var(--foreground)] text-[color:var(--surface)] hover:opacity-90 transition-all shadow-lg"
+                    >
+                      {isProcessing ? 'Przetwarzanie...' : 'Tak, wypisz się'}
+                    </button>
+                  </div>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </main>

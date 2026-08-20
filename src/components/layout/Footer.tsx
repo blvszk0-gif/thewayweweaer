@@ -50,7 +50,7 @@ export const Footer = () => {
           <h4 className="text-lg font-black uppercase tracking-tighter mb-8 italic underline decoration-1 underline-offset-4 font-antonio">Konto</h4>
           <div className="flex flex-col gap-6">
             <div className="space-y-4">
-              <p className="text-[11px] font-black uppercase tracking-[0.3em] opacity-30 italic">Bądź częścią Squadu:</p>
+              <p className="text-[11px] font-black uppercase tracking-[0.3em] opacity-30 italic">Bądź częścią TWWW Club:</p>
               <button
                 onClick={() => setIsNewsletterWizardOpen(true)}
                 className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-xl font-black uppercase tracking-[0.3em] text-[12px] shadow-lg hover:scale-[1.02] transition-transform"

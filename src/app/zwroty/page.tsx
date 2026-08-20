@@ -16,30 +16,17 @@ export default function ReturnsPage() {
            <h1 className="text-7xl font-black uppercase tracking-tighter italic leading-none">Polityka Zwrotów</h1>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="max-w-3xl mx-auto">
            <motion.div
-            initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
-            className="p-12 rounded-[50px] bg-[color:var(--surface-muted)] border border-[color:var(--border)] shadow-2xl"
-           >
-              <div className="w-16 h-16 bg-red-500 text-white rounded-2xl flex items-center justify-center mb-8 shadow-xl">
-                 <ShieldAlert size={32} />
-              </div>
-              <h2 className="text-4xl font-black uppercase italic tracking-tighter mb-8">Artykuły na zamówienie</h2>
-              <p className="text-[18px] font-bold uppercase tracking-widest leading-relaxed opacity-60">
-                 Artykuły z haftem na zamówienie są tworzone według Twojej indywidualnej specyfikacji. Zgodnie z art. 38 ust. 1 pkt 3 ustawy o prawach konsumenta, produkty personalizowane nie podlegają zwrotowi ani wymianie z tytułu rezygnacji. Prosimy o dokładne sprawdzenie przesłanego projektu oraz tabeli rozmiarów przed sfinalizowaniem zamówienia.
-              </p>
-           </motion.div>
-
-           <motion.div
-            initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             className="p-12 rounded-[50px] bg-[color:var(--surface)] border border-[color:var(--border)] shadow-2xl"
            >
               <div className="w-16 h-16 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-2xl flex items-center justify-center mb-8 shadow-xl">
                  <RefreshCcw size={32} />
               </div>
-              <h2 className="text-4xl font-black uppercase italic tracking-tighter mb-8">Standardowe produkty</h2>
+              <h2 className="text-4xl font-black uppercase italic tracking-tighter mb-8">Warunki Zwrotu</h2>
               <p className="text-[18px] font-bold uppercase tracking-widest leading-relaxed opacity-60">
-                 W przypadku artykułów, które nie są wykonywane na indywidualne zamówienie, przysługuje Ci prawo do zwrotu w terminie 14 dni od momentu otrzymania przesyłki bez podania przyczyny. Towar nie może nosić śladów użytkowania i musi posiadać oryginalne metki.
+                 Przysługuje Ci prawo do zwrotu towaru w terminie 14 dni od momentu otrzymania przesyłki bez podania przyczyny. Towar nie może nosić śladów użytkowania, musi posiadać oryginalne metki i pozostać w pełnym komplecie.
               </p>
            </motion.div>
         </div>
