@@ -45,9 +45,29 @@ export default function OrderStatusPage() {
   const params = useParams();
   const id = params.id as string;
   const [currentStatus, setCurrentStatus] = useState(1);
+  const [recipient, setRecipient] = useState({
+    name: 'Klient TWWW',
+    address: 'Adres zlecenia',
+    city: 'Polska',
+    method: 'InPost Paczkomat / Kurier',
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => setCurrentStatus(1), 500);
+    const storedProfileStr = localStorage.getItem('twww-user-profile');
+    if (storedProfileStr) {
+      try {
+        const parsed = JSON.parse(storedProfileStr);
+        setRecipient({
+          name: `${parsed.firstName || ''} ${parsed.lastName || ''}`.trim() || 'Klient TWWW',
+          address: parsed.address || 'Brak wyznaczonego adresu',
+          city: parsed.inpostLocker ? `Paczkomat: ${parsed.inpostLocker}` : 'Polska',
+          method: parsed.deliveryMethod || 'Kurier TWWW',
+        });
+      } catch {
+        // ignore
+      }
+    }
     return () => clearTimeout(timer);
   }, [id]);
 
@@ -117,18 +137,18 @@ export default function OrderStatusPage() {
                <h3 className="text-base font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
                  <MapPin size={16} /> {tAccount('adres_dostawy')}
                </h3>
-               <p className="text-[18px] font-bold uppercase opacity-40 leading-relaxed">
-                 Jan Kowalski<br />
-                 ul. Modowa 13/37<br />
-                 00-001 Warszawa, Polska
+               <p className="text-[18px] font-bold uppercase opacity-60 leading-relaxed">
+                 {recipient.name}<br />
+                 {recipient.address}<br />
+                 {recipient.city}
                </p>
              </div>
              <div className="flex-1">
                <h3 className="text-base font-black uppercase tracking-widest mb-6 italic flex items-center gap-2">
                  <Truck size={16} /> {tAccount('preferowana_metoda_dostawy')}
                </h3>
-               <p className="text-[18px] font-bold uppercase opacity-40 leading-relaxed">
-                 Kurier TWWW (InPost)
+               <p className="text-[18px] font-bold uppercase opacity-60 leading-relaxed">
+                 {recipient.method}
                </p>
              </div>
           </div>
