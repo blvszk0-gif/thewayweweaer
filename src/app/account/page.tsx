@@ -21,8 +21,11 @@ import {
   Box,
   XCircle,
   RefreshCcw,
-  Lock
+  Lock,
+  AlertTriangle,
+  Check
 } from 'lucide-react';
+import pb from '@/lib/pocketbase';
 
 const mockOrders = [
   { id: 'TWWW-0042', date: '10 Cze 2026', total: 299, status: 'Opłacone', icon: CheckCircle2 },
@@ -48,6 +51,12 @@ export default function AccountPage() {
   const [hasAccess, setHasAccess] = useState(false);
   const [deliveryMethod, setDeliveryMethod] = useState('InPost');
   const [isDeliveryConfirmed, setIsDeliveryConfirmed] = useState(false);
+
+  // Modals for deletion & newsletter
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showUnsubscribeModal, setShowUnsubscribeModal] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [modalSuccessMessage, setModalSuccessMessage] = useState<string | null>(null);
 
   // UseEffect to check login (mocked)
   useEffect(() => {
@@ -407,14 +416,20 @@ export default function AccountPage() {
                   >
                      <h3 className="text-4xl font-black uppercase italic tracking-tighter">Opcje Konta</h3>
                      <div className="flex flex-wrap gap-6">
-                        <button className="flex items-center gap-4 bg-[color:var(--surface)] border border-[color:var(--border)] px-10 py-6 rounded-[30px] hover:bg-red-500 hover:text-white transition-all group shadow-sm">
+                        <button
+                          onClick={() => setShowDeleteModal(true)}
+                          className="flex items-center gap-4 bg-[color:var(--surface)] border border-[color:var(--border)] px-10 py-6 rounded-[30px] hover:bg-red-500 hover:text-white transition-all group shadow-sm"
+                        >
                            <Trash2 size={24} className="text-red-500 group-hover:text-white" />
                            <div className="text-left">
                               <p className="font-black uppercase text-lg">Usuń moje konto</p>
                               <p className="text-[13px] font-bold opacity-40 uppercase tracking-widest group-hover:text-white/60">Bezpowrotne usunięcie danych</p>
                            </div>
                         </button>
-                        <button className="flex items-center gap-4 bg-[color:var(--surface)] border border-[color:var(--border)] px-10 py-6 rounded-[30px] hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all group shadow-sm">
+                        <button
+                          onClick={() => setShowUnsubscribeModal(true)}
+                          className="flex items-center gap-4 bg-[color:var(--surface)] border border-[color:var(--border)] px-10 py-6 rounded-[30px] hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-all group shadow-sm"
+                        >
                            <BellOff size={24} className="opacity-40 group-hover:opacity-100 group-hover:text-[color:var(--surface)]" />
                            <div className="text-left">
                               <p className="font-black uppercase text-lg">Wypisz z newslettera</p>
@@ -429,6 +444,171 @@ export default function AccountPage() {
 
         </div>
       </div>
+
+      {/* Account Deletion Confirmation Modal */}
+      <AnimatePresence>
+        {showDeleteModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-[40px] p-8 sm:p-10 max-w-md w-full text-center space-y-6 shadow-2xl"
+            >
+              {modalSuccessMessage ? (
+                <div className="space-y-4 py-6">
+                  <div className="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <Check size={32} />
+                  </div>
+                  <h3 className="text-2xl font-black uppercase italic">{modalSuccessMessage}</h3>
+                </div>
+              ) : (
+                <>
+                  <div className="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto">
+                    <AlertTriangle size={32} />
+                  </div>
+                  <h3 className="text-2xl font-black uppercase italic">Czy na pewno chcesz usunąć konto?</h3>
+                  <p className="text-xs font-bold opacity-60 uppercase tracking-widest leading-relaxed">
+                    Operacja jest nieodwracalna. Twoje konto, historia zamówień i zapisane dane zostaną bezpowrotnie usunięte.
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-4 pt-4">
+                    <button
+                      type="button"
+                      onClick={() => setShowDeleteModal(false)}
+                      disabled={isProcessing}
+                      className="py-4 rounded-2xl font-black uppercase text-xs tracking-wider border border-[color:var(--border)] hover:bg-[color:var(--surface-muted)] transition-all"
+                    >
+                      Anuluj
+                    </button>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        setIsProcessing(true);
+                        try {
+                          if (pb.authStore.isValid && pb.authStore.model?.id) {
+                            await pb.collection('users').delete(pb.authStore.model.id);
+                            pb.authStore.clear();
+                          }
+                        } catch (err) {
+                          console.warn('PB Delete user note:', err);
+                        }
+
+                        localStorage.removeItem('twww-auth');
+                        localStorage.removeItem('twww-user-email');
+                        localStorage.removeItem('twww-user-profile');
+                        localStorage.removeItem('twww-user-is-new');
+
+                        setIsProcessing(false);
+                        setModalSuccessMessage('Konto zostało usunięte');
+                        setTimeout(() => {
+                          window.location.reload();
+                        }, 1500);
+                      }}
+                      disabled={isProcessing}
+                      className="py-4 rounded-2xl font-black uppercase text-xs tracking-wider bg-red-500 text-white hover:bg-red-600 transition-all shadow-lg"
+                    >
+                      {isProcessing ? 'Usuwanie...' : 'Tak, usuń'}
+                    </button>
+                  </div>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Newsletter Unsubscribe Confirmation Modal */}
+      <AnimatePresence>
+        {showUnsubscribeModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-[40px] p-8 sm:p-10 max-w-md w-full text-center space-y-6 shadow-2xl"
+            >
+              {modalSuccessMessage ? (
+                <div className="space-y-4 py-6">
+                  <div className="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <Check size={32} />
+                  </div>
+                  <h3 className="text-2xl font-black uppercase italic">{modalSuccessMessage}</h3>
+                </div>
+              ) : (
+                <>
+                  <div className="w-16 h-16 bg-[color:var(--surface-muted)] text-[color:var(--foreground)] rounded-full flex items-center justify-center mx-auto border border-[color:var(--border)]">
+                    <BellOff size={32} className="opacity-60" />
+                  </div>
+                  <h3 className="text-2xl font-black uppercase italic">Czy na pewno chcesz wypisać się z newslettera?</h3>
+                  <p className="text-xs font-bold opacity-60 uppercase tracking-widest leading-relaxed">
+                    Przestaniesz otrzymywać powiadomienia o nowych dropach i ekskluzywnych kodach rabatowych.
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-4 pt-4">
+                    <button
+                      type="button"
+                      onClick={() => setShowUnsubscribeModal(false)}
+                      disabled={isProcessing}
+                      className="py-4 rounded-2xl font-black uppercase text-xs tracking-wider border border-[color:var(--border)] hover:bg-[color:var(--surface-muted)] transition-all"
+                    >
+                      Anuluj
+                    </button>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        setIsProcessing(true);
+                        try {
+                          const userEmail = userProfile.email;
+                          if (userEmail) {
+                            const records = await pb.collection('newsletter').getList(1, 1, {
+                              filter: `email = "${userEmail}"`,
+                            }).catch(() => null);
+
+                            if (records && records.items && records.items.length > 0) {
+                              await pb.collection('newsletter').delete(records.items[0].id).catch(() => null);
+                            }
+                          }
+                        } catch (err) {
+                          console.warn('PB Newsletter unsubscribe note:', err);
+                        }
+
+                        // Update local user profile consent
+                        setUserProfile((prev) => {
+                          const updated = { ...prev, newsletter: false };
+                          localStorage.setItem('twww-user-profile', JSON.stringify(updated));
+                          return updated;
+                        });
+
+                        setIsProcessing(false);
+                        setModalSuccessMessage('Wypisano z newslettera');
+                        setTimeout(() => {
+                          setShowUnsubscribeModal(false);
+                          setModalSuccessMessage(null);
+                        }, 1500);
+                      }}
+                      disabled={isProcessing}
+                      className="py-4 rounded-2xl font-black uppercase text-xs tracking-wider bg-[color:var(--foreground)] text-[color:var(--surface)] hover:opacity-90 transition-all shadow-lg"
+                    >
+                      {isProcessing ? 'Przetwarzanie...' : 'Tak, wypisz się'}
+                    </button>
+                  </div>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </main>
