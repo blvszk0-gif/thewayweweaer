@@ -28,6 +28,13 @@ export async function generateMetadata({
       template: "%s | The Way WE Wear"
     },
     description: "Premium Minimalist Streetwear",
+    icons: {
+      icon: [
+        { url: '/logokarta.png', type: 'image/png' },
+        { url: '/icon.png', type: 'image/png' },
+      ],
+      apple: '/logokarta.png',
+    },
     alternates: {
       canonical: locale === 'pl' ? '/' : `/${locale}`,
       languages: {
