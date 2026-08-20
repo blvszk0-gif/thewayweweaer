@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, CheckCircle2, ArrowRight } from 'lucide-react';
 
@@ -10,13 +11,14 @@ interface NewsletterWizardProps {
 }
 
 export const NewsletterWizard = ({ isOpen, onClose }: NewsletterWizardProps) => {
+  const tForms = useTranslations('forms');
+  const tHome = useTranslations('home');
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
 
   const handleNext = () => {
     if (step === 1 && email) setStep(2);
     else if (step === 2) {
-       // Submit logic here
        setStep(3);
     }
   };
@@ -58,12 +60,12 @@ export const NewsletterWizard = ({ isOpen, onClose }: NewsletterWizardProps) => 
                     <div className="w-16 h-16 bg-white text-black rounded-2xl flex items-center justify-center mb-4">
                        <Mail size={32} />
                     </div>
-                    <h2 className="text-4xl font-black uppercase italic tracking-tighter">Dołącz do TWWW Club</h2>
-                    <p className="text-lg font-bold opacity-40 uppercase tracking-widest leading-relaxed">Zostaw swój e-mail, aby otrzymywać powiadomienia o nowych kolekcjach i ekskluzywnych ofertach.</p>
+                    <h2 className="text-4xl font-black uppercase italic tracking-tighter">{tForms('dołącz_do_twww_club')}</h2>
+                    <p className="text-lg font-bold opacity-40 uppercase tracking-widest leading-relaxed">{tForms('zostaw_swój_e-mail_aby_otrzymywać_powiad')}</p>
                     <div className="space-y-4">
                        <input
                          type="email"
-                         placeholder="TWÓJ@EMAIL.COM"
+                         placeholder={tHome('twojapocztacom')}
                          value={email}
                          onChange={(e) => setEmail(e.target.value.toUpperCase())}
                          className="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-6 text-xl font-black uppercase focus:outline-none focus:border-white transition-colors"
@@ -73,7 +75,7 @@ export const NewsletterWizard = ({ isOpen, onClose }: NewsletterWizardProps) => 
                         disabled={!email}
                         className="w-full bg-white text-black py-6 rounded-2xl font-black uppercase tracking-widest text-xl flex items-center justify-center gap-4 disabled:opacity-20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                        >
-                         Dalej <ArrowRight size={24} />
+                         {tForms('wyślij')} <ArrowRight size={24} />
                        </button>
                     </div>
                  </motion.div>
@@ -81,19 +83,19 @@ export const NewsletterWizard = ({ isOpen, onClose }: NewsletterWizardProps) => 
 
                {step === 2 && (
                  <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
-                    <h2 className="text-4xl font-black uppercase italic tracking-tighter">Zgody Marketingowe</h2>
+                    <h2 className="text-4xl font-black uppercase italic tracking-tighter">{tForms('dołącz_do_twww_club')}</h2>
                     <div className="space-y-6">
                        <div className="flex gap-4 items-start bg-white/5 p-6 rounded-2xl border border-white/10">
                           <input type="checkbox" className="mt-1 w-5 h-5 rounded border-white/10 bg-transparent" defaultChecked />
                           <p className="text-sm font-bold uppercase tracking-widest opacity-60 leading-relaxed">
-                             Zgadzam się na przetwarzanie moich danych osobowych w celu przesyłania newslettera.
+                             {tForms('zgadzam_się_na_przetwarzanie_moich_danyc')}
                           </p>
                        </div>
                        <button
                         onClick={handleNext}
                         className="w-full bg-white text-black py-6 rounded-2xl font-black uppercase tracking-widest text-xl shadow-xl"
                        >
-                         Zapisz się!
+                         {tHome('zapisz_się')}!
                        </button>
                     </div>
                  </motion.div>
@@ -105,8 +107,8 @@ export const NewsletterWizard = ({ isOpen, onClose }: NewsletterWizardProps) => 
                        <CheckCircle2 size={48} />
                     </div>
                     <div>
-                       <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-4 leading-tight">Dziękuję za zapisanie się, od teraz będziesz otrzymywał od nas wiadomości na temat marki</h2>
-                       <p className="text-lg font-bold opacity-40 uppercase tracking-widest mt-6">Wypisać się możesz zawsze z poziomu konta</p>
+                       <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-4 leading-tight">{tForms('dziękuję_za_zapisanie_się_od_teraz_będzi')}</h2>
+                       <p className="text-lg font-bold opacity-40 uppercase tracking-widest mt-6">{tForms('wypisać_się_możesz_zawsze_z_poziomu_kont')}</p>
                     </div>
                     <button
                       onClick={handleReset}

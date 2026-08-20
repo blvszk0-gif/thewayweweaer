@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
+import { useTranslations } from 'next-intl';
 import { User, ShoppingBag, Heart, Moon, ChevronRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LoginForm } from '../auth/LoginForm';
@@ -9,6 +10,8 @@ import { useStore } from '@/context/StoreContext';
 import { SearchBar } from './SearchBar';
 
 export const Header = () => {
+  const tNav = useTranslations('nav');
+  const tColorsCategories = useTranslations('colors_categories');
   const { cart, wishlist } = useStore();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -63,7 +66,7 @@ export const Header = () => {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-expanded={isMenuOpen}
             aria-haspopup="dialog"
-            aria-label={isMenuOpen ? 'Zamknij menu' : 'Otwórz menu'}
+            aria-label={isMenuOpen ? tNav('zamknij_menu') : tNav('otwórz_menu')}
             type="button"
             className="relative w-10 h-10 flex items-center justify-center group z-[80]"
           >
@@ -94,11 +97,12 @@ export const Header = () => {
             <Link
               href={isLoggedIn ? "/account" : "#"}
               onClick={(e) => { if (!isLoggedIn) { e.preventDefault(); setIsLoginModalOpen(true); } }}
+              aria-label={tNav('konto')}
               className="text-[color:var(--foreground)] outline-none"
             >
               <User size={20} className="md:w-[22px] md:h-[22px]" />
             </Link>
-            <Link href="/wishlist" className="relative text-[color:var(--foreground)]">
+            <Link href="/wishlist" aria-label="Wishlist" className="relative text-[color:var(--foreground)]">
               <Heart size={20} className="md:w-[22px] md:h-[22px]" />
               {wishlist.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[12px] md:text-[13px] font-black w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center font-antonio animate-pulse">
@@ -106,7 +110,7 @@ export const Header = () => {
                 </span>
               )}
             </Link>
-            <Link href="/cart" className="relative text-[color:var(--foreground)]">
+            <Link href="/cart" aria-label="Cart" className="relative text-[color:var(--foreground)]">
               <ShoppingBag size={20} className="md:w-[22px] md:h-[22px]" />
               <span className="absolute -top-2 -right-2 bg-[color:var(--foreground)] text-[color:var(--surface)] text-[12px] md:text-[13px] font-black w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center font-antonio">
                 {cart.reduce((acc, item) => acc + item.quantity, 0)}
@@ -116,7 +120,7 @@ export const Header = () => {
               type="button"
               onClick={() => setIsDarkTheme((prev) => !prev)}
               className="bg-[color:var(--surface-muted)] text-[color:var(--foreground)] w-8 h-8 rounded-full flex items-center justify-center hover:bg-[color:var(--surface)] transition-colors"
-              aria-label={isDarkTheme ? 'Wyłącz tryb ciemny' : 'Włącz tryb ciemny'}
+              aria-label={isDarkTheme ? tNav('wyłącz_tryb_ciemny') : tNav('włącz_tryb_ciemny')}
             >
               <Moon size={18} />
             </button>
@@ -147,7 +151,7 @@ export const Header = () => {
                 <button
                   onClick={() => setIsMenuOpen(false)}
                   className="text-[color:var(--foreground)]/70 hover:text-[color:var(--foreground)] transition-colors"
-                  aria-label="Zamknij menu"
+                  aria-label={tNav('zamknij_menu')}
                 >
                   <X size={24} />
                 </button>
@@ -160,9 +164,9 @@ export const Header = () => {
               <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-tighter overflow-y-auto no-scrollbar font-antonio text-[color:var(--foreground)]">
                 <div className="text-base text-[color:var(--foreground)] font-bold opacity-70 mb-2 font-antonio">Project: TWWW // Subject:</div>
 
-                <Link href="/shop/bluzy" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">Bluzy</Link>
-                <Link href="/shop/koszulki" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">Koszulki</Link>
-                <Link href="/shop/akcesoria" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">Akcesoria</Link>
+                <Link href="/shop/bluzy" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('bluzy')}</Link>
+                <Link href="/shop/koszulki" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('koszulki')}</Link>
+                <Link href="/shop/akcesoria" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('akcesoria')}</Link>
                 <Link href="/lookbook" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">Lookbook</Link>
 
                 <div>
@@ -170,7 +174,7 @@ export const Header = () => {
                     onClick={() => setExpandedKolekcje(!expandedKolekcje)}
                     className="flex items-center gap-2 hover:pl-4 transition-all italic uppercase font-black"
                    >
-                     KOLEKCJE <ChevronRight size={24} className={`transition-transform ${expandedKolekcje ? 'rotate-90' : 'rotate-0'}`} />
+                     {tNav('kolekcje')} <ChevronRight size={24} className={`transition-transform ${expandedKolekcje ? 'rotate-90' : 'rotate-0'}`} />
                    </button>
                    <AnimatePresence>
                     {expandedKolekcje && (

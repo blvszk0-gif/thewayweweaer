@@ -1,26 +1,27 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { useRouter } from '@/i18n/routing';
+import { useTranslations } from 'next-intl';
 import { Search, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const searchRegistry = [
-  { keywords: ['bluza', 'hoodie', 'sweatshirt', 'sweter'], route: '/shop/bluzy' },
-  { keywords: ['koszulka', 't-shirt', 'tee', 'tshirt'], route: '/shop/koszulki' },
-  { keywords: ['akcesoria', 'dodatki', 'gadżety', 'sticker', 'czapka'], route: '/shop/akcesoria' },
+  { keywords: ['bluza', 'hoodie', 'sweatshirt', 'sweter', 'худі'], route: '/shop/bluzy' },
+  { keywords: ['koszulka', 't-shirt', 'tee', 'tshirt', 'футболка'], route: '/shop/koszulki' },
+  { keywords: ['akcesoria', 'dodatki', 'gadżety', 'sticker', 'czapka', 'accessories', 'аксесуари'], route: '/shop/akcesoria' },
   { keywords: ['lookbook', 'katalog', 'zdjęcia'], route: '/lookbook' },
-  { keywords: ['stare', 'stare', 'we stare'], route: '/shop/stare' },
-  { keywords: ['roll', 'roll', 'we roll'], route: '/shop/roll' },
-  { keywords: ['bloom', 'bloom', 'we bloom'], route: '/shop/bloom' },
-  { keywords: ['fly', 'fly', 'we fly'], route: '/shop/fly' },
-  { keywords: ['konto', 'profil', 'login', 'rejestracja'], route: '/account' },
+  { keywords: ['stare', 'we stare'], route: '/shop/stare' },
+  { keywords: ['roll', 'we roll'], route: '/shop/roll' },
+  { keywords: ['bloom', 'we bloom'], route: '/shop/bloom' },
+  { keywords: ['fly', 'we fly'], route: '/shop/fly' },
+  { keywords: ['konto', 'profil', 'login', 'rejestracja', 'account'], route: '/account' },
   { keywords: ['koszyk', 'cart', 'zakupy'], route: '/cart' },
   { keywords: ['wishlist', 'lista życzeń', 'serce'], route: '/wishlist' },
-  { keywords: ['kontakt', 'pomoc', 'support', 'reklamacja'], route: '/blog' }, // Updated route will be wizard
+  { keywords: ['kontakt', 'pomoc', 'support', 'reklamacja', 'help'], route: '/blog' },
 ];
 
 export const SearchBar = ({ isHeader = false }) => {
+  const tLegalSearch = useTranslations('legal_search');
   const [query, setQuery] = useState('');
   const router = useRouter();
 
@@ -46,7 +47,7 @@ export const SearchBar = ({ isHeader = false }) => {
       <Search size={18} className="opacity-50" />
       <input
         type="text"
-        placeholder="SZUKAJ..."
+        placeholder={tLegalSearch('szukaj')}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="bg-transparent border-none text-base focus:outline-none flex-1 uppercase font-black text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50"
