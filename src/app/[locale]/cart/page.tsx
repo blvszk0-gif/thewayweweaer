@@ -10,7 +10,7 @@ import { useStore } from '@/context/StoreContext';
 
 export default function CartPage() {
   const tCartWishlist = useTranslations('cart_wishlist');
-  const { cart, removeFromCart, updateQuantity } = useStore();
+  const { cart, removeFromCart, updateQuantity, checkout, cartError, isCartLoading } = useStore();
   const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
   return (
@@ -62,7 +62,7 @@ export default function CartPage() {
                               <Plus size={20} />
                             </button>
                          </div>
-                         <span className="text-2xl font-black">{item.price * item.quantity} PLN</span>
+                         <span className="text-2xl font-black">{item.price * item.quantity} {item.currencyCode}</span>
                       </div>
                     </div>
                   </div>
@@ -100,10 +100,13 @@ export default function CartPage() {
 
                <button
                 disabled={cart.length === 0}
+                onClick={checkout}
                 className={`w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-6 rounded-full font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-2xl mb-8 disabled:opacity-20 disabled:cursor-not-allowed text-[22px]`}
                >
-                 {tCartWishlist('przejdź_do_płatności')} <ArrowRight size={24} />
+                 {isCartLoading ? '...' : tCartWishlist('przejdź_do_płatności')} <ArrowRight size={24} />
                </button>
+
+               {cartError && <p role="alert" className="text-sm text-red-500 font-bold text-center">{cartError}</p>}
 
                <div className="space-y-4">
                   <p className="text-[17px] font-black uppercase tracking-widest opacity-30 text-center">{tCartWishlist('zamówienie_zostanie_sfinalizowane_w_nast')}</p>

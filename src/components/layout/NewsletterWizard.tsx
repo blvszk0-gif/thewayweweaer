@@ -15,11 +15,24 @@ export const NewsletterWizard = ({ isOpen, onClose }: NewsletterWizardProps) => 
   const tHome = useTranslations('home');
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step === 1 && email) setStep(2);
     else if (step === 2) {
-       setStep(3);
+       setSubmitting(true);
+       setError(null);
+       try {
+         const response = await fetch('/api/newsletter/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) });
+         const body = await response.json() as { error?: string };
+         if (!response.ok) throw new Error(body.error || 'Nie udało się zapisać.');
+         setStep(3);
+       } catch (reason) {
+         setError(reason instanceof Error ? reason.message : 'Nie udało się zapisać.');
+       } finally {
+         setSubmitting(false);
+       }
     }
   };
 
@@ -93,10 +106,12 @@ export const NewsletterWizard = ({ isOpen, onClose }: NewsletterWizardProps) => 
                        </div>
                        <button
                         onClick={handleNext}
+                        disabled={submitting}
                         className="w-full bg-white text-black py-6 rounded-2xl font-black uppercase tracking-widest text-xl shadow-xl"
                        >
-                         {tHome('zapisz_się')}!
+                         {submitting ? '...' : `${tHome('zapisz_się')}!`}
                        </button>
+                       {error && <p className="text-sm font-bold text-red-400">{error}</p>}
                     </div>
                  </motion.div>
                )}

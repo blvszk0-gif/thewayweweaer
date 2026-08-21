@@ -22,13 +22,7 @@ export const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const checkLogin = () => {
-      const saved = localStorage.getItem('twww-auth');
-      setIsLoggedIn(!!saved);
-    };
-    checkLogin();
-    window.addEventListener('storage', checkLogin);
-    return () => window.removeEventListener('storage', checkLogin);
+    fetch('/api/auth/me').then((response) => setIsLoggedIn(response.ok)).catch(() => setIsLoggedIn(false));
   }, []);
 
   useEffect(() => {
