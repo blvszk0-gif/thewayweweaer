@@ -92,6 +92,32 @@ const PRODUCT_FRAGMENT = `
       namespace
       value
       type
+      reference {
+        ... on Metaobject {
+          id
+          handle
+          type
+          fields {
+            key
+            value
+          }
+        }
+      }
+      references(first: 10) {
+        edges {
+          node {
+            ... on Metaobject {
+              id
+              handle
+              type
+              fields {
+                key
+                value
+              }
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -391,6 +417,26 @@ export async function getMetaobjects(type: string): Promise<ShopifyMetaobject[]>
             fields {
               key
               value
+              reference {
+                ... on MediaImage {
+                  image {
+                    url
+                    altText
+                  }
+                }
+              }
+              references(first: 10) {
+                edges {
+                  node {
+                    ... on MediaImage {
+                      image {
+                        url
+                        altText
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -537,6 +583,7 @@ export async function subscribeNewsletterAdmin(email: string) {
           email
           emailMarketingConsent {
             marketingState
+            consentUpdatedAt
           }
         }
         userErrors {
@@ -551,8 +598,7 @@ export async function subscribeNewsletterAdmin(email: string) {
     input: {
       email,
       emailMarketingConsent: {
-        marketingConsentUpdatedState: "SUBSCRIBED",
-        marketingState: "SUBSCRIBED"
+        marketingConsentUpdatedState: "PENDING"
       }
     }
   };

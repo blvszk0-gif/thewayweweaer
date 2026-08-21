@@ -37,14 +37,14 @@ export async function POST(req: Request) {
 
       if (isDuplicate) {
         return NextResponse.json({
-          message: 'Dziękujemy! Twój e-mail jest już zarejestrowany w naszej bazie.',
+          message: 'Twój e-mail jest już zarejestrowany. Sprawdź swoją skrzynkę odbiorczą, aby potwierdzić subskrypcję.',
           status: 'success'
         });
       }
     }
 
     return NextResponse.json({
-      message: 'Dziękujemy za zapisanie się do newslettera The Way WE Wear!',
+      message: 'Na Twój adres e-mail wysłaliśmy link potwierdzający subskrypcję (Double Opt-in). Sprawdź skrzynkę odbiorczą.',
       status: 'success'
     });
   } catch (error) {
