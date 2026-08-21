@@ -48,6 +48,7 @@ const FAQItem = ({ q, a, i }: { q: string, a: string, i: number }) => {
 
 export const LandingSections = () => {
   const tHome = useTranslations('home');
+  const tForms = useTranslations('forms');
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterConsent, setNewsletterConsent] = useState(false);
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -186,7 +187,7 @@ export const LandingSections = () => {
               </div>
               <label className="flex items-start gap-3 text-sm font-bold uppercase tracking-widest text-[color:var(--foreground)]/60 cursor-pointer">
                 <input type="checkbox" checked={newsletterConsent} onChange={(event) => setNewsletterConsent(event.target.checked)} className="mt-0.5 h-4 w-4" />
-                <span>{tHome('newsletter_consent')}</span>
+                <span>{tForms('zgadzam_się_na_przetwarzanie_moich_danyc')}</span>
               </label>
               {newsletterStatus === 'success' && <p className="text-sm font-black uppercase tracking-widest text-green-600">{newsletterMessage}</p>}
               {newsletterStatus === 'error' && <p className="text-sm font-black uppercase tracking-widest text-red-600">{newsletterMessage}</p>}
