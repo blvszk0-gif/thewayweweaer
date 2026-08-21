@@ -37,3 +37,4 @@ npm run build
 ```
 
 Test on a Vercel preview before production: product → cart → Shopify checkout, newsletter confirmation, Customer Accounts login/logout, and an order connected to the test customer.
+
