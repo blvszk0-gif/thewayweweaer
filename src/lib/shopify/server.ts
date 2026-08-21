@@ -9,6 +9,9 @@ type GraphQLResponse<T> = {
 
 const apiVersion = process.env.SHOPIFY_API_VERSION || '2026-07';
 
+let adminAccessToken: string | null = null;
+let adminAccessTokenExpiresAt = 0;
+
 function storeDomain() {
   const domain = process.env.SHOPIFY_STORE_DOMAIN?.replace(/^https?:\/\//, '').replace(/\/$/, '');
   if (!domain) throw new Error('Shopify is not configured. Missing SHOPIFY_STORE_DOMAIN.');
@@ -40,8 +43,7 @@ export async function storefrontFetch<T>(query: string, variables?: Record<strin
 }
 
 export async function adminFetch<T>(query: string, variables?: Record<string, unknown>): Promise<T> {
-  const token = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
-  if (!token) throw new Error('Shopify newsletter is not configured. Missing SHOPIFY_ADMIN_ACCESS_TOKEN.');
+  const token = await getAdminAccessToken();
 
   const response = await fetch(`https://${storeDomain()}/admin/api/${apiVersion}/graphql.json`, {
     method: 'POST',
@@ -58,6 +60,42 @@ export async function adminFetch<T>(query: string, variables?: Record<string, un
     throw new Error(body.errors?.map((error) => error.message).join(', ') || 'Shopify Admin API request failed.');
   }
   return body.data;
+}
+
+/**
+ * Dev Dashboard apps use OAuth client credentials rather than a permanent token
+ * copied from Shopify Admin. Cache the short-lived token per server instance and
+ * renew it one minute before expiry.
+ */
+async function getAdminAccessToken() {
+  if (adminAccessToken && Date.now() < adminAccessTokenExpiresAt - 60_000) {
+    return adminAccessToken;
+  }
+
+  const clientId = process.env.SHOPIFY_ADMIN_CLIENT_ID;
+  const clientSecret = process.env.SHOPIFY_ADMIN_CLIENT_SECRET;
+  if (!clientId || !clientSecret) {
+    throw new Error('Shopify newsletter is not configured. Missing SHOPIFY_ADMIN_CLIENT_ID or SHOPIFY_ADMIN_CLIENT_SECRET.');
+  }
+
+  const response = await fetch(`https://${storeDomain()}/admin/oauth/access_token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'client_credentials',
+      client_id: clientId,
+      client_secret: clientSecret,
+    }),
+    cache: 'no-store',
+  });
+  const body = (await response.json()) as { access_token?: string; expires_in?: number };
+  if (!response.ok || !body.access_token) {
+    throw new Error('Shopify Admin API token request failed. Ensure the Dev Dashboard app is installed on this store.');
+  }
+
+  adminAccessToken = body.access_token;
+  adminAccessTokenExpiresAt = Date.now() + (body.expires_in || 86_399) * 1000;
+  return adminAccessToken;
 }
 
 export type StorefrontProduct = {
