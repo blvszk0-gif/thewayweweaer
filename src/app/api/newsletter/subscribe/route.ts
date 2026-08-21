@@ -41,6 +41,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, message: 'Zapis do newslettera został potwierdzony.' });
   } catch (error) {
     console.error('Newsletter subscription failed:', error);
-    return NextResponse.json({ error: 'Nie udało się zapisać do newslettera. Spróbuj ponownie później.' }, { status: 502 });
+    const reason = error instanceof Error ? error.message : 'Unknown newsletter error';
+    return NextResponse.json({
+      error: 'Nie udało się zapisać do newslettera. Spróbuj ponownie później.',
+      // Preview only: shows a technical configuration reason, never a secret.
+      ...(process.env.VERCEL_ENV === 'preview' ? { debug: reason } : {}),
+    }, { status: 502 });
   }
 }

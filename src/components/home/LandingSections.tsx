@@ -66,8 +66,8 @@ export const LandingSections = () => {
         body: JSON.stringify({ email: newsletterEmail, consent: newsletterConsent }),
       });
       const isJson = response.headers.get('content-type')?.includes('application/json');
-      const body = isJson ? await response.json() as { error?: string; message?: string } : {};
-      if (!response.ok) throw new Error(body.error || 'Nie udało się zapisać do newslettera. Spróbuj ponownie później.');
+      const body = isJson ? await response.json() as { error?: string; message?: string; debug?: string } : {};
+      if (!response.ok) throw new Error(body.debug || body.error || 'Nie udało się zapisać do newslettera. Spróbuj ponownie później.');
       setNewsletterStatus('success');
       setNewsletterMessage(body.message || 'Zapis do newslettera został potwierdzony.');
       setNewsletterEmail('');
