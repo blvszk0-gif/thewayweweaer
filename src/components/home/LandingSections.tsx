@@ -48,6 +48,34 @@ const FAQItem = ({ q, a, i }: { q: string, a: string, i: number }) => {
 
 export const LandingSections = () => {
   const tHome = useTranslations('home');
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterConsent, setNewsletterConsent] = useState(false);
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [newsletterMessage, setNewsletterMessage] = useState('');
+
+  const subscribeToNewsletter = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setNewsletterStatus('loading');
+    setNewsletterMessage('');
+
+    try {
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newsletterEmail, consent: newsletterConsent }),
+      });
+      const isJson = response.headers.get('content-type')?.includes('application/json');
+      const body = isJson ? await response.json() as { error?: string; message?: string } : {};
+      if (!response.ok) throw new Error(body.error || 'Nie udało się zapisać do newslettera. Spróbuj ponownie później.');
+      setNewsletterStatus('success');
+      setNewsletterMessage(body.message || 'Zapis do newslettera został potwierdzony.');
+      setNewsletterEmail('');
+      setNewsletterConsent(false);
+    } catch (error) {
+      setNewsletterStatus('error');
+      setNewsletterMessage(error instanceof Error ? error.message : 'Nie udało się zapisać do newslettera. Spróbuj ponownie później.');
+    }
+  };
 
   const reviews = [
     { id: 1, author: 'Kamil G.', rating: 5, text: tHome('najlepsza_bluza_jaką_miałem_materiał_340'), photo: 'https://placehold.co/400x500/000000/FFFFFF?text=OPINIA+1' },
@@ -142,20 +170,27 @@ export const LandingSections = () => {
               <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-8">{tHome('pozostańmy_w_kontakcie')}</h3>
               <p className="text-xl font-bold opacity-40 uppercase mb-12 tracking-wide text-[color:var(--foreground)]/60">{tHome('zapisz_się_już_dziś_do_newslettera_i_bąd')}</p>
 
+              <form onSubmit={subscribeToNewsletter} className="space-y-5">
               <div className="flex flex-col md:flex-row gap-4">
                  <input
                   type="email"
                   placeholder={tHome('twojapocztacom')}
+                  value={newsletterEmail}
+                  onChange={(event) => setNewsletterEmail(event.target.value)}
+                  required
                   className="flex-1 bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-full px-10 py-6 font-black uppercase text-[18px] focus:outline-none focus:border-[color:var(--foreground)] transition-all text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50"
                  />
-                 <button className="bg-[color:var(--foreground)] text-[color:var(--surface)] px-12 py-6 rounded-full font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-xl">
-                   {tHome('zapisz_się')}
+                 <button type="submit" disabled={!newsletterConsent || newsletterStatus === 'loading'} className="bg-[color:var(--foreground)] text-[color:var(--surface)] px-12 py-6 rounded-full font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-xl disabled:opacity-40">
+                   {newsletterStatus === 'loading' ? '...' : tHome('zapisz_się')}
                  </button>
               </div>
-
-              <button className="mt-8 text-[13px] font-black uppercase tracking-widest text-red-600 hover:text-red-700 transition-colors">
-                {tHome('anuluj_subskrypcję')}
-              </button>
+              <label className="flex items-start gap-3 text-sm font-bold uppercase tracking-widest text-[color:var(--foreground)]/60 cursor-pointer">
+                <input type="checkbox" checked={newsletterConsent} onChange={(event) => setNewsletterConsent(event.target.checked)} className="mt-0.5 h-4 w-4" />
+                <span>{tHome('newsletter_consent')}</span>
+              </label>
+              {newsletterStatus === 'success' && <p className="text-sm font-black uppercase tracking-widest text-green-600">{newsletterMessage}</p>}
+              {newsletterStatus === 'error' && <p className="text-sm font-black uppercase tracking-widest text-red-600">{newsletterMessage}</p>}
+              </form>
            </div>
         </div>
       </div>
