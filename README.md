@@ -8,7 +8,8 @@ Copy `.env.example` to `.env.local` and fill values **locally only**. In Vercel 
 
 - `SHOPIFY_STORE_DOMAIN` — e.g. `your-store.myshopify.com`, without `https://`.
 - `SHOPIFY_STOREFRONT_ACCESS_TOKEN` or `SHOPIFY_PRIVATE_STOREFRONT_ACCESS_TOKEN` — token from the Headless sales channel. This implementation uses it only on the server.
-- `SHOPIFY_ADMIN_ACCESS_TOKEN` — custom app token for newsletter endpoint only; it requires `read_customers` and `write_customers`.
+- `SHOPIFY_ADMIN_CLIENT_ID` — Client ID from the Shopify Dev Dashboard app, used server-side only for newsletter operations.
+- `SHOPIFY_ADMIN_CLIENT_SECRET` — Client secret from the Shopify Dev Dashboard app, used server-side only for newsletter operations.
 - `SHOPIFY_API_VERSION` — `2026-07`.
 - `SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID` — public client ID from Shopify Customer Accounts.
 - `SHOPIFY_BLOG_HANDLE` — Shopify blog handle, default `journal`.
@@ -16,7 +17,7 @@ Copy `.env.example` to `.env.local` and fill values **locally only**. In Vercel 
 ## Shopify setup
 
 1. Add the **Headless** sales channel and create a Storefront API token. Make products, collections, blog posts and metaobjects available to the channel.
-2. Create a custom app for the newsletter endpoint with only `read_customers` and `write_customers`; install it and place its Admin API token in Vercel.
+2. Create and publish a Shopify Dev Dashboard app for the newsletter endpoint with only `read_customers` and `write_customers`. Install it on this store, then place its Client ID and Client secret in Vercel. The server exchanges them automatically for a short-lived Admin API token; do not look for or store a permanent Admin API token.
 3. In **Settings → Customer accounts**, enable new customer accounts. Create/configure a Customer Account API client with callback URL `https://thewaywewear.pl/api/auth/callback` and JavaScript origin `https://thewaywewear.pl`.
 4. Enable marketing double opt-in in Shopify. Newsletter requests set consent to `PENDING`; confirmation is delivered by Shopify.
 5. Create collection handles matching routes. Any collection handle is available at `/shop/[handle]`; product handles are at `/product/[handle]`.
