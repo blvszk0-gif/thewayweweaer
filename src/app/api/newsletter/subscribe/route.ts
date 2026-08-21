@@ -1,18 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminFetch } from '@/lib/shopify/server';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const attempts = new Map<string, { count: number; resetAt: number }>();
+const apiVersion = process.env.SHOPIFY_API_VERSION || '2026-07';
+
+function getShopDomain() {
+  const rawDomain = process.env.SHOPIFY_STORE_DOMAIN?.trim();
+  if (!rawDomain) throw new Error('Brak konfiguracji SHOPIFY_STORE_DOMAIN.');
+  const url = new URL(rawDomain.startsWith('http') ? rawDomain : `https://${rawDomain}`);
+  return url.hostname;
+}
+
+function getAdminToken() {
+  const token = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN?.trim();
+  if (!token) throw new Error('Brak konfiguracji SHOPIFY_ADMIN_ACCESS_TOKEN.');
+  return token;
+}
+
+async function readJsonSafely(response: Response) {
+  const raw = await response.text();
+  try {
+    return JSON.parse(raw) as {
+      data?: { customerCreate?: { userErrors?: Array<{ message: string }> } };
+      errors?: Array<{ message: string }>;
+    };
+  } catch {
+    throw new Error(`Shopify zwrócił nieprawidłową odpowiedź (HTTP ${response.status}).`);
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
     const now = Date.now();
-    const entry = attempts.get(ip);
-    if (entry?.resetAt && entry.resetAt > now && entry.count >= 5) {
+    const attempt = attempts.get(ip);
+    if (attempt && attempt.resetAt > now && attempt.count >= 5) {
       return NextResponse.json({ error: 'Spróbuj ponownie za kilka minut.' }, { status: 429 });
     }
-    attempts.set(ip, { count: entry?.resetAt && entry.resetAt > now ? entry.count + 1 : 1, resetAt: now + 10 * 60 * 1000 });
+    attempts.set(ip, { count: attempt && attempt.resetAt > now ? attempt.count + 1 : 1, resetAt: now + 10 * 60 * 1000 });
 
     const { email, consent } = await request.json() as { email?: string; consent?: boolean };
     const normalizedEmail = email?.trim().toLowerCase();
@@ -23,28 +48,46 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Potwierdź zgodę na otrzymywanie newslettera.' }, { status: 400 });
     }
 
-    const lookup = await adminFetch<{ customers: { nodes: Array<{ id: string }> } }>(
-      `query FindCustomer($query: String!) { customers(first: 1, query: $query) { nodes { id } } }`,
-      { query: `email:${normalizedEmail}` },
-    );
-    const customerId = lookup.customers.nodes[0]?.id;
-    const mutation = customerId
-      ? `mutation CustomerUpdate($input: CustomerInput!) { customerUpdate(input: $input) { customer { id } userErrors { message } } }`
-      : `mutation CustomerCreate($input: CustomerInput!) { customerCreate(input: $input) { customer { id } userErrors { message } } }`;
-    const result = await adminFetch<{ customerCreate?: { userErrors: Array<{ message: string }> }; customerUpdate?: { userErrors: Array<{ message: string }> } }>(
-      mutation,
-      { input: { ...(customerId ? { id: customerId } : { email: normalizedEmail }), emailMarketingConsent: { marketingState: 'SUBSCRIBED', marketingOptInLevel: 'SINGLE_OPT_IN' } } },
-    );
-    const userErrors = result.customerCreate?.userErrors || result.customerUpdate?.userErrors || [];
-    if (userErrors.length) throw new Error('Shopify rejected the subscription request.');
+    const response = await fetch(`https://${getShopDomain()}/admin/api/${apiVersion}/graphql.json`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Shopify-Access-Token': getAdminToken(),
+      },
+      body: JSON.stringify({
+        query: `mutation CustomerCreate($input: CustomerInput!) {
+          customerCreate(input: $input) {
+            customer { id email emailMarketingConsent { marketingState } }
+            userErrors { field message }
+          }
+        }`,
+        variables: {
+          input: {
+            email: normalizedEmail,
+            emailMarketingConsent: { marketingState: 'SUBSCRIBED', marketingOptInLevel: 'SINGLE_OPT_IN' },
+          },
+        },
+      }),
+      cache: 'no-store',
+    });
+
+    const result = await readJsonSafely(response);
+    const apiError = result.errors?.map((item) => item.message).join(', ');
+    const userErrors = result.data?.customerCreate?.userErrors || [];
+    if (!response.ok || apiError) throw new Error(apiError || `Shopify API zwróciło HTTP ${response.status}.`);
+    if (userErrors.length) {
+      const duplicate = userErrors.some(({ message }) => /email.*(taken|exists|already)/i.test(message));
+      if (duplicate) return NextResponse.json({ ok: true, message: 'Ten adres jest już zapisany do newslettera.' });
+      return NextResponse.json({ error: userErrors[0].message }, { status: 400 });
+    }
 
     return NextResponse.json({ ok: true, message: 'Zapis do newslettera został potwierdzony.' });
   } catch (error) {
     console.error('Newsletter subscription failed:', error);
-    const reason = error instanceof Error ? error.message : 'Unknown newsletter error';
+    const reason = error instanceof Error ? error.message : 'Nieznany błąd newslettera.';
     return NextResponse.json({
       error: 'Nie udało się zapisać do newslettera. Spróbuj ponownie później.',
-      // Preview only: shows a technical configuration reason, never a secret.
       ...(process.env.VERCEL_ENV === 'preview' ? { debug: reason } : {}),
     }, { status: 502 });
   }
