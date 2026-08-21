@@ -26,7 +26,8 @@ export const NewsletterWizard = ({ isOpen, onClose }: NewsletterWizardProps) => 
        setError(null);
        try {
          const response = await fetch('/api/newsletter/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, consent }) });
-         const body = await response.json() as { error?: string };
+         const isJson = response.headers.get('content-type')?.includes('application/json');
+         const body = isJson ? await response.json() as { error?: string } : {};
          if (!response.ok) throw new Error(body.error || 'Nie udało się zapisać.');
          setStep(3);
        } catch (reason) {
