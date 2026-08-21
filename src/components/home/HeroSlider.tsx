@@ -57,7 +57,6 @@ export const HeroSlider = () => {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     addToCart({
-      id: slide.id,
       name: slide.name,
       price: slide.price,
       image: slide.img,

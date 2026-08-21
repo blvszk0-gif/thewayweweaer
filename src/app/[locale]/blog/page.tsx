@@ -1,15 +1,26 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { motion } from 'framer-motion';
+import { getBlogArticles, ShopifyArticle } from '@/lib/shopify';
+import { Link } from '@/i18n/routing';
 
 export default function BlogPage() {
   const tEditorial = useTranslations('editorial');
+  const [articles, setArticles] = useState<ShopifyArticle[]>([]);
 
-  const articles = [
+  useEffect(() => {
+    async function fetchShopifyArticles() {
+      const data = await getBlogArticles('news');
+      setArticles(data);
+    }
+    fetchShopifyArticles();
+  }, []);
+
+  const fallbackArticles = [
     {
       title: tEditorial('jak_to_się_zaczęło'),
       date: '12 STYCZNIA 2026',
@@ -31,7 +42,7 @@ export default function BlogPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] font-antonio">
+    <main className="min-h-screen bg-[color:var(--surface)] font-antonio text-[color:var(--foreground)]">
       <Header />
 
       <div className="container mx-auto px-4 pt-40 pb-40 max-w-2xl">
@@ -41,26 +52,67 @@ export default function BlogPage() {
         </div>
 
         <div className="space-y-24">
-          {articles.map((art, i) => (
-            <motion.article
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-3xl overflow-hidden shadow-2xl"
-            >
-               <div className="p-6 flex items-center gap-4 border-b border-[color:var(--border)]">
+          {articles.length > 0 ? (
+            articles.map((art) => (
+              <motion.article
+                key={art.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                className="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-3xl overflow-hidden shadow-2xl"
+              >
+                <div className="p-6 flex items-center gap-4 border-b border-[color:var(--border)]">
+                  <div className="w-10 h-10 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center font-black text-xs italic">WE</div>
+                  <div>
+                    <p className="text-sm font-black uppercase tracking-widest">TheWayWEWear</p>
+                    <p className="text-[10px] font-bold opacity-30 uppercase tracking-widest">
+                      {new Date(art.publishedAt).toLocaleDateString('pl-PL')}
+                    </p>
+                  </div>
+                </div>
+
+                {art.image && (
+                  <div className="aspect-square bg-[color:var(--surface-muted)] overflow-hidden">
+                    <img src={art.image.url} className="w-full h-full object-cover grayscale" alt={art.title} />
+                  </div>
+                )}
+
+                <div className="p-8 space-y-4">
+                  <h2 className="text-2xl font-black uppercase italic tracking-tighter">{art.title}</h2>
+                  {art.excerpt && (
+                    <p className="text-[17px] font-bold opacity-60 uppercase leading-relaxed tracking-wide">
+                      {art.excerpt}
+                    </p>
+                  )}
+                  <Link
+                    href={`/journal/${art.handle}`}
+                    className="inline-block pt-4 font-black uppercase text-xs tracking-widest underline"
+                  >
+                    Czytaj cały artykuł
+                  </Link>
+                </div>
+              </motion.article>
+            ))
+          ) : (
+            fallbackArticles.map((art, i) => (
+              <motion.article
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                className="bg-[color:var(--surface)] border border-[color:var(--border)] rounded-3xl overflow-hidden shadow-2xl"
+              >
+                <div className="p-6 flex items-center gap-4 border-b border-[color:var(--border)]">
                   <div className="w-10 h-10 bg-[color:var(--foreground)] text-[color:var(--surface)] rounded-full flex items-center justify-center font-black text-xs italic">WE</div>
                   <div>
                     <p className="text-sm font-black uppercase tracking-widest">TheWayWEWear</p>
                     <p className="text-[10px] font-bold opacity-30 uppercase tracking-widest">{art.date}</p>
                   </div>
-               </div>
+                </div>
 
-               <div className="aspect-square bg-[color:var(--surface-muted)] overflow-hidden">
+                <div className="aspect-square bg-[color:var(--surface-muted)] overflow-hidden">
                   <img src={art.img} className="w-full h-full object-cover grayscale" alt="" />
-               </div>
+                </div>
 
-               <div className="p-8 space-y-4">
+                <div className="p-8 space-y-4">
                   <h2 className="text-2xl font-black uppercase italic tracking-tighter">{art.title}</h2>
                   <p className="text-[17px] font-bold opacity-60 uppercase leading-relaxed tracking-wide">
                     <span className="text-[color:var(--foreground)] opacity-100 mr-2">thewaywewear</span>
@@ -71,9 +123,10 @@ export default function BlogPage() {
                     <span>#CLUB</span>
                     <span>#PREMIUM</span>
                   </div>
-               </div>
-            </motion.article>
-          ))}
+                </div>
+              </motion.article>
+            ))
+          )}
         </div>
       </div>
 

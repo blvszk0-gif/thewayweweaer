@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { LoginForm } from '../auth/LoginForm';
 import { useStore } from '@/context/StoreContext';
 import { SearchBar } from './SearchBar';
+import { getMenu, ShopifyMenuItem } from '@/lib/shopify';
 
 export const Header = () => {
   const tNav = useTranslations('nav');
@@ -20,6 +21,17 @@ export const Header = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [menuItems, setMenuItems] = useState<ShopifyMenuItem[]>([]);
+
+  useEffect(() => {
+    async function fetchNav() {
+      const shopifyMenu = await getMenu('main-menu');
+      if (shopifyMenu?.items && shopifyMenu.items.length > 0) {
+        setMenuItems(shopifyMenu.items);
+      }
+    }
+    fetchNav();
+  }, []);
 
   useEffect(() => {
     const checkLogin = () => {
@@ -84,9 +96,9 @@ export const Header = () => {
 
           {/* Center: Logo with background for contrast */}
           <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-center flex items-center justify-center group z-[80]">
-             <div className="bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-black/5 group-hover:scale-105 transition-transform">
-               <img src="/logo.png" alt="TWWW Logo" className="h-6 md:h-8 w-auto object-contain" />
-             </div>
+            <div className="bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-black/5 group-hover:scale-105 transition-transform">
+              <img src="/logo.png" alt="TWWW Logo" className="h-6 md:h-8 w-auto object-contain" />
+            </div>
           </Link>
 
           {/* Right: Actions */}
@@ -164,19 +176,32 @@ export const Header = () => {
               <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-tighter overflow-y-auto no-scrollbar font-antonio text-[color:var(--foreground)]">
                 <div className="text-base text-[color:var(--foreground)] font-bold opacity-70 mb-2 font-antonio">Project: TWWW // Subject:</div>
 
-                <Link href="/shop/bluzy" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('bluzy')}</Link>
-                <Link href="/shop/koszulki" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('koszulki')}</Link>
-                <Link href="/shop/akcesoria" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('akcesoria')}</Link>
-                <Link href="/lookbook" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">Lookbook</Link>
+                {menuItems.length > 0 ? (
+                  menuItems.map((item) => {
+                    const relativeUrl = item.url.replace(/^https?:\/\/[^\/]+/, '');
+                    return (
+                      <Link key={item.id} href={relativeUrl || '/'} onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">
+                        {item.title}
+                      </Link>
+                    );
+                  })
+                ) : (
+                  <>
+                    <Link href="/shop/bluzy" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('bluzy')}</Link>
+                    <Link href="/shop/koszulki" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('koszulki')}</Link>
+                    <Link href="/shop/akcesoria" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('akcesoria')}</Link>
+                    <Link href="/lookbook" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">Lookbook</Link>
+                  </>
+                )}
 
                 <div>
-                   <button
+                  <button
                     onClick={() => setExpandedKolekcje(!expandedKolekcje)}
                     className="flex items-center gap-2 hover:pl-4 transition-all italic uppercase font-black"
-                   >
-                     {tNav('kolekcje')} <ChevronRight size={24} className={`transition-transform ${expandedKolekcje ? 'rotate-90' : 'rotate-0'}`} />
-                   </button>
-                   <AnimatePresence>
+                  >
+                    {tNav('kolekcje')} <ChevronRight size={24} className={`transition-transform ${expandedKolekcje ? 'rotate-90' : 'rotate-0'}`} />
+                  </button>
+                  <AnimatePresence>
                     {expandedKolekcje && (
                       <motion.div
                         initial={{ height: 0, opacity: 0 }}
@@ -190,7 +215,7 @@ export const Header = () => {
                         <Link href="/shop/fly" onClick={() => setIsMenuOpen(false)} className="hover:text-[color:var(--foreground)] transition-colors">The Way WE Fly</Link>
                       </motion.div>
                     )}
-                   </AnimatePresence>
+                  </AnimatePresence>
                 </div>
               </div>
 

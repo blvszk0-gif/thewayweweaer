@@ -92,7 +92,7 @@ export default function WishlistPage() {
                     </div>
                     <div className="flex justify-end gap-4">
                        <button
-                        onClick={() => addToCart({ id: item.id, name: item.name, price: item.price, image: item.images[0], quantity: 1 })}
+                        onClick={() => addToCart({ name: item.name, price: item.price, image: item.images[0], quantity: 1 })}
                         className="bg-[color:var(--foreground)] text-[color:var(--surface)] px-8 py-3 rounded-full font-black uppercase tracking-widest text-[13px] hover:scale-105 transition-all shadow-xl"
                        >
                           {tCartWishlist('do_koszyka')}

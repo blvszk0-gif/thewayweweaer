@@ -31,7 +31,7 @@ export const ProductCard = ({ id, name, price, image, category }: ProductCardPro
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
-    addToCart({ id, name, price, image, quantity: 1 });
+    addToCart({ name, price, image, quantity: 1 });
   };
 
   return (

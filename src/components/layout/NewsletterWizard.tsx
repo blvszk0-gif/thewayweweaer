@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, CheckCircle2, ArrowRight } from 'lucide-react';
+import { X, Mail, CheckCircle2, ArrowRight, Loader2 } from 'lucide-react';
 
 interface NewsletterWizardProps {
   isOpen: boolean;
@@ -15,17 +15,40 @@ export const NewsletterWizard = ({ isOpen, onClose }: NewsletterWizardProps) => 
   const tHome = useTranslations('home');
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [responseMsg, setResponseMsg] = useState('');
+
+  const handleSubscribe = async () => {
+    setIsSubmitting(true);
+    try {
+      const res = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      setResponseMsg(data.message || 'Dziękujemy za zapisanie się!');
+      setStep(3);
+    } catch (e) {
+      console.error(e);
+      setResponseMsg('Wystąpił błąd podczas zapisywania.');
+      setStep(3);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleNext = () => {
     if (step === 1 && email) setStep(2);
     else if (step === 2) {
-       setStep(3);
+      handleSubscribe();
     }
   };
 
   const handleReset = () => {
     setStep(1);
     setEmail('');
+    setResponseMsg('');
     onClose();
   };
 
@@ -55,69 +78,74 @@ export const NewsletterWizard = ({ isOpen, onClose }: NewsletterWizardProps) => 
             </button>
 
             <div className="p-12">
-               {step === 1 && (
-                 <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
-                    <div className="w-16 h-16 bg-white text-black rounded-2xl flex items-center justify-center mb-4">
-                       <Mail size={32} />
-                    </div>
-                    <h2 className="text-4xl font-black uppercase italic tracking-tighter">{tForms('dołącz_do_twww_club')}</h2>
-                    <p className="text-lg font-bold opacity-40 uppercase tracking-widest leading-relaxed">{tForms('zostaw_swój_e-mail_aby_otrzymywać_powiad')}</p>
-                    <div className="space-y-4">
-                       <input
-                         type="email"
-                         placeholder={tHome('twojapocztacom')}
-                         value={email}
-                         onChange={(e) => setEmail(e.target.value.toUpperCase())}
-                         className="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-6 text-xl font-black uppercase focus:outline-none focus:border-white transition-colors"
-                       />
-                       <button
-                        onClick={handleNext}
-                        disabled={!email}
-                        className="w-full bg-white text-black py-6 rounded-2xl font-black uppercase tracking-widest text-xl flex items-center justify-center gap-4 disabled:opacity-20 hover:scale-[1.02] active:scale-[0.98] transition-all"
-                       >
-                         {tForms('wyślij')} <ArrowRight size={24} />
-                       </button>
-                    </div>
-                 </motion.div>
-               )}
+              {step === 1 && (
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
+                  <div className="w-16 h-16 bg-white text-black rounded-2xl flex items-center justify-center mb-4">
+                    <Mail size={32} />
+                  </div>
+                  <h2 className="text-4xl font-black uppercase italic tracking-tighter">{tForms('dołącz_do_twww_club')}</h2>
+                  <p className="text-lg font-bold opacity-40 uppercase tracking-widest leading-relaxed">{tForms('zostaw_swój_e-mail_aby_otrzymywać_powiad')}</p>
+                  <div className="space-y-4">
+                    <input
+                      type="email"
+                      placeholder={tHome('twojapocztacom')}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value.toLowerCase())}
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-6 text-xl font-black uppercase focus:outline-none focus:border-white transition-colors"
+                    />
+                    <button
+                      onClick={handleNext}
+                      disabled={!email || !email.includes('@')}
+                      className="w-full bg-white text-black py-6 rounded-2xl font-black uppercase tracking-widest text-xl flex items-center justify-center gap-4 disabled:opacity-20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    >
+                      {tForms('wyślij')} <ArrowRight size={24} />
+                    </button>
+                  </div>
+                </motion.div>
+              )}
 
-               {step === 2 && (
-                 <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
-                    <h2 className="text-4xl font-black uppercase italic tracking-tighter">{tForms('dołącz_do_twww_club')}</h2>
-                    <div className="space-y-6">
-                       <div className="flex gap-4 items-start bg-white/5 p-6 rounded-2xl border border-white/10">
-                          <input type="checkbox" className="mt-1 w-5 h-5 rounded border-white/10 bg-transparent" defaultChecked />
-                          <p className="text-sm font-bold uppercase tracking-widest opacity-60 leading-relaxed">
-                             {tForms('zgadzam_się_na_przetwarzanie_moich_danyc')}
-                          </p>
-                       </div>
-                       <button
-                        onClick={handleNext}
-                        className="w-full bg-white text-black py-6 rounded-2xl font-black uppercase tracking-widest text-xl shadow-xl"
-                       >
-                         {tHome('zapisz_się')}!
-                       </button>
-                    </div>
-                 </motion.div>
-               )}
-
-               {step === 3 && (
-                 <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center space-y-8 py-12">
-                    <div className="w-24 h-24 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto shadow-[0_0_50px_rgba(34,197,94,0.3)]">
-                       <CheckCircle2 size={48} />
-                    </div>
-                    <div>
-                       <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-4 leading-tight">{tForms('dziękuję_za_zapisanie_się_od_teraz_będzi')}</h2>
-                       <p className="text-lg font-bold opacity-40 uppercase tracking-widest mt-6">{tForms('wypisać_się_możesz_zawsze_z_poziomu_kont')}</p>
+              {step === 2 && (
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
+                  <h2 className="text-4xl font-black uppercase italic tracking-tighter">{tForms('dołącz_do_twww_club')}</h2>
+                  <div className="space-y-6">
+                    <div className="flex gap-4 items-start bg-white/5 p-6 rounded-2xl border border-white/10">
+                      <input type="checkbox" className="mt-1 w-5 h-5 rounded border-white/10 bg-transparent" defaultChecked />
+                      <p className="text-sm font-bold uppercase tracking-widest opacity-60 leading-relaxed">
+                        {tForms('zgadzam_się_na_przetwarzanie_moich_danyc')}
+                      </p>
                     </div>
                     <button
-                      onClick={handleReset}
-                      className="w-full bg-white/10 border border-white/10 text-white py-6 rounded-2xl font-black uppercase tracking-widest text-xl hover:bg-white/20 transition-all"
+                      onClick={handleSubscribe}
+                      disabled={isSubmitting}
+                      className="w-full bg-white text-black py-6 rounded-2xl font-black uppercase tracking-widest text-xl shadow-xl flex items-center justify-center gap-2"
                     >
-                      Zamknij
+                      {isSubmitting ? <Loader2 className="animate-spin" size={24} /> : `${tHome('zapisz_się')}!`}
                     </button>
-                 </motion.div>
-               )}
+                  </div>
+                </motion.div>
+              )}
+
+              {step === 3 && (
+                <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center space-y-8 py-12">
+                  <div className="w-24 h-24 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto shadow-[0_0_50px_rgba(34,197,94,0.3)]">
+                    <CheckCircle2 size={48} />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-4 leading-tight">
+                      {responseMsg || tForms('dziękuję_za_zapisanie_się_od_teraz_będzi')}
+                    </h2>
+                    <p className="text-lg font-bold opacity-40 uppercase tracking-widest mt-6">
+                      {tForms('wypisać_się_możesz_zawsze_z_poziomu_kont')}
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleReset}
+                    className="w-full bg-white/10 border border-white/10 text-white py-6 rounded-2xl font-black uppercase tracking-widest text-xl hover:bg-white/20 transition-all"
+                  >
+                    Zamknij
+                  </button>
+                </motion.div>
+              )}
             </div>
           </motion.div>
         </div>

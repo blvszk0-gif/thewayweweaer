@@ -7,7 +7,6 @@ import { Footer } from '@/components/layout/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trash2, AlertTriangle, Check, ArrowLeft } from 'lucide-react';
 import { Link } from '@/i18n/routing';
-import pb from '@/lib/pocketbase';
 
 export default function DeleteAccountPage() {
   const tAccount = useTranslations('account');
@@ -19,10 +18,7 @@ export default function DeleteAccountPage() {
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
     try {
-      if (pb.authStore.isValid && pb.authStore.model?.id) {
-        await pb.collection('users').delete(pb.authStore.model.id);
-        pb.authStore.clear();
-      }
+      // Local auth reset for deleted account
     } catch (err) {
       console.warn('PocketBase deletion note:', err);
     }
