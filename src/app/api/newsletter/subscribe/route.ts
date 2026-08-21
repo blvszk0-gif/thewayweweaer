@@ -47,8 +47,8 @@ export async function POST(req: Request) {
       message: 'Na Twój adres e-mail wysłaliśmy link potwierdzający subskrypcję (Double Opt-in). Sprawdź skrzynkę odbiorczą.',
       status: 'success'
     });
-  } catch (error) {
-    console.error('Newsletter API route error:', error);
+  } catch {
+    console.error('An error occurred during newsletter subscription processing.');
     return NextResponse.json(
       { message: 'Wystąpił błąd podczas zapisywania. Spróbuj ponownie.' },
       { status: 500 }

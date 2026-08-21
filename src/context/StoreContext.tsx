@@ -1,17 +1,9 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import {
-  createCart,
-  getCart,
-  addToCart as shopifyAddToCart,
-  updateCartLines as shopifyUpdateCartLines,
-  removeCartLines as shopifyRemoveCartLines,
-  ShopifyCart
-} from '@/lib/shopify';
 
 export interface CartItem {
-  id: string; // Line ID or item ID
+  id: string; // Line ID
   variantId?: string;
   name: string;
   price: number;
@@ -35,6 +27,7 @@ interface StoreContextType {
   cartId: string | null;
   checkoutUrl: string | null;
   isLoadingCart: boolean;
+  cartError: string | null;
   addToCart: (item: { variantId?: string; name: string; price: number; image: string; quantity: number; color?: string; size?: string }) => Promise<void>;
   removeFromCart: (lineId: string) => Promise<void>;
   updateQuantity: (lineId: string, quantity: number) => Promise<void>;
@@ -42,6 +35,7 @@ interface StoreContextType {
   removeFromWishlist: (id: string) => void;
   isInWishlist: (id: string) => boolean;
   proceedToCheckout: () => void;
+  clearCartError: () => void;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -52,37 +46,61 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   const [cartId, setCartId] = useState<string | null>(null);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [isLoadingCart, setIsLoadingCart] = useState<boolean>(false);
+  const [cartError, setCartError] = useState<string | null>(null);
 
-  // Sync shopify cart data to state
-  const syncShopifyCart = (shopifyCart: ShopifyCart | null) => {
-    if (!shopifyCart) return;
+  // Helper to sync Shopify Cart state from server response
+  const syncCartState = (shopifyCart: any) => {
+    if (!shopifyCart) {
+      setCart([]);
+      setCheckoutUrl(null);
+      return;
+    }
 
     setCartId(shopifyCart.id);
     setCheckoutUrl(shopifyCart.checkoutUrl);
     localStorage.setItem('twww-shopify-cart-id', shopifyCart.id);
 
-    const mappedItems: CartItem[] = shopifyCart.lines.edges.map(({ node }) => {
-      const selectedSize = node.merchandise.selectedOptions?.find((o) => o.name.toLowerCase() === 'size' || o.name.toLowerCase() === 'rozmiar')?.value;
-      const selectedColor = node.merchandise.selectedOptions?.find((o) => o.name.toLowerCase() === 'color' || o.name.toLowerCase() === 'kolor')?.value;
+    const mapped: CartItem[] = (shopifyCart.lines?.edges || []).map(({ node }: any) => {
+      const selectedSize = node.merchandise?.selectedOptions?.find(
+        (o: any) => o.name.toLowerCase() === 'size' || o.name.toLowerCase() === 'rozmiar'
+      )?.value;
+      const selectedColor = node.merchandise?.selectedOptions?.find(
+        (o: any) => o.name.toLowerCase() === 'color' || o.name.toLowerCase() === 'kolor'
+      )?.value;
 
       return {
         id: node.id,
-        variantId: node.merchandise.id,
-        name: node.merchandise.product.title,
-        price: parseFloat(node.merchandise.price.amount),
-        image: node.merchandise.product.featuredImage?.url || 'https://placehold.co/400x500/000000/FFFFFF?text=TWWW',
+        variantId: node.merchandise?.id,
+        name: node.merchandise?.product?.title || 'Produkt',
+        price: parseFloat(node.merchandise?.price?.amount || '0'),
+        image: node.merchandise?.product?.featuredImage?.url || 'https://placehold.co/400x500/000000/FFFFFF?text=TWWW',
         quantity: node.quantity,
         size: selectedSize,
         color: selectedColor,
       };
     });
 
-    setCart(mappedItems);
+    setCart(mapped);
   };
 
-  // Initialize Cart on Mount
+  // Call server proxy route `/api/shopify/cart`
+  const callCartProxy = async (payload: Record<string, any>) => {
+    const res = await fetch('/api/shopify/cart', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+    if (!res.ok || data.error) {
+      throw new Error(data.error || 'Błąd komunikacji z serwerem Shopify Cart API.');
+    }
+    return data.cart;
+  };
+
+  // Initialize cart on mount
   useEffect(() => {
-    const initCart = async () => {
+    const initStore = async () => {
       setIsLoadingCart(true);
       const savedWishlist = localStorage.getItem('twww-wishlist');
       if (savedWishlist) {
@@ -96,30 +114,20 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
       const existingCartId = localStorage.getItem('twww-shopify-cart-id');
       if (existingCartId) {
         try {
-          const shopifyCart = await getCart(existingCartId);
+          const shopifyCart = await callCartProxy({ action: 'get', cartId: existingCartId });
           if (shopifyCart) {
-            syncShopifyCart(shopifyCart);
-            setIsLoadingCart(false);
-            return;
+            syncCartState(shopifyCart);
+          } else {
+            localStorage.removeItem('twww-shopify-cart-id');
           }
-        } catch (err) {
-          console.warn('Failed to fetch existing Shopify cart:', err);
-        }
-      }
-
-      // Fallback local cart if shopify credentials or cart not present
-      const savedLocalCart = localStorage.getItem('twww-cart');
-      if (savedLocalCart) {
-        try {
-          setCart(JSON.parse(savedLocalCart));
-        } catch (e) {
-          console.error(e);
+        } catch (err: any) {
+          console.warn('Failed to restore Shopify cart:', err);
         }
       }
       setIsLoadingCart(false);
     };
 
-    initCart();
+    initStore();
   }, []);
 
   // Sync wishlist to localStorage
@@ -127,108 +135,94 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem('twww-wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
 
-  // Sync local cart backup when not on Shopify
-  useEffect(() => {
-    if (!cartId) {
-      localStorage.setItem('twww-cart', JSON.stringify(cart));
-    }
-  }, [cart, cartId]);
-
   const addToCart = async (item: { variantId?: string; name: string; price: number; image: string; quantity: number; color?: string; size?: string }) => {
     setIsLoadingCart(true);
+    setCartError(null);
 
-    if (item.variantId) {
-      try {
-        let updatedCart: ShopifyCart | null = null;
-        if (!cartId) {
-          updatedCart = await createCart([{ merchandiseId: item.variantId, quantity: item.quantity }]);
-        } else {
-          updatedCart = await shopifyAddToCart(cartId, [{ merchandiseId: item.variantId, quantity: item.quantity }]);
-        }
-
-        if (updatedCart) {
-          syncShopifyCart(updatedCart);
-          setIsLoadingCart(false);
-          return;
-        }
-      } catch (err) {
-        console.warn('Shopify Cart Add error:', err);
-      }
+    if (!item.variantId) {
+      setCartError('Wariant produktu jest niedostępny lub nie wybrano rozmiaru/koloru.');
+      setIsLoadingCart(false);
+      return;
     }
 
-    // Fallback local cart handling
-    setCart((prev) => {
-      const existingIndex = prev.findIndex((i) => i.name === item.name && i.size === item.size && i.color === item.color);
-      if (existingIndex > -1) {
-        const updated = [...prev];
-        updated[existingIndex].quantity += item.quantity;
-        return updated;
-      }
-      return [
-        ...prev,
-        {
-          id: `local-${Date.now()}`,
-          variantId: item.variantId,
-          name: item.name,
-          price: item.price,
-          image: item.image,
-          quantity: item.quantity,
-          size: item.size,
-          color: item.color,
-        },
-      ];
-    });
+    try {
+      const updatedCart = await callCartProxy({
+        action: 'add',
+        cartId: cartId || undefined,
+        lines: [{ merchandiseId: item.variantId, quantity: item.quantity }],
+      });
 
-    setIsLoadingCart(false);
+      if (updatedCart) {
+        syncCartState(updatedCart);
+      } else {
+        throw new Error('Shopify Cart API nie zwróciło koszyka.');
+      }
+    } catch (err: any) {
+      console.error('Cart add error:', err);
+      setCartError(err.message || 'Nie udało się dodać produktu do koszyka. Sprawdź połączenie lub konfigurację Shopify.');
+    } finally {
+      setIsLoadingCart(false);
+    }
   };
 
   const removeFromCart = async (lineId: string) => {
     setIsLoadingCart(true);
-    if (cartId && !lineId.startsWith('local-')) {
-      try {
-        const updatedCart = await shopifyRemoveCartLines(cartId, [lineId]);
-        if (updatedCart) {
-          syncShopifyCart(updatedCart);
-          setIsLoadingCart(false);
-          return;
-        }
-      } catch (err) {
-        console.warn('Shopify Cart Remove error:', err);
-      }
+    setCartError(null);
+
+    if (!cartId) {
+      setIsLoadingCart(false);
+      return;
     }
 
-    setCart((prev) => prev.filter((i) => i.id !== lineId));
-    setIsLoadingCart(false);
+    try {
+      const updatedCart = await callCartProxy({
+        action: 'remove',
+        cartId,
+        lineIds: [lineId],
+      });
+      syncCartState(updatedCart);
+    } catch (err: any) {
+      console.error('Cart remove error:', err);
+      setCartError(err.message || 'Błąd usuwania z koszyka Shopify.');
+    } finally {
+      setIsLoadingCart(false);
+    }
   };
 
   const updateQuantity = async (lineId: string, quantity: number) => {
     setIsLoadingCart(true);
+    setCartError(null);
     const validQty = Math.max(1, quantity);
 
-    if (cartId && !lineId.startsWith('local-')) {
-      try {
-        const updatedCart = await shopifyUpdateCartLines(cartId, [{ id: lineId, quantity: validQty }]);
-        if (updatedCart) {
-          syncShopifyCart(updatedCart);
-          setIsLoadingCart(false);
-          return;
-        }
-      } catch (err) {
-        console.warn('Shopify Cart Update error:', err);
-      }
+    if (!cartId) {
+      setIsLoadingCart(false);
+      return;
     }
 
-    setCart((prev) => prev.map((i) => (i.id === lineId ? { ...i, quantity: validQty } : i)));
-    setIsLoadingCart(false);
+    try {
+      const updatedCart = await callCartProxy({
+        action: 'update',
+        cartId,
+        lines: [{ id: lineId, quantity: validQty }],
+      });
+      syncCartState(updatedCart);
+    } catch (err: any) {
+      console.error('Cart update error:', err);
+      setCartError(err.message || 'Błąd aktualizacji ilości w koszyku.');
+    } finally {
+      setIsLoadingCart(false);
+    }
   };
 
   const proceedToCheckout = () => {
     if (checkoutUrl) {
       window.location.href = checkoutUrl;
     } else {
-      alert('Koszyk zostanie otwarty po podłączeniu kluczy Shopify Storefront API.');
+      setCartError('Brak aktywnego checkoutUrl z Shopify. Dodaj produkty do koszyka.');
     }
   };
+
+  const clearCartError = () => setCartError(null);
 
   const addToWishlist = (item: WishlistItem) => {
     setWishlist((prev) => {
@@ -253,6 +247,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
         cartId,
         checkoutUrl,
         isLoadingCart,
+        cartError,
         addToCart,
         removeFromCart,
         updateQuantity,
@@ -260,6 +255,7 @@ export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
         removeFromWishlist,
         isInWishlist,
         proceedToCheckout,
+        clearCartError,
       }}
     >
       {children}

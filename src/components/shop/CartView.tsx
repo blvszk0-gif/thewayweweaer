@@ -1,19 +1,31 @@
 'use client';
 
 import React from 'react';
-import { ShoppingBag, ChevronRight, Truck, Trash2 } from 'lucide-react';
+import { ShoppingBag, ChevronRight, Truck, Trash2, AlertCircle, X } from 'lucide-react';
 import { useStore } from '@/context/StoreContext';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 
 export const CartView = () => {
-  const { cart, removeFromCart, updateQuantity, proceedToCheckout, isLoadingCart } = useStore();
+  const { cart, removeFromCart, updateQuantity, proceedToCheckout, isLoadingCart, cartError, clearCartError } = useStore();
   const tCart = useTranslations('cart');
 
   const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (
     <div className="bg-[color:var(--surface)] py-32 container mx-auto px-6 font-antonio">
+      {cartError && (
+        <div className="mb-8 bg-red-500/10 border border-red-500/30 text-red-500 p-6 rounded-2xl flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <AlertCircle size={24} />
+            <span className="font-bold text-sm uppercase tracking-wider">{cartError}</span>
+          </div>
+          <button onClick={clearCartError} className="p-1 hover:opacity-70">
+            <X size={20} />
+          </button>
+        </div>
+      )}
+
       <div className="flex flex-col lg:flex-row gap-16">
         {/* Items List */}
         <div className="flex-1">

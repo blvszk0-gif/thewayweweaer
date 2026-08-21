@@ -27,11 +27,24 @@ SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID=your_customer_account_client_id
 
 ### Opis Zmiennych:
 1. `SHOPIFY_STORE_DOMAIN`: Domena Twojego sklepu Shopify (np. `thewaywewear.myshopify.com`).
-2. `SHOPIFY_STOREFRONT_ACCESS_TOKEN`: Publiczny token dostępowy Storefront API dla zapytań z przeglądarki.
-3. `SHOPIFY_PRIVATE_STOREFRONT_ACCESS_TOKEN`: Prywatny token dostępowy Storefront API (używany wyłącznie po stronie serwera w `src/lib/shopify/client.ts`).
+2. `SHOPIFY_STOREFRONT_ACCESS_TOKEN`: Publiczny token dostępowy Storefront API.
+3. `SHOPIFY_PRIVATE_STOREFRONT_ACCESS_TOKEN`: Prywatny token dostępowy Storefront API (używany wyłącznie po stronie serwera w route handlerach `/api/shopify/*`).
 4. `SHOPIFY_API_VERSION`: Wersja API (`2026-07`).
-5. `SHOPIFY_ADMIN_ACCESS_TOKEN`: Admin API access token dla custom app (używany wyłącznie po stronie serwera np. w `/api/newsletter/subscribe` do mutacji ze zgodą Double Opt-in). **Nigdy nie trafia do bundle klienta.**
+5. `SHOPIFY_ADMIN_ACCESS_TOKEN`: Admin API access token dla custom app (używany wyłącznie po stronie serwera w `/api/newsletter/subscribe` do mutacji ze zgodą Double Opt-in). **Nigdy nie trafia do przeglądarki.**
 6. `SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID`: Client ID z panelu Shopify Customer Accounts API.
+
+---
+
+## 🏗️ Architektura Proxy Serwerowego (`/api/shopify/*`)
+
+Aplikacja wykonuje wszystkie zapytania i mutacje Storefront API wyłącznie po stronie serwera za pomocą wewnętrznych route handlerów:
+- `/api/shopify/cart`: Obsługa operacji na koszyku (get, create, add, update, remove).
+- `/api/shopify/products`: Pobieranie listy lub szczegółów produktów po `handle`.
+- `/api/shopify/collections`: Pobieranie kolekcji i przypisanych do nich produktów.
+- `/api/shopify/metaobjects`: Pobieranie opublikowanych metaobiektów (`lookbook`, `care_instruction`, `size_chart`, itp.).
+- `/api/shopify/policies`: Pobieranie oficjalnych regulaminów i polityk sklepu.
+
+Dzięki temu prywatne tokeny nie są udostępniane w kodzie klienckim (bundle JavaScript przeglądarki).
 
 ---
 
@@ -58,7 +71,7 @@ Do obsługi mutacji newslettera ze zgodą Double Opt-in po stronie serwera wymag
    - `read_customers`
    - `write_customers`
 4. Kliknij **Save (Zapisz)**, a następnie **Install app (Zainstaluj aplikację)**.
-5. Skopiuj wygenerowany **Admin API access token** i wklej go do zmiennej `SHOPIFY_ADMIN_ACCESS_TOKEN`. Token ten działa wyłącznie po stronie serwera i nie jest udostępniany klientom.
+5. Skopiuj wygenerowany **Admin API access token** i wklej go do zmiennej `SHOPIFY_ADMIN_ACCESS_TOKEN`.
 
 ### 3. Publikacja Zasobów w Kanale Headless (Wymóg konieczny!)
 Wszystkie **produkty**, **kolekcje** oraz **metaobiekty** utworzone w Shopify muszą mieć włączoną dostępność (publikację) dla kanału sprzedaży **Headless**. Jeżeli produkt nie zostanie przypisany do kanału Headless, nie pojawi się na froncie w sklepie.
@@ -111,20 +124,23 @@ W zakładce **Settings → Custom data → Products** utwórz następujące pola
 
 ---
 
-## 👤 Customer Account API & OAuth
+## 👤 Realne Konto Klienta & OAuth PKCE (`/api/auth/*`)
 
+Aplikacja wykorzystuje oficjalny protokół OAuth 2.0 PKCE dla Shopify Customer Account API:
+- `/api/auth/login`: Generuje unikalny PKCE `code_verifier`, hash `code_challenge` oraz `state`, po czym przekierowuje użytkownika do logowania Shopify.
+- `/api/auth/callback`: Weryfikuje `state` i wymienia kod na autoryzowany token dostępowy, zapisując go w zaszyfrowanym ciasteczku `twww_customer_session` (HttpOnly).
+- `/api/auth/me`: Odczytuje sesję i pobiera bezpośrednio z GraphQL API Customer Account dane profilu oraz historię zamówień klienta.
+- `/api/auth/logout`: Czyści ciasteczka sesyjne i przekierowuje do wylogowania Shopify.
+
+### Wymagana Konfiguracja w Panelu Shopify:
 1. W panelu **Shopify Admin → Customer accounts** włącz opcję Nowe Konta Klientów (New Customer Accounts).
-2. Customer Account API wymaga szyfrowanych połączeń HTTPS (adresy `http` oraz `localhost` nie są obsługiwane):
+2. Ustawienia URL:
    - **Allowed callback URIs:**
      - `https://thewaywewear.pl/api/auth/callback`
-     - Dla testów lokalnych użyj tunelu HTTPS (np. ngrok): `https://<twoj-tunel>.ngrok.app/api/auth/callback`
+     - Dla testów lokalnych tunel HTTPS: `https://<twoj-tunel>.ngrok.app/api/auth/callback`
    - **JavaScript origin:** `https://thewaywewear.pl`
    - **Allowed logout URIs:** `https://thewaywewear.pl`
-3. Konfiguracja logowania:
-   - Dla klienta publicznego włącz OAuth 2.0 z rozszerzeniem PKCE.
-   - Dla klienta typu confidential użyj bezpiecznego Client Secret przechowywanego po stronie serwera.
-4. Jeżeli logowanie Google SSO ma być aktywne, włącz dostawcę Google bezpośrednio w panelu logowania Shopify.
-5. **Zakupy jako gość (Guest Checkout)** są w pełni zachowane – klient może zrealizować koszyk i zamówienie bez logowania.
+3. **Zakupy jako gość (Guest Checkout)** są w pełni zachowane.
 
 ---
 
@@ -132,7 +148,7 @@ W zakładce **Settings → Custom data → Products** utwórz następujące pola
 
 - Endpoint `/api/newsletter/subscribe` wywołuje bezpieczną mutację Admin API ustawiającą stan marketingowy zgody e-mail na `PENDING`.
 - Shopify automatycznie generuje i wysyła wiadomość e-mail z linkiem potwierdzającym subskrypcję do klienta, zgodnie z ustawieniami Double Opt-in w sklepie.
-- Zgoda nie jest zapisywana w osobnej bazie danych ani PocketBase.
+- Żadne PII (dane osobowe) ani tokeny nie są logowane do konsoli serwera.
 
 ---
 
