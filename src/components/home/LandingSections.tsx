@@ -48,35 +48,6 @@ const FAQItem = ({ q, a, i }: { q: string, a: string, i: number }) => {
 
 export const LandingSections = () => {
   const tHome = useTranslations('home');
-  const tForms = useTranslations('forms');
-  const [newsletterEmail, setNewsletterEmail] = useState('');
-  const [newsletterConsent, setNewsletterConsent] = useState(false);
-  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [newsletterMessage, setNewsletterMessage] = useState('');
-
-  const subscribeToNewsletter = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setNewsletterStatus('loading');
-    setNewsletterMessage('');
-
-    try {
-      const response = await fetch('/api/newsletter/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: newsletterEmail, consent: newsletterConsent }),
-      });
-      const isJson = response.headers.get('content-type')?.includes('application/json');
-      const body = isJson ? await response.json() as { error?: string; message?: string; debug?: string } : {};
-      if (!response.ok) throw new Error(body.debug || body.error || 'Nie udało się zapisać do newslettera. Spróbuj ponownie później.');
-      setNewsletterStatus('success');
-      setNewsletterMessage(body.message || 'Zapis do newslettera został potwierdzony.');
-      setNewsletterEmail('');
-      setNewsletterConsent(false);
-    } catch (error) {
-      setNewsletterStatus('error');
-      setNewsletterMessage(error instanceof Error ? error.message : 'Nie udało się zapisać do newslettera. Spróbuj ponownie później.');
-    }
-  };
 
   const reviews = [
     { id: 1, author: 'Kamil G.', rating: 5, text: tHome('najlepsza_bluza_jaką_miałem_materiał_340'), photo: 'https://placehold.co/400x500/000000/FFFFFF?text=OPINIA+1' },
@@ -162,37 +133,6 @@ export const LandingSections = () => {
               <FAQItem key={i} q={item.q} a={item.a} i={i} />
             ))}
           </div>
-        </div>
-
-        {/* Newsletter Section */}
-        <div className="bg-[color:var(--surface)] text-[color:var(--foreground)] rounded-[50px] p-16 md:p-24 shadow-2xl relative overflow-hidden group border border-[color:var(--border)]">
-           <div className="absolute top-0 right-0 w-96 h-96 bg-[color:var(--foreground)]/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-[color:var(--foreground)]/10 transition-all duration-1000" />
-           <div className="relative z-10 max-w-2xl">
-              <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-8">{tHome('pozostańmy_w_kontakcie')}</h3>
-              <p className="text-xl font-bold opacity-40 uppercase mb-12 tracking-wide text-[color:var(--foreground)]/60">{tHome('zapisz_się_już_dziś_do_newslettera_i_bąd')}</p>
-
-              <form onSubmit={subscribeToNewsletter} className="space-y-5">
-              <div className="flex flex-col md:flex-row gap-4">
-                 <input
-                  type="email"
-                  placeholder={tHome('twojapocztacom')}
-                  value={newsletterEmail}
-                  onChange={(event) => setNewsletterEmail(event.target.value)}
-                  required
-                  className="flex-1 bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-full px-10 py-6 font-black uppercase text-[18px] focus:outline-none focus:border-[color:var(--foreground)] transition-all text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50"
-                 />
-                 <button type="submit" disabled={!newsletterConsent || newsletterStatus === 'loading'} className="bg-[color:var(--foreground)] text-[color:var(--surface)] px-12 py-6 rounded-full font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-xl disabled:opacity-40">
-                   {newsletterStatus === 'loading' ? '...' : tHome('zapisz_się')}
-                 </button>
-              </div>
-              <label className="flex items-start gap-3 text-sm font-bold uppercase tracking-widest text-[color:var(--foreground)]/60 cursor-pointer">
-                <input type="checkbox" checked={newsletterConsent} onChange={(event) => setNewsletterConsent(event.target.checked)} className="mt-0.5 h-4 w-4" />
-                <span>{tForms('zgadzam_się_na_przetwarzanie_moich_danyc')}</span>
-              </label>
-              {newsletterStatus === 'success' && <p className="text-sm font-black uppercase tracking-widest text-green-600">{newsletterMessage}</p>}
-              {newsletterStatus === 'error' && <p className="text-sm font-black uppercase tracking-widest text-red-600">{newsletterMessage}</p>}
-              </form>
-           </div>
         </div>
       </div>
     </section>
