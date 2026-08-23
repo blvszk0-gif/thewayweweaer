@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { GuestAccount } from '@/components/account/GuestAccount';
+import { AccountHeader } from '@/components/account/AccountHeader';
+import { OrderHistory } from '@/components/account/OrderHistory';
+
 type Customer = {
   firstName?: string;
   lastName?: string;
@@ -61,80 +64,15 @@ export default function AccountPage() {
 
         {!loading && customer && (
           <>
-            <div className="flex justify-between gap-6 items-start mb-14">
-              <div>
-                <p className="opacity-50 font-black tracking-widest">
-                  The Way We Are
-                </p>
+            <AccountHeader
+              firstName={customer.firstName}
+              email={customer.emailAddress?.emailAddress}
+              logout={logout}
+            />
 
-                <h1 className="mt-3 text-5xl font-black italic">
-                  {customer.firstName ||
-                    customer.emailAddress?.emailAddress ||
-                    'Moje konto'}
-                </h1>
-
-                {customer.emailAddress?.emailAddress && (
-                  <p className="mt-3 opacity-60">
-                    {customer.emailAddress.emailAddress}
-                  </p>
-                )}
-              </div>
-
-              <button
-                type="button"
-                onClick={logout}
-                className="border border-[color:var(--border)] px-5 py-3 rounded-full font-black uppercase tracking-widest text-sm"
-              >
-                Wyloguj się
-              </button>
-            </div>
-
-            <h2 className="text-2xl font-black uppercase italic mb-6">
-              Historia zamówień
-            </h2>
-
-            {customer.orders?.nodes?.length ? (
-              <div className="space-y-4">
-                {customer.orders.nodes.map((order) => (
-                  <article
-                    key={order.id}
-                    className="border border-[color:var(--border)] rounded-2xl p-6 flex flex-wrap justify-between gap-4"
-                  >
-                    <div>
-                      <p className="font-black">
-                        Zamówienie #{order.number || order.id}
-                      </p>
-
-                      <p className="opacity-50 text-sm">
-                        {order.processedAt
-                          ? new Date(order.processedAt).toLocaleDateString(
-                              'pl-PL'
-                            )
-                          : ''}
-                      </p>
-                    </div>
-
-                    <div className="text-right">
-                      <p className="font-black">
-                        {order.totalPrice
-                          ? `${order.totalPrice.amount} ${order.totalPrice.currencyCode}`
-                          : ''}
-                      </p>
-
-                      <p className="opacity-50 text-sm">
-                        {order.fulfillmentStatus ||
-                          order.financialStatus ||
-                          'W realizacji'}
-                      </p>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            ) : (
-              <p className="opacity-50">
-                Nie masz jeszcze zamówień.
-              </p>
-            )}
+            <OrderHistory
+              orders={customer.orders?.nodes || []}
+            />
           </>
         )}
       </section>
