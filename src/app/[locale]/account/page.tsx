@@ -6,7 +6,7 @@ import { Footer } from '@/components/layout/Footer';
 import { GuestAccount } from '@/components/account/GuestAccount';
 import { AccountHeader } from '@/components/account/AccountHeader';
 import { OrderHistory } from '@/components/account/OrderHistory';
-
+import { AccountNavigation } from '@/components/account/AccountNavigation';
 type Customer = {
   firstName?: string;
   lastName?: string;
@@ -30,7 +30,7 @@ type Customer = {
 
 export default function AccountPage() {
   const [customer, setCustomer] = useState<Customer | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); const [activeTab, setActiveTab] = useState('orders');
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -69,10 +69,34 @@ export default function AccountPage() {
               email={customer.emailAddress?.emailAddress}
               logout={logout}
             />
-
-            <OrderHistory
-              orders={customer.orders?.nodes || []}
+            <AccountNavigation
+              active={activeTab}
+              onChange={setActiveTab}
             />
+
+            {activeTab === 'orders' && (
+  <OrderHistory
+    orders={customer.orders?.nodes || []}
+  />
+)}
+
+{activeTab === 'profile' && (
+  <p className="opacity-50">
+    Profil użytkownika — w przygotowaniu.
+  </p>
+)}
+
+{activeTab === 'wishlist' && (
+  <p className="opacity-50">
+    Lista życzeń — w przygotowaniu.
+  </p>
+)}
+
+{activeTab === 'addresses' && (
+  <p className="opacity-50">
+    Adresy — w przygotowaniu.
+  </p>
+)}
           </>
         )}
       </section>
