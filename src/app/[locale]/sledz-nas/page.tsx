@@ -1,52 +1,13 @@
 'use client';
 
-import React from 'react';
-import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { motion } from 'framer-motion';
-import { Twitter, Instagram, Facebook, Youtube } from 'lucide-react';
 
-const socials = [
-  { id: 'x', label: 'X.COM', icon: Twitter, link: 'https://x.com', image: 'https://images.unsplash.com/photo-1611605698335-8b1569810432?auto=format&fit=crop&q=80&w=800' },
-  { id: 'insta', label: 'INSTAGRAM', icon: Instagram, link: 'https://instagram.com', image: 'https://images.unsplash.com/photo-1611262588024-d1217049d9c6?auto=format&fit=crop&q=80&w=800' },
-  { id: 'fb', label: 'FACEBOOK', icon: Facebook, link: 'https://facebook.com', image: 'https://images.unsplash.com/photo-1611223235982-5f503482b48d?auto=format&fit=crop&q=80&w=800' },
-  { id: 'tiktok', label: 'TIKTOK', icon: Youtube, link: 'https://tiktok.com', image: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&q=80&w=800' },
-];
-
+type Field = { key: string; value: string | null }; type Social = { id: string; fields: Field[] };
+const value = (entry: Social, key: string) => entry.fields.find((field) => field.key === key)?.value || '';
 export default function FollowUsPage() {
-  const tEditorial = useTranslations('editorial');
-
-  return (
-    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio relative overflow-hidden">
-      <Header />
-      <div className="container mx-auto px-6 pt-40 pb-20 relative z-10">
-        <header className="mb-20 text-center">
-           <p className="text-[17px] font-black uppercase tracking-[0.4em] text-[color:var(--foreground)]/30 mb-4">Project: TWWW // Subject:</p>
-           <h1 className="text-7xl font-black uppercase tracking-tighter italic leading-none">{tEditorial('śledź_nasz_profil')}</h1>
-        </header>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-           {socials.map((social, i) => (
-             <a
-               key={social.id}
-               href={social.link}
-               target="_blank"
-               rel="noopener noreferrer"
-               className="group relative aspect-square overflow-hidden rounded-[50px] border border-[color:var(--border)] shadow-2xl hover:scale-[1.02] transition-all duration-700"
-             >
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.1 }}>
-                  <img src={social.image} alt={social.label} className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-110" />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/20 group-hover:bg-transparent transition-colors">
-                     <social.icon size={48} className="text-white mb-4 opacity-50 group-hover:opacity-100 transition-all" />
-                     <span className="text-4xl font-black uppercase tracking-tighter italic text-white drop-shadow-2xl">{social.label}</span>
-                  </div>
-                </motion.div>
-             </a>
-           ))}
-        </div>
-      </div>
-      <Footer />
-    </main>
-  );
+  const [socials, setSocials] = useState<Social[]>([]); const [loading, setLoading] = useState(true);
+  useEffect(() => { fetch('/api/shopify/metaobjects?type=social_link').then(async (response) => { if (!response.ok) throw new Error(); return response.json() as Promise<{ metaobjects: Social[] }>; }).then((data) => setSocials(data.metaobjects)).finally(() => setLoading(false)); }, []);
+  return <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio"><Header /><section className="container mx-auto px-6 pt-40 pb-24"><header className="text-center"><p className="font-black uppercase tracking-[.4em] opacity-30">Project: TWWW</p><h1 className="mt-3 text-6xl font-black uppercase italic">Śledź nas</h1></header>{loading && <p className="py-20 text-center opacity-50">Ładowanie…</p>}<div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">{socials.map((social) => <a key={social.id} href={value(social, 'url')} target="_blank" rel="noopener noreferrer" className="aspect-square rounded-[40px] border border-[color:var(--border)] grid place-items-center hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)] transition-colors"><span className="text-3xl font-black uppercase italic">{value(social, 'platform')}</span></a>)}</div>{!loading && !socials.length && <p className="py-20 text-center opacity-50">Dodaj linki w Shopify → Content → Metaobjects → social_link.</p>}</section><Footer /></main>;
 }

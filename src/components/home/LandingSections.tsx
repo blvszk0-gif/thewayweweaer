@@ -134,30 +134,6 @@ export const LandingSections = () => {
             ))}
           </div>
         </div>
-
-        {/* Newsletter Section */}
-        <div className="bg-[color:var(--surface)] text-[color:var(--foreground)] rounded-[50px] p-16 md:p-24 shadow-2xl relative overflow-hidden group border border-[color:var(--border)]">
-           <div className="absolute top-0 right-0 w-96 h-96 bg-[color:var(--foreground)]/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-[color:var(--foreground)]/10 transition-all duration-1000" />
-           <div className="relative z-10 max-w-2xl">
-              <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter italic mb-8">{tHome('pozostańmy_w_kontakcie')}</h3>
-              <p className="text-xl font-bold opacity-40 uppercase mb-12 tracking-wide text-[color:var(--foreground)]/60">{tHome('zapisz_się_już_dziś_do_newslettera_i_bąd')}</p>
-
-              <div className="flex flex-col md:flex-row gap-4">
-                 <input
-                  type="email"
-                  placeholder={tHome('twojapocztacom')}
-                  className="flex-1 bg-[color:var(--surface-muted)] border border-[color:var(--border)] rounded-full px-10 py-6 font-black uppercase text-[18px] focus:outline-none focus:border-[color:var(--foreground)] transition-all text-[color:var(--foreground)] placeholder:text-[color:var(--foreground)]/50"
-                 />
-                 <button className="bg-[color:var(--foreground)] text-[color:var(--surface)] px-12 py-6 rounded-full font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-xl">
-                   {tHome('zapisz_się')}
-                 </button>
-              </div>
-
-              <button className="mt-8 text-[13px] font-black uppercase tracking-widest text-red-600 hover:text-red-700 transition-colors">
-                {tHome('anuluj_subskrypcję')}
-              </button>
-           </div>
-        </div>
       </div>
     </section>
   );

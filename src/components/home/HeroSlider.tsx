@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Heart, ShoppingBag } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useStore } from '@/context/StoreContext';
 
@@ -24,7 +24,7 @@ const collection = {
 
 export const HeroSlider = () => {
   const [current, setCurrent] = useState(0);
-  const { addToCart, addToWishlist, isInWishlist, removeFromWishlist } = useStore();
+  const { addToWishlist, isInWishlist, removeFromWishlist } = useStore();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -52,17 +52,6 @@ export const HeroSlider = () => {
         category: slide.category
       });
     }
-  };
-
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    addToCart({
-      id: slide.id,
-      name: slide.name,
-      price: slide.price,
-      image: slide.img,
-      quantity: 1
-    });
   };
 
   return (
@@ -97,12 +86,6 @@ export const HeroSlider = () => {
               className="p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-md bg-[color:var(--foreground)] text-[color:var(--surface)]"
              >
                <Heart size={20} className="sm:w-6 sm:h-6" strokeWidth={2} fill={isLiked ? "currentColor" : "none"} />
-             </button>
-             <button
-              onClick={handleAddToCart}
-              className="p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-md bg-[color:var(--foreground)] text-[color:var(--surface)]"
-             >
-               <ShoppingBag size={20} className="sm:w-6 sm:h-6" strokeWidth={2} />
              </button>
           </div>
 

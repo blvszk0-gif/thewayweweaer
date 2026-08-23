@@ -1,0 +1,7 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+type Field = { key: string; value: string | null }; type Entry = { id: string; fields: Field[] }; const value = (entry: Entry, key: string) => entry.fields.find((field) => field.key === key)?.value || '';
+export default function CarePage() { const [entries, setEntries] = useState<Entry[]>([]); useEffect(() => { fetch('/api/shopify/metaobjects?type=care_instruction').then((response) => response.json()).then((data: { metaobjects?: Entry[] }) => setEntries(data.metaobjects || [])); }, []); return <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio"><Header /><section className="container max-w-5xl mx-auto px-6 pt-36 pb-24"><h1 className="text-6xl font-black uppercase italic">Pielęgnacja</h1><div className="mt-12 grid md:grid-cols-2 gap-6">{entries.map((entry) => <article key={entry.id} className="border border-[color:var(--border)] rounded-3xl p-8"><h2 className="text-2xl font-black uppercase italic">{value(entry, 'title')}</h2><p className="mt-4 opacity-70 whitespace-pre-line">{value(entry, 'description')}</p></article>)}</div>{!entries.length && <p className="py-20 opacity-50">Dodaj instrukcje w Shopify → Content → Metaobjects → care_instruction.</p>}</section><Footer /></main>; }

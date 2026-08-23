@@ -1,416 +1,198 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Heart,
-  ShoppingBag,
-  ChevronLeft,
-  ChevronRight,
-  Minus,
-  Plus,
-  X,
-  Ruler
-} from 'lucide-react';
-import { Link } from '@/i18n/routing';
 import { useStore } from '@/context/StoreContext';
+import { ChevronLeft, ChevronRight, Minus, Plus, ShoppingBag } from 'lucide-react';
 
-const WashIcon = () => (
-  <svg viewBox="0 0 100 100" width="24" height="24" fill="currentColor">
-    <path d="M10,40 L90,40 L80,90 L20,90 Z" fill="none" stroke="currentColor" strokeWidth="5"/>
-    <path d="M30,30 Q50,20 70,30" fill="none" stroke="currentColor" strokeWidth="5"/>
-  </svg>
-);
-const BleachIcon = () => (
-  <svg viewBox="0 0 100 100" width="24" height="24" fill="currentColor">
-    <path d="M10,90 L50,10 L90,90 Z" fill="none" stroke="currentColor" strokeWidth="5"/>
-    <line x1="25" y1="90" x2="75" y2="90" stroke="currentColor" strokeWidth="10"/>
-  </svg>
-);
-const TumbleIcon = () => (
-  <svg viewBox="0 0 100 100" width="24" height="24" fill="currentColor">
-    <rect x="10" y="10" width="80" height="80" fill="none" stroke="currentColor" strokeWidth="5"/>
-    <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="5"/>
-    <line x1="20" y1="20" x2="80" y2="80" stroke="currentColor" strokeWidth="5"/>
-  </svg>
-);
-const IronIcon = () => (
-  <svg viewBox="0 0 100 100" width="24" height="24" fill="currentColor">
-    <path d="M10,80 L90,80 L80,40 Q70,20 40,20 L10,20 Z" fill="none" stroke="currentColor" strokeWidth="5"/>
-    <circle cx="25" cy="50" r="5" fill="currentColor"/>
-  </svg>
-);
-
-const productData = {
-  id: 'twww-hoodie-01',
-  category: 'Bluzy',
-  name: 'THE WAY WE STARE',
-  type: 'OVERSIZE HOODIE',
-  price: 299,
-  currency: 'PLN',
-  colors: [
-    { name: 'Pitch Black', hex: '#000000', stock: true, extra: 0 },
-    { name: 'Heather Grey', hex: '#808080', stock: true, extra: 0 },
-    { name: 'Cloud White', hex: '#FFFFFF', stock: false, extra: 0 },
-  ],
-  premiumColors: [
-    { name: 'Baby Blue', hex: '#89CFF0', stock: true, extra: 40 },
-    { name: 'Powder Pink', hex: '#F2D2BD', stock: true, extra: 40 },
-  ],
-  sizes: [
-    { label: 'S', stock: true },
-    { label: 'M', stock: true },
-    { label: 'L', stock: false },
-    { label: 'XL', stock: true },
-    { label: '2XL', stock: true },
-    { label: '3XL', stock: true },
-  ],
-  images: [
-    "https://placehold.co/1200x1600/000000/FFFFFF?text=DETAL+HAFTU+1",
-    "https://placehold.co/1200x1600/000000/FFFFFF?text=PACKSHOT+1",
-    "https://placehold.co/1200x1600/000000/FFFFFF?text=CLIENT+VIEW",
-    "https://placehold.co/1200x1600/000000/FFFFFF?text=LABEL+DETAIL",
-  ],
-};
-
-const sizeTable = [
-  { size: 'XS', chest: '54 cm', length: '68 cm', sleeve: '58 cm' },
-  { size: 'S', chest: '57 cm', length: '70 cm', sleeve: '60 cm' },
-  { size: 'M', chest: '60 cm', length: '72 cm', sleeve: '62 cm' },
-  { size: 'L', chest: '63 cm', length: '74 cm', sleeve: '64 cm' },
-  { size: 'XL', chest: '66 cm', length: '76 cm', sleeve: '66 cm' },
-  { size: '2XL', chest: '69 cm', length: '78 cm', sleeve: '68 cm' },
-  { size: '3XL', chest: '72 cm', length: '80 cm', sleeve: '70 cm' },
-];
-
-const LaundryIcon = ({ icon: Icon, detail, active, onToggle }: { icon: React.ComponentType, label: string, detail: string, active: boolean, onToggle: () => void }) => {
-  return (
-    <div className="relative perspective-[1000px]">
-      <motion.button
-        onClick={onToggle}
-        animate={{ rotateY: active ? 180 : 0 }}
-        transition={{ duration: 0.6, type: 'spring', damping: 20 }}
-        className="w-16 h-16 relative preserve-3d cursor-pointer"
-      >
-         <div className={`absolute inset-0 backface-hidden border rounded-xl flex items-center justify-center bg-[color:var(--surface)] text-[color:var(--foreground)]/40 border-[color:var(--border)]`}>
-            <Icon />
-         </div>
-         <div className={`absolute inset-0 backface-hidden border rounded-xl flex items-center justify-center bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)] rotate-y-180 p-2 text-center`}>
-            <p className="text-[8px] font-black uppercase leading-tight tracking-tighter">{detail}</p>
-         </div>
-      </motion.button>
-    </div>
-  );
-};
+type Variant = { id: string; title: string; availableForSale: boolean; price: { amount: string; currencyCode: string }; image: { url: string } | null; selectedOptions: Array<{ name: string; value: string }> };
+type Product = { handle: string; title: string; description: string; availableForSale: boolean; featuredImage: { url: string; altText: string | null } | null; images: { nodes: Array<{ url: string; altText: string | null }> }; variants: { nodes: Variant[] } };
 
 export default function ProductPage() {
-  const tCatalogPdp = useTranslations('catalog_pdp');
-  const tCartWishlist = useTranslations('cart_wishlist');
-
-  const [currentImg, setCurrentImg] = useState(0);
-  const [selectedColor, setSelectedColor] = useState(productData.colors[0]);
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [isSizeTableOpen, setIsSizeTableOpen] = useState(false);
-  const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false);
-  const [notifySize, setNotifySize] = useState<string | null>(null);
-  const [notifyEmail, setNotifyEmail] = useState('');
-  const [isNotifySuccess, setIsNotifySuccess] = useState(false);
+  const params = useParams<{ id: string }>();
+  const { addToCart, isCartLoading, cartError } = useStore();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [selected, setSelected] = useState<Record<string, string>>({});
+  const [imageIndex, setImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [viewers, setViewers] = useState(0);
-  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
-  const { addToCart, addToWishlist, isInWishlist, removeFromWishlist } = useStore();
-
-  React.useEffect(() => {
-    setViewers(Math.floor(Math.random() * 50) + 12);
-  }, []);
-
-  const totalPrice = productData.price + (selectedColor.extra || 0);
-
-  const handleToggleTooltip = (id: string) => {
-    setActiveTooltip(activeTooltip === id ? null : id);
-  };
-
-  const isLiked = isInWishlist(productData.id);
-
-  const handleWishlist = () => {
-    if (isLiked) {
-      removeFromWishlist(productData.id);
-    } else {
-      addToWishlist({
-        id: productData.id,
-        name: productData.name,
-        price: productData.price,
-        image: productData.images[0],
-        category: productData.category
-      });
-    }
-  };
-
-  const handleAddToCart = () => {
-    if (!selectedSize) return;
-    addToCart({
-      id: productData.id,
-      name: productData.name,
-      price: totalPrice,
-      image: productData.images[0],
-      quantity: quantity,
-      size: selectedSize,
-      color: selectedColor.name
-    });
-  };
-
-  return (
-    <main className="min-h-screen bg-[color:var(--surface)] font-antonio text-[color:var(--foreground)] shadow-[inset_0_0_100px_rgba(0,0,0,0.1)] relative overflow-x-hidden">
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-repeat" />
-      <Header />
-
-      <div className="container mx-auto px-6 pt-32 relative z-10">
-        <Link
-            href={`/shop/${productData.category.toLowerCase()}`}
-            className="inline-flex items-center gap-2 text-[13px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity mb-8"
-        >
-            ← {tCatalogPdp('powrót_do_project_twww_temat_category', { category: productData.category })}
-        </Link>
-
-        <div className="flex flex-col lg:flex-row gap-16">
-
-          <div className="lg:w-[45%]">
-            <div className="relative group">
-               <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-[color:var(--surface-muted)] relative shadow-2xl border border-[color:var(--border)]">
-                  <AnimatePresence>
-                    {viewers > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-                        className="absolute top-4 left-4 z-20 bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 flex items-center gap-2 shadow-xl"
-                      >
-                        <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                        <span className="text-[11px] font-black uppercase tracking-widest text-white">{tCatalogPdp('count_osób_oglądało_w_ostatnich_48_h', { count: viewers })}</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                  <AnimatePresence mode="wait">
-                    <motion.img
-                      key={currentImg} src={productData.images[currentImg]}
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                      className="w-full h-full object-cover grayscale transition-all duration-700 hover:grayscale-0"
-                      alt=""
-                    />
-                  </AnimatePresence>
-                  <button onClick={() => setCurrentImg((prev) => (prev - 1 + productData.images.length) % productData.images.length)} className="absolute left-4 top-1/2 -translate-y-1/2 bg-[color:var(--surface)]/20 hover:bg-[color:var(--surface)]/80 p-2 rounded-full transition-all shadow-xl text-[color:var(--foreground)]"><ChevronLeft size={24} /></button>
-                  <button onClick={() => setCurrentImg((prev) => (prev + 1) % productData.images.length)} className="absolute right-4 top-1/2 -translate-y-1/2 bg-[color:var(--surface)]/20 hover:bg-[color:var(--surface)]/80 p-2 rounded-full transition-all shadow-xl text-[color:var(--foreground)]"><ChevronRight size={24} /></button>
-               </div>
-
-               <div className="flex gap-4 mt-6 overflow-x-auto no-scrollbar">
-                  {productData.images.map((img, i) => (
-                    <button key={i} onClick={() => setCurrentImg(i)} className={`w-20 aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${currentImg === i ? 'border-[color:var(--foreground)]' : 'border-transparent opacity-50'}`}><img src={img} alt="" className="w-full h-full object-cover grayscale" /></button>
-                  ))}
-               </div>
-            </div>
-          </div>
-
-          <div className="lg:flex-1 flex flex-col">
-            <div className="mb-8">
-                <span className="text-[13px] font-black uppercase tracking-[0.4em] text-[color:var(--foreground)]/30 block mb-2">Project: TWWW // Subject: {productData.type} //</span>
-                <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter italic leading-none">{productData.name}</h1>
-            </div>
-
-            <p className="text-3xl font-black mb-12 tracking-tighter">{totalPrice} {productData.currency}</p>
-
-            <div className="space-y-12">
-               <div>
-                  <h3 className="text-[13px] font-black uppercase tracking-[0.3em] mb-4 text-[color:var(--foreground)]/48 italic">{tCatalogPdp('wybierz_kolor')}: {selectedColor.name}</h3>
-                  <div className="space-y-6">
-                      <div className="flex gap-3">
-                        {productData.colors.map((color) => (
-                          <button
-                            key={color.name} onClick={() => { if (color.stock) setSelectedColor(color); }}
-                            className={`w-12 h-12 rounded-full border-2 transition-all relative ${selectedColor.name === color.name ? 'border-[color:var(--foreground)] scale-110 shadow-xl' : 'border-transparent'} ${!color.stock ? 'opacity-20 cursor-not-allowed grayscale' : ''}`}
-                            style={{ backgroundColor: color.hex }}
-                          >
-                            {!color.stock && <div className="absolute inset-0 flex items-center justify-center text-[color:var(--foreground)]"><X size={20} /></div>}
-                          </button>
-                        ))}
-                      </div>
-
-                      <div className="flex flex-col gap-4">
-                        <p className="text-[12px] font-black uppercase tracking-widest opacity-20 italic">{tCatalogPdp('kolory_premium')}:</p>
-                        <div className="flex flex-wrap gap-4">
-                            {productData.premiumColors.map((color) => (
-                                <button
-                                    key={color.name} onClick={() => { if (color.stock) setSelectedColor(color); }}
-                                    className={`group/color relative flex items-center gap-3 pr-6 py-1 rounded-full border transition-all ${selectedColor.name === color.name ? 'border-[color:var(--foreground)] bg-[color:var(--surface)] shadow-lg' : 'border-[color:var(--border)] hover:border-[color:var(--foreground)]/20'}`}
-                                >
-                                    <div
-                                      className={`w-10 h-10 rounded-full border-2 transition-all ${selectedColor.name === color.name ? 'border-[color:var(--foreground)] scale-110 shadow-md' : 'border-transparent shadow-inner'}`}
-                                      style={{ backgroundColor: color.hex }}
-                                    >
-                                       {!color.stock && <div className="absolute inset-0 flex items-center justify-center text-[color:var(--foreground)]"><X size={16} /></div>}
-                                    </div>
-                                    <div className="flex flex-col items-start leading-none">
-                                      <span className="text-[13px] font-black uppercase tracking-tighter">{color.name}</span>
-                                      <span className="text-[13px] font-bold opacity-40 mt-1">+40 PLN</span>
-                                    </div>
-                                </button>
-                            ))}
-                        </div>
-                      </div>
-                  </div>
-               </div>
-
-               <div>
-                  <div className="flex justify-between items-end mb-4">
-                    <h3 className="text-[13px] font-black uppercase tracking-[0.3em] text-[color:var(--foreground)]/48 italic">{tCatalogPdp('rozmiar')}</h3>
-                    <button onClick={() => setIsSizeTableOpen(true)} className="text-[13px] font-black uppercase tracking-widest underline underline-offset-4 flex items-center gap-2"><Ruler size={12} /> {tCatalogPdp('tabela_rozmiarów')}</button>
-                  </div>
-                  <div className="grid grid-cols-4 sm:grid-cols-7 gap-2 mb-6">
-                    {productData.sizes.map((size) => (
-                      <button
-                        key={size.label}
-                        onClick={() => {
-                          if (size.stock) {
-                            setSelectedSize(size.label);
-                          } else {
-                            setNotifySize(size.label);
-                            setIsNotifyModalOpen(true);
-                          }
-                        }}
-                        className={`py-4 rounded-xl font-black text-base transition-all border relative overflow-hidden ${selectedSize === size.label ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)] shadow-lg scale-[1.02]' : 'bg-[color:var(--surface-muted)] border-transparent hover:border-[color:var(--border)]'} ${!size.stock ? 'opacity-40' : ''}`}
-                      >
-                        <span className={!size.stock ? 'line-through' : ''}>{size.label}</span>
-                        {!size.stock && (
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/5">
-                             <div className="rotate-[-45deg] bg-red-500 text-white text-[8px] font-black px-1 leading-tight">{tCatalogPdp('brak')}</div>
-                          </div>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-               </div>
-
-               <div className="flex gap-4 items-stretch">
-                  <div className="flex items-center bg-[color:var(--surface)] border border-[color:var(--border)] rounded-full px-6 gap-6 shadow-lg">
-                    <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="opacity-40 hover:opacity-100 transition-opacity"><Minus size={16}/></button>
-                    <span className="text-[18px] font-black w-4 text-center">{quantity}</span>
-                    <button onClick={() => setQuantity(quantity + 1)} className="opacity-40 hover:opacity-100 transition-opacity"><Plus size={16}/></button>
-                  </div>
-                  <button
-                    onClick={handleAddToCart}
-                    className={`flex-1 py-6 rounded-full font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 border-2 ${selectedSize ? 'border-[color:var(--foreground)] bg-[color:var(--foreground)] text-[color:var(--surface)] shadow-2xl hover:opacity-90' : 'border-[color:var(--border)] bg-transparent text-[color:var(--foreground)]/20 cursor-not-allowed'}`}
-                  >
-                    <ShoppingBag size={20} /> {tCartWishlist('dodaj_do_koszyka')}
-                  </button>
-               </div>
-
-               <button
-                onClick={handleWishlist}
-                className={`w-full py-6 rounded-full font-black uppercase tracking-[0.2em] border border-[color:var(--border)] flex items-center justify-center gap-3 hover:bg-[color:var(--surface-muted)] transition-all shadow-md ${isLiked ? 'text-red-500 border-red-500/30' : ''}`}
-               >
-                 <Heart size={20} fill={isLiked ? "currentColor" : "none"} /> {isLiked ? tCatalogPdp('usuń_z_wishlisty') : tCatalogPdp('dodaj_do_wishlisty')}
-               </button>
-
-               <div className="pt-6 border-t border-[color:var(--border)]">
-                  <p className="text-[13px] font-black uppercase tracking-widest text-[color:var(--foreground)]/30 mb-4 text-center">{tCatalogPdp('bezpieczne_płatności')}</p>
-                  <div className="flex justify-center gap-6 opacity-40 italic font-black text-[13px] tracking-widest"><span>BLIK</span><span>APPLE PAY</span><span>VISA</span><span>MASTERCARD</span></div>
-               </div>
-
-               <div className="space-y-12 pt-12">
-                  <div><h4 className="text-[13px] font-black uppercase tracking-[0.3em] mb-4 text-[color:var(--foreground)]/48 italic">{tCatalogPdp('opis_produktu')}</h4><p className="text-base font-bold leading-relaxed opacity-60 uppercase tracking-widest">{tCatalogPdp('najwyższej_jakości_bluza_typu_oversize_z')}</p></div>
-                  <div><h4 className="text-[13px] font-black uppercase tracking-[0.3em] mb-4 text-[color:var(--foreground)]/48 italic">{tCatalogPdp('materiał')}</h4><p className="text-base font-bold opacity-60 uppercase italic tracking-widest">{tCatalogPdp('80_bawełna_czesana_20_poliester_recyklin')}</p></div>
-                  <div>
-                    <h4 className="text-[13px] font-black uppercase tracking-[0.3em] mb-6 text-[color:var(--foreground)]/48 italic">{tCatalogPdp('pielęgnacja')}</h4>
-                    <div className="flex gap-4">
-                        <LaundryIcon
-                            icon={WashIcon} label={tCatalogPdp('pranie')} detail={tCatalogPdp('prać_w_maks_30c_nie_stosować_wybielaczy')}
-                            active={activeTooltip === 'wash'} onToggle={() => handleToggleTooltip('wash')}
-                        />
-                        <LaundryIcon
-                            icon={BleachIcon} label={tCatalogPdp('wybielanie')} detail={tCatalogPdp('nie_stosować_wybielaczy_i_chloru')}
-                            active={activeTooltip === 'bleach'} onToggle={() => handleToggleTooltip('bleach')}
-                        />
-                        <LaundryIcon
-                            icon={TumbleIcon} label={tCatalogPdp('suszenie')} detail={tCatalogPdp('nie_suszyć_w_suszarce_bębnowej')}
-                            active={activeTooltip === 'dry'} onToggle={() => handleToggleTooltip('dry')}
-                        />
-                        <LaundryIcon
-                            icon={IronIcon} label={tCatalogPdp('prasowanie')} detail={tCatalogPdp('prasować_na_lewej_stronie_maks_110c')}
-                            active={activeTooltip === 'iron'} onToggle={() => handleToggleTooltip('iron')}
-                        />
-                    </div>
-                  </div>
-               </div>
-            </div>
-          </div>
-        </div>
+  useEffect(() => { setLoading(true); setError(false); fetch(`/api/shopify/products/${encodeURIComponent(params.id)}`).then(async (response) => { if (!response.ok) throw new Error(); return response.json() as Promise<{ product: Product }>; }).then(({ product: received }) => { setProduct(received); setSelected(Object.fromEntries(received.variants.nodes[0]?.selectedOptions.map((option) => [option.name, option.value]) || [])); }).catch(() => setError(true)).finally(() => setLoading(false)); }, [params.id]);
+  const variant = useMemo(() => product?.variants.nodes.find((item) => item.selectedOptions.every((option) => selected[option.name] === option.value)) || product?.variants.nodes[0], [product, selected]);
+  const options = useMemo(() => product ? Array.from(new Set(product.variants.nodes.flatMap((item) => item.selectedOptions.map((option) => option.name)))).map((name) => [name, Array.from(new Set(product.variants.nodes.flatMap((item) => item.selectedOptions.filter((option) => option.name === name).map((option) => option.value))))] as const) : [], [product]);
+  const images = product ? (product.images.nodes.length ? product.images.nodes : product.featuredImage ? [product.featuredImage] : []) : [];
+  if (loading) return <main className="min-h-screen bg-[color:var(--surface)]"><Header /><p className="pt-40 text-center font-black uppercase tracking-widest">Ładowanie produktu…</p></main>;
+  if (error || !product || !variant) return <main className="min-h-screen bg-[color:var(--surface)]"><Header /><p className="pt-40 text-center font-black uppercase tracking-widest">Nie znaleziono produktu.</p><Footer /></main>;
+  return <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio"><Header /><div className="container mx-auto px-6 pt-32 pb-24"><div className="grid lg:grid-cols-2 gap-16">
+    <section>
+  <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-[color:var(--surface-muted)] relative">
+    {images[imageIndex] ? (
+      <button
+        type="button"
+        onClick={() => setLightboxOpen(true)}
+        className="absolute inset-0 flex items-center justify-center cursor-zoom-in"
+        aria-label={`Powiększ zdjęcie produktu ${product.title}`}
+      >
+        <img
+          src={images[imageIndex].url}
+          alt={images[imageIndex].altText || product.title}
+          className="w-full h-full object-contain transition-transform duration-500 ease-out hover:scale-105"
+        />
+      </button>
+    ) : (
+      <div className="h-full grid place-items-center opacity-40">
+        Brak zdjęcia
       </div>
+    )}
 
-      <AnimatePresence>
-        {isSizeTableOpen && (
-          <div className="fixed inset-0 z-[120] flex items-center justify-center p-6">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsSizeTableOpen(false)} className="absolute inset-0 bg-[color:var(--foreground)]/60 backdrop-blur-md" />
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-2xl bg-[color:var(--surface)] rounded-[40px] shadow-2xl p-12 overflow-hidden border border-[color:var(--border)]"
-            >
-              <button onClick={() => setIsSizeTableOpen(false)} className="absolute top-8 right-8 text-[color:var(--foreground)]/20 hover:text-[color:var(--foreground)] transition-colors"><X size={32} /></button>
-              <h2 className="text-4xl font-black uppercase tracking-tighter italic mb-12 text-[color:var(--foreground)]">{tCatalogPdp('tabela_rozmiarów')}</h2>
-              <div className="overflow-x-auto">
-                 <table className="w-full text-left font-black uppercase text-base tracking-widest text-[color:var(--foreground)]">
-                    <thead className="border-b border-[color:var(--border)]"><tr><th className="py-4">{tCatalogPdp('rozmiar')}</th><th className="py-4">{tCatalogPdp('klatka')}</th><th className="py-4">{tCatalogPdp('długość')}</th><th className="py-4">{tCatalogPdp('rękaw')}</th></tr></thead>
-                    <tbody className="divide-y divide-[color:var(--border)]/5">{sizeTable.map(s => (<tr key={s.size}><td className="py-4 font-black">{s.size}</td><td className="py-4 opacity-40">{s.chest}</td><td className="py-4 opacity-40">{s.length}</td><td className="py-4 opacity-40">{s.sleeve}</td></tr>))}</tbody>
-                 </table>
-              </div>
-              <p className="mt-8 text-[13px] font-bold opacity-30 uppercase tracking-[0.2em] text-[color:var(--foreground)]">{tCatalogPdp('wymiary_mierzone_na_płasko_tolerancja_-')}</p>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+    {images.length > 1 && (
+      <>
+        <button
+          type="button"
+          aria-label="Poprzednie zdjęcie"
+          onClick={() =>
+            setImageIndex(
+              (current) => (current - 1 + images.length) % images.length
+            )
+          }
+          className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/80 text-black hover:bg-white transition"
+        >
+          <ChevronLeft />
+        </button>
 
-      <AnimatePresence>
-        {isNotifyModalOpen && (
-          <div className="fixed inset-0 z-[120] flex items-center justify-center p-6">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => { setIsNotifyModalOpen(false); setIsNotifySuccess(false); }} className="absolute inset-0 bg-[color:var(--foreground)]/60 backdrop-blur-md" />
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-md bg-[color:var(--surface)] rounded-[40px] shadow-2xl p-12 overflow-hidden border border-[color:var(--border)] text-center"
-            >
-              <button onClick={() => { setIsNotifyModalOpen(false); setIsNotifySuccess(false); }} className="absolute top-8 right-8 text-[color:var(--foreground)]/20 hover:text-[color:var(--foreground)] transition-colors"><X size={32} /></button>
+        <button
+          type="button"
+          aria-label="Następne zdjęcie"
+          onClick={() =>
+            setImageIndex((current) => (current + 1) % images.length)
+          }
+          className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/80 text-black hover:bg-white transition"
+        >
+          <ChevronRight />
+        </button>
+      </>
+    )}
+  </div>
 
-              {isNotifySuccess ? (
-                <div className="py-8 px-6">
-                  <div className="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
-                    <ShoppingBag size={40} />
-                  </div>
-                  <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4 text-green-500">ZAPISANO!</h2>
-                  <p className="text-[18px] font-bold opacity-70 uppercase tracking-widest leading-relaxed">{tCatalogPdp('gdy_uzupełnimy_zapas_tego_rozmiaru_damy')}</p>
-                </div>
-              ) : (
-                <>
-                  <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4">{tCatalogPdp('powiadom_o_dostępności')}</h2>
-                  <p className="text-[17px] font-bold opacity-50 uppercase tracking-widest mb-8 leading-relaxed">{tCatalogPdp('rozmiar_size_jest_obecnie_wyprzedany_zos', { size: notifySize || '' })}</p>
-                  <div className="space-y-4">
-                    <input
-                      type="email" placeholder="TWOJA@POCZTA.COM" value={notifyEmail} onChange={(e) => setNotifyEmail(e.target.value)}
-                      className="w-full bg-[color:var(--surface-muted)] px-8 py-5 rounded-2xl border border-[color:var(--border)] font-black uppercase text-base focus:outline-none focus:border-[color:var(--foreground)]"
-                    />
-                    <button
-                      onClick={() => { if (notifyEmail) setIsNotifySuccess(true); }}
-                      className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-6 rounded-full font-black uppercase tracking-widest text-[18px] shadow-xl hover:scale-[1.02] transition-transform"
-                    >
-                      {tCatalogPdp('powiadom_o_dostępności')}
-                    </button>
-                  </div>
-                </>
-              )}
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+  {images.length > 1 && (
+    <div className="mt-4 flex gap-3 justify-center">
+      {images.map((image, index) => (
+        <button
+          key={`${image.url}-${index}`}
+          type="button"
+          onClick={() => setImageIndex(index)}
+          className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition ${
+            imageIndex === index
+              ? 'border-[color:var(--foreground)]'
+              : 'border-transparent opacity-60 hover:opacity-100'
+          }`}
+          aria-label={`Wybierz zdjęcie ${index + 1}`}
+        >
+          <img
+            src={image.url}
+            alt={image.altText || `${product.title} ${index + 1}`}
+            className="w-full h-full object-contain"
+          />
+        </button>
+      ))}
+    </div>
+  )}
+</section>
+    <section><p className="font-black uppercase tracking-[.3em] opacity-40">Project: TWWW</p><h1 className="mt-3 text-5xl font-black uppercase italic tracking-tighter">{product.title}</h1><p className="mt-6 text-3xl font-black">{variant.price.amount} {variant.price.currencyCode}</p><p className="mt-8 whitespace-pre-line leading-relaxed opacity-70">{product.description}</p>
+      <div className="mt-10 space-y-7">{options.map(([name, values]) => <fieldset key={name}><legend className="font-black uppercase tracking-widest text-sm mb-3">{name}</legend><div className="flex flex-wrap gap-3">{values.map((value) => <button key={value} onClick={() => setSelected((previous) => ({ ...previous, [name]: value }))} className={`border rounded-full px-5 py-3 font-black uppercase text-sm ${selected[name] === value ? 'bg-[color:var(--foreground)] text-[color:var(--surface)]' : 'border-[color:var(--border)]'}`}>{value}</button>)}</div></fieldset>)}</div>
+      <div className="mt-10 flex gap-4"><div className="flex items-center border border-[color:var(--border)] rounded-full"><button aria-label="Zmniejsz ilość" onClick={() => setQuantity((current) => Math.max(1, current - 1))} className="p-4"><Minus size={16} /></button><span className="font-black w-8 text-center">{quantity}</span><button aria-label="Zwiększ ilość" onClick={() => setQuantity((current) => current + 1)} className="p-4"><Plus size={16} /></button></div><button disabled={!variant.availableForSale || isCartLoading} onClick={() => addToCart({ merchandiseId: variant.id, quantity })} className="flex-1 bg-[color:var(--foreground)] text-[color:var(--surface)] py-5 rounded-full font-black uppercase tracking-widest disabled:opacity-30"><ShoppingBag className="inline mr-2" size={18} />{variant.availableForSale ? 'Dodaj do koszyka' : 'Niedostępne'}</button></div>{cartError && <p role="alert" className="mt-4 text-red-500 font-bold">{cartError}</p>}</section>
+  </div></div>{lightboxOpen && images[imageIndex] && (
+  <div
+    className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 md:p-8"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Galeria zdjęć produktu"
+  >
+    {/* Zamknięcie */}
+    <button
+      type="button"
+      onClick={() => setLightboxOpen(false)}
+      aria-label="Zamknij galerię"
+      className="absolute top-5 right-5 z-20 w-12 h-12 rounded-full bg-white/90 text-black text-2xl flex items-center justify-center hover:bg-white transition"
+    >
+      ×
+    </button>
 
-      <Footer />
-    </main>
-  );
+    {/* Licznik */}
+    <div className="absolute top-6 left-6 z-20 text-white font-black tracking-widest">
+      {imageIndex + 1} / {images.length}
+    </div>
+
+    {/* Główne zdjęcie */}
+    <div className="relative w-full h-full flex items-center justify-center">
+      <img
+        src={images[imageIndex].url}
+        alt={images[imageIndex].altText || product.title}
+        className="max-w-full max-h-[78vh] object-contain select-none"
+      />
+
+      {images.length > 1 && (
+        <>
+          {/* Poprzednie */}
+          <button
+            type="button"
+            aria-label="Poprzednie zdjęcie"
+            onClick={() =>
+              setImageIndex(
+                (current) =>
+                  (current - 1 + images.length) % images.length
+              )
+            }
+            className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/90 text-black flex items-center justify-center hover:bg-white transition"
+          >
+            <ChevronLeft size={24} />
+          </button>
+
+          {/* Następne */}
+          <button
+            type="button"
+            aria-label="Następne zdjęcie"
+            onClick={() =>
+              setImageIndex(
+                (current) => (current + 1) % images.length
+              )
+            }
+            className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/90 text-black flex items-center justify-center hover:bg-white transition"
+          >
+            <ChevronRight size={24} />
+          </button>
+        </>
+      )}
+    </div>
+
+    {/* Miniatury */}
+    {images.length > 1 && (
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 max-w-[90vw] overflow-x-auto px-2">
+        {images.map((image, index) => (
+          <button
+            key={`lightbox-${image.url}-${index}`}
+            type="button"
+            onClick={() => setImageIndex(index)}
+            className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 bg-white transition ${
+              imageIndex === index
+                ? 'border-white'
+                : 'border-transparent opacity-60 hover:opacity-100'
+            }`}
+            aria-label={`Wybierz zdjęcie ${index + 1}`}
+          >
+            <img
+              src={image.url}
+              alt={image.altText || `${product.title} ${index + 1}`}
+              className="w-full h-full object-contain"
+            />
+          </button>
+        ))}
+      </div>
+    )}
+  </div>
+)}<Footer /></main>;
 }

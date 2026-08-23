@@ -10,7 +10,7 @@ import { useStore } from '@/context/StoreContext';
 
 export default function CartPage() {
   const tCartWishlist = useTranslations('cart_wishlist');
-  const { cart, removeFromCart, updateQuantity } = useStore();
+  const { cart, removeFromCart, updateQuantity, checkout, cartError, isCartLoading } = useStore();
   const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
   return (
@@ -28,13 +28,27 @@ export default function CartPage() {
               <div className="space-y-8">
                 {cart.map((item) => (
                   <div key={`${item.id}-${item.size}-${item.color}`} className="flex gap-6 pb-8 border-b border-[color:var(--border)]">
-                    <div className="w-24 md:w-32 aspect-[3/4] bg-[color:var(--surface-muted)] rounded-xl overflow-hidden shadow-lg">
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
-                    </div>
+                    <Link
+  href={`/product/${encodeURIComponent(item.handle)}`}
+  className="w-24 md:w-32 aspect-[3/4] bg-[color:var(--surface-muted)] rounded-xl overflow-hidden shadow-lg block"
+>
+  <img
+    src={item.image}
+    alt={item.name}
+    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+  />
+</Link>
                     <div className="flex-1 flex flex-col justify-between py-2">
                       <div>
                         <div className="flex justify-between items-start mb-2">
-                           <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter leading-tight max-w-[200px] md:max-w-none">{item.name}</h3>
+                           <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter leading-tight max-w-[200px] md:max-w-none">
+  <Link
+    href={`/product/${encodeURIComponent(item.handle)}`}
+    className="hover:opacity-60 transition-opacity"
+  >
+    {item.name}
+  </Link>
+</h3>
                            <button
                             onClick={() => removeFromCart(item.id)}
                             className="text-[color:var(--foreground)]/40 hover:text-red-500 transition-colors"
@@ -62,7 +76,7 @@ export default function CartPage() {
                               <Plus size={20} />
                             </button>
                          </div>
-                         <span className="text-2xl font-black">{item.price * item.quantity} PLN</span>
+                         <span className="text-2xl font-black">{item.price * item.quantity} {item.currencyCode}</span>
                       </div>
                     </div>
                   </div>
@@ -100,10 +114,13 @@ export default function CartPage() {
 
                <button
                 disabled={cart.length === 0}
+                onClick={checkout}
                 className={`w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-6 rounded-full font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-2xl mb-8 disabled:opacity-20 disabled:cursor-not-allowed text-[22px]`}
                >
-                 {tCartWishlist('przejdź_do_płatności')} <ArrowRight size={24} />
+                 {isCartLoading ? '...' : tCartWishlist('przejdź_do_płatności')} <ArrowRight size={24} />
                </button>
+
+               {cartError && <p role="alert" className="text-sm text-red-500 font-bold text-center">{cartError}</p>}
 
                <div className="space-y-4">
                   <p className="text-[17px] font-black uppercase tracking-widest opacity-30 text-center">{tCartWishlist('zamówienie_zostanie_sfinalizowane_w_nast')}</p>

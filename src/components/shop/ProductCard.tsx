@@ -9,15 +9,16 @@ import { useStore } from '@/context/StoreContext';
 
 interface ProductCardProps {
   id: string;
+  variantId?: string;
   name: string;
   price: number;
   image: string;
   category: string;
 }
 
-export const ProductCard = ({ id, name, price, image, category }: ProductCardProps) => {
+export const ProductCard = ({ id, variantId, name, price, image, category }: ProductCardProps) => {
   const tCartWishlist = useTranslations('cart_wishlist');
-  const { addToCart, addToWishlist, isInWishlist, removeFromWishlist } = useStore();
+  const { addToCart, addToWishlist, isInWishlist, removeFromWishlist, isCartLoading } = useStore();
   const liked = isInWishlist(id);
 
   const handleWishlist = (e: React.MouseEvent) => {
@@ -29,9 +30,9 @@ export const ProductCard = ({ id, name, price, image, category }: ProductCardPro
     }
   };
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
-    addToCart({ id, name, price, image, quantity: 1 });
+    await addToCart({ merchandiseId: variantId, quantity: 1 });
   };
 
   return (
@@ -63,9 +64,10 @@ export const ProductCard = ({ id, name, price, image, category }: ProductCardPro
         <div className="mt-auto space-y-4 pt-6">
           <button
             onClick={handleAddToCart}
+            disabled={!variantId || isCartLoading}
             className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-full font-black uppercase tracking-widest text-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg"
           >
-            <ShoppingBag size={20} /> {tCartWishlist('dodaj_do_koszyka')}
+            <ShoppingBag size={20} /> {isCartLoading ? '...' : tCartWishlist('dodaj_do_koszyka')}
           </button>
 
           <div className="flex items-center justify-center gap-4 opacity-20 py-2 text-[color:var(--foreground)]">
