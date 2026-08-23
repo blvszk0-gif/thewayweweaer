@@ -123,7 +123,6 @@ export async function GET(request: NextRequest) {
     throw new Error(
       "Missing SHOPIFY_REDIRECT_URI"
     );
-
   }
 
 
@@ -156,7 +155,6 @@ export async function GET(request: NextRequest) {
               pkce.verifier,
 
           }),
-
       }
     );
 
@@ -172,8 +170,14 @@ export async function GET(request: NextRequest) {
 
 
   console.log(
-    "TOKEN RESPONSE:",
+    "TOKEN RESPONSE FULL:",
     token
+  );
+
+
+  console.log(
+    "ACCESS TOKEN EXISTS:",
+    !!token.access_token
   );
 
 
@@ -182,13 +186,17 @@ export async function GET(request: NextRequest) {
     !token.access_token
   ) {
 
+    console.log(
+      "TOKEN ERROR:",
+      token
+    );
+
     return NextResponse.redirect(
       new URL(
         "/login?error=token",
         request.url
       )
     );
-
   }
 
 
@@ -219,6 +227,18 @@ export async function GET(request: NextRequest) {
   );
 
 
+  console.log(
+    "COOKIE SET:",
+    CUSTOMER_TOKEN_COOKIE
+  );
+
+
+  console.log(
+    "SET COOKIE HEADER:",
+    response.headers.get("set-cookie")
+  );
+
+
   response.cookies.delete(
     PKCE_COOKIE
   );
@@ -229,12 +249,5 @@ export async function GET(request: NextRequest) {
   );
 
 
-  console.log(
-    "COOKIE SET:",
-    CUSTOMER_TOKEN_COOKIE
-  );
-
-
   return response;
-
 }
