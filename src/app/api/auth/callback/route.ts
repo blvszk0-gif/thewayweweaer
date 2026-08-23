@@ -40,10 +40,13 @@ export async function GET(request: NextRequest) {
 
 
   const callbackUrl =
-    new URL(
-      "/api/auth/callback",
-      request.url
-    ).toString();
+  process.env.SHOPIFY_REDIRECT_URI;
+
+if (!callbackUrl) {
+  throw new Error(
+    "Missing SHOPIFY_REDIRECT_URI"
+  );
+}
 
 
   const tokenResponse =

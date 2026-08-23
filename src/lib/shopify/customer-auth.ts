@@ -37,12 +37,12 @@ export async function customerOpenIdConfiguration(): Promise<OpenIdConfiguration
     await fetch(
       `https://${shopDomain()}/.well-known/openid-configuration`,
       {
-        cache:"no-store",
+        cache: "no-store",
       }
     );
 
 
-  if(!response.ok){
+  if (!response.ok) {
     throw new Error(
       "Unable to load Shopify Customer Account configuration."
     );
@@ -50,12 +50,13 @@ export async function customerOpenIdConfiguration(): Promise<OpenIdConfiguration
 
 
   return response.json();
+
 }
 
 
 
 
-export function generatePkce(){
+export function generatePkce() {
 
   const verifier =
     randomBytes(48)
@@ -76,20 +77,21 @@ export function generatePkce(){
     state:
       randomBytes(24)
         .toString("base64url"),
+
   };
+
 }
 
 
 
 
-export function customerClientId(){
+export function customerClientId() {
 
   const clientId =
-    process.env
-      .SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID;
+    process.env.SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID;
 
 
-  if(!clientId){
+  if (!clientId) {
     throw new Error(
       "Missing SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID."
     );
@@ -97,6 +99,7 @@ export function customerClientId(){
 
 
   return clientId;
+
 }
 
 
@@ -114,7 +117,7 @@ export async function customerApiFetch<T>(
 
 
   const endpoint =
-    `https://shopify.com/authentication/${shopId}/api/unstable/graphql`;
+    "https://shopify.com/customer-account/api/2025-07/graphql.json";
 
 
   const response =
@@ -125,22 +128,33 @@ export async function customerApiFetch<T>(
 
         headers: {
           "Content-Type": "application/json",
+
           Authorization:
             `Bearer ${accessToken}`,
         },
+
 
         body: JSON.stringify({
           query,
           variables,
         }),
 
+
         cache: "no-store",
       }
     );
 
 
+
   const text =
     await response.text();
+
+
+
+  console.log(
+    "CUSTOMER API ENDPOINT:",
+    endpoint
+  );
 
 
   console.log(
@@ -155,10 +169,15 @@ export async function customerApiFetch<T>(
   );
 
 
+
   let body;
 
+
   try {
-    body = JSON.parse(text);
+
+    body =
+      JSON.parse(text);
+
   } catch {
 
     throw new Error(
@@ -166,6 +185,7 @@ export async function customerApiFetch<T>(
     );
 
   }
+
 
 
   if (
@@ -180,7 +200,9 @@ export async function customerApiFetch<T>(
   }
 
 
+
   return body.data;
+
 }
 
 
