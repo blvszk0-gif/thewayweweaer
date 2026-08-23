@@ -7,12 +7,10 @@ type OpenIdConfiguration = {
   authorization_endpoint: string;
   token_endpoint: string;
   end_session_endpoint?: string;
-  graphql_api?: string;
 };
 
 
 
-// SHOPIFY STORE DOMAIN
 function shopDomain() {
 
   const domain =
@@ -22,9 +20,11 @@ function shopDomain() {
 
 
   if (!domain) {
+
     throw new Error(
-      "Missing SHOPIFY_STORE_DOMAIN."
+      "Missing SHOPIFY_STORE_DOMAIN"
     );
+
   }
 
 
@@ -34,8 +34,9 @@ function shopDomain() {
 
 
 
-// OPENID CONFIGURATION
+
 export async function customerOpenIdConfiguration(): Promise<OpenIdConfiguration> {
+
 
   const response =
     await fetch(
@@ -49,7 +50,7 @@ export async function customerOpenIdConfiguration(): Promise<OpenIdConfiguration
   if (!response.ok) {
 
     throw new Error(
-      "Unable to load Shopify Customer Account configuration."
+      "Unable to load OpenID configuration"
     );
 
   }
@@ -61,12 +62,14 @@ export async function customerOpenIdConfiguration(): Promise<OpenIdConfiguration
 
 
 
-// PKCE
+
 export function generatePkce() {
+
 
   const verifier =
     randomBytes(48)
       .toString("base64url");
+
 
 
   return {
@@ -86,12 +89,14 @@ export function generatePkce() {
 
   };
 
+
 }
 
 
 
-// CLIENT ID
+
 export function customerClientId() {
+
 
   const clientId =
     process.env.SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID;
@@ -100,7 +105,7 @@ export function customerClientId() {
   if (!clientId) {
 
     throw new Error(
-      "Missing SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID."
+      "Missing SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID"
     );
 
   }
@@ -112,7 +117,7 @@ export function customerClientId() {
 
 
 
-// CUSTOMER ACCOUNT API
+
 export async function customerApiFetch<T>(
   accessToken: string,
   query: string,
@@ -120,8 +125,14 @@ export async function customerApiFetch<T>(
 ): Promise<T> {
 
 
+
+  const shopId =
+    "107560632651";
+
+
+
   const endpoint =
-    "https://shopify.com/customer-account/api/2025-07/graphql";
+    `https://shopify.com/${shopId}/account/customer/api/2025-07/graphql`;
 
 
 
@@ -136,9 +147,11 @@ export async function customerApiFetch<T>(
     await fetch(
       endpoint,
       {
-        method: "POST",
 
-        headers: {
+        method:"POST",
+
+
+        headers:{
 
           "Content-Type":
             "application/json",
@@ -146,10 +159,6 @@ export async function customerApiFetch<T>(
 
           "Authorization":
             `Bearer ${accessToken}`,
-
-
-          "X-Shopify-Storefront-Access-Token":
-            accessToken,
 
         },
 
@@ -161,18 +170,12 @@ export async function customerApiFetch<T>(
           }),
 
 
-        cache:
-          "no-store",
+        cache:"no-store",
 
       }
     );
 
 
-
-  const contentType =
-    response.headers.get(
-      "content-type"
-    );
 
 
   const text =
@@ -187,8 +190,10 @@ export async function customerApiFetch<T>(
 
 
   console.log(
-    "CUSTOMER API CONTENT TYPE:",
-    contentType
+    "CUSTOMER API TYPE:",
+    response.headers.get(
+      "content-type"
+    )
   );
 
 
@@ -196,6 +201,7 @@ export async function customerApiFetch<T>(
     "CUSTOMER API RAW:",
     text.substring(0,500)
   );
+
 
 
 
@@ -211,16 +217,16 @@ export async function customerApiFetch<T>(
 
 
     throw new Error(
-      `Customer API returned non JSON: ${text.substring(0,200)}`
+      "Customer API returned non JSON: " +
+      text.substring(0,200)
     );
 
   }
 
 
 
-  if (
-    body.errors
-  ) {
+
+  if(body.errors){
 
     throw new Error(
       JSON.stringify(body.errors)
@@ -236,7 +242,6 @@ export async function customerApiFetch<T>(
 
 
 
-// COOKIES
 
 export const CUSTOMER_TOKEN_COOKIE =
   "twww_customer_access_token";
