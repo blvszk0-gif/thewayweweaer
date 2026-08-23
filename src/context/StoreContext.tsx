@@ -2,7 +2,7 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
-export type CartItem = { id: string; merchandiseId: string; name: string; price: number; currencyCode: string; image: string; quantity: number; color?: string; size?: string };
+export type CartItem = { id: string; merchandiseId: string; name: string; handle: string; price: number; currencyCode: string; image: string; quantity: number; color?: string; size?: string };
 export type WishlistItem = { id: string; name: string; price: number; image: string; category: string };
 type RawCart = {
   id: string;
@@ -16,7 +16,7 @@ type RawCart = {
       merchandise: {
         id: string;
         selectedOptions: Array<{ name: string; value: string }>;
-        product: { title: string; featuredImage: { url: string } | null };
+        product: { title: string; handle: string; featuredImage: { url: string } | null };
         price: { amount: string; currencyCode: string };
         image: { url: string } | null;
       };
@@ -37,8 +37,7 @@ const WISHLIST_KEY = 'twww-wishlist';
 function mapCart(raw: RawCart): CartItem[] {
   return raw.lines.nodes.map((line) => {
     const options = Object.fromEntries(line.merchandise.selectedOptions.map((option) => [option.name.toLowerCase(), option.value]));
-    return { id: line.id, merchandiseId: line.merchandise.id, name: line.merchandise.product.title, price: Number(line.merchandise.price.amount), currencyCode: line.merchandise.price.currencyCode, image: line.merchandise.image?.url || line.merchandise.product.featuredImage?.url || '', quantity: line.quantity, color: options.color || options.kolor, size: options.size || options.rozmiar };
-  });
+    return { id: line.id, merchandiseId: line.merchandise.id, name: line.merchandise.product.title, handle: line.merchandise.product.handle, price: Number(line.merchandise.price.amount), currencyCode: line.merchandise.price.currencyCode, image: line.merchandise.image?.url || line.merchandise.product.featuredImage?.url || '', quantity: line.quantity, color: options.color || options.kolor, size: options.size || options.rozmiar };
 }
 
 export const StoreProvider = ({ children }: { children: React.ReactNode }) => {

@@ -28,13 +28,27 @@ export default function CartPage() {
               <div className="space-y-8">
                 {cart.map((item) => (
                   <div key={`${item.id}-${item.size}-${item.color}`} className="flex gap-6 pb-8 border-b border-[color:var(--border)]">
-                    <div className="w-24 md:w-32 aspect-[3/4] bg-[color:var(--surface-muted)] rounded-xl overflow-hidden shadow-lg">
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
-                    </div>
+                    <Link
+  href={`/product/${encodeURIComponent(item.handle)}`}
+  className="w-24 md:w-32 aspect-[3/4] bg-[color:var(--surface-muted)] rounded-xl overflow-hidden shadow-lg block"
+>
+  <img
+    src={item.image}
+    alt={item.name}
+    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+  />
+</Link>
                     <div className="flex-1 flex flex-col justify-between py-2">
                       <div>
                         <div className="flex justify-between items-start mb-2">
-                           <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter leading-tight max-w-[200px] md:max-w-none">{item.name}</h3>
+                           <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter leading-tight max-w-[200px] md:max-w-none">
+  <Link
+    href={`/product/${encodeURIComponent(item.handle)}`}
+    className="hover:opacity-60 transition-opacity"
+  >
+    {item.name}
+  </Link>
+</h3>
                            <button
                             onClick={() => removeFromCart(item.id)}
                             className="text-[color:var(--foreground)]/40 hover:text-red-500 transition-colors"
