@@ -27,7 +27,7 @@ export async function storefrontFetch<T>(query: string, variables?: Record<strin
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': storefrontToken(),
+      'Shopify-Storefront-Private-Token': storefrontToken(),
     },
     body: JSON.stringify({ query, variables }),
     cache: 'no-store',
