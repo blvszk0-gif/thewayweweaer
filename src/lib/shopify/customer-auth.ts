@@ -20,11 +20,9 @@ function shopDomain() {
 
 
   if (!domain) {
-
     throw new Error(
-      "Missing SHOPIFY_STORE_DOMAIN"
+      "Missing SHOPIFY_STORE_DOMAIN."
     );
-
   }
 
 
@@ -35,8 +33,8 @@ function shopDomain() {
 
 
 
-export async function customerOpenIdConfiguration(): Promise<OpenIdConfiguration> {
 
+export async function customerOpenIdConfiguration(): Promise<OpenIdConfiguration> {
 
   const response =
     await fetch(
@@ -48,11 +46,9 @@ export async function customerOpenIdConfiguration(): Promise<OpenIdConfiguration
 
 
   if (!response.ok) {
-
     throw new Error(
-      "Unable to load OpenID configuration"
+      "Unable to load Shopify OpenID configuration."
     );
-
   }
 
 
@@ -63,13 +59,12 @@ export async function customerOpenIdConfiguration(): Promise<OpenIdConfiguration
 
 
 
-export function generatePkce() {
 
+export function generatePkce() {
 
   const verifier =
     randomBytes(48)
       .toString("base64url");
-
 
 
   return {
@@ -89,14 +84,13 @@ export function generatePkce() {
 
   };
 
-
 }
 
 
 
 
-export function customerClientId() {
 
+export function customerClientId() {
 
   const clientId =
     process.env.SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID;
@@ -105,7 +99,7 @@ export function customerClientId() {
   if (!clientId) {
 
     throw new Error(
-      "Missing SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID"
+      "Missing SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID."
     );
 
   }
@@ -118,6 +112,7 @@ export function customerClientId() {
 
 
 
+
 export async function customerApiFetch<T>(
   accessToken: string,
   query: string,
@@ -125,19 +120,53 @@ export async function customerApiFetch<T>(
 ): Promise<T> {
 
 
+  const shop =
+    shopDomain();
 
-  const shopId =
-    "107560632651";
+
+
+  const discoveryResponse =
+    await fetch(
+      `https://${shop}/.well-known/customer-account-api`,
+      {
+        cache: "no-store",
+      }
+    );
+
+
+
+  if (!discoveryResponse.ok) {
+
+    throw new Error(
+      "Customer Account API discovery failed."
+    );
+
+  }
+
+
+
+  const discovery =
+    await discoveryResponse.json();
 
 
 
   const endpoint =
-    `https://shopify.com/${shopId}/account/customer/api/2025-07/graphql`;
+    discovery.graphql_api;
+
+
+
+  if (!endpoint) {
+
+    throw new Error(
+      "Missing graphql_api endpoint."
+    );
+
+  }
 
 
 
   console.log(
-    "CUSTOMER API ENDPOINT:",
+    "CUSTOMER GRAPHQL ENDPOINT:",
     endpoint
   );
 
@@ -147,19 +176,14 @@ export async function customerApiFetch<T>(
     await fetch(
       endpoint,
       {
+        method: "POST",
 
-        method:"POST",
-
-
-        headers:{
-
+        headers: {
           "Content-Type":
             "application/json",
 
-
-          "Authorization":
-            `Bearer ${accessToken}`,
-
+          Authorization:
+            accessToken,
         },
 
 
@@ -170,11 +194,10 @@ export async function customerApiFetch<T>(
           }),
 
 
-        cache:"no-store",
-
+        cache:
+          "no-store",
       }
     );
-
 
 
 
@@ -190,55 +213,47 @@ export async function customerApiFetch<T>(
 
 
   console.log(
-    "CUSTOMER API TYPE:",
-    response.headers.get(
-      "content-type"
-    )
-  );
-
-
-  console.log(
     "CUSTOMER API RAW:",
     text.substring(0,500)
   );
 
 
 
-
-  let body;
+  let json;
 
 
   try {
 
-    body =
+    json =
       JSON.parse(text);
 
   } catch {
 
-
     throw new Error(
-      "Customer API returned non JSON: " +
-      text.substring(0,200)
+      `Customer API returned non JSON: ${text.substring(0,200)}`
     );
 
   }
 
 
 
-
-  if(body.errors){
+  if (
+    !response.ok ||
+    json.errors
+  ) {
 
     throw new Error(
-      JSON.stringify(body.errors)
+      JSON.stringify(json.errors)
     );
 
   }
 
 
 
-  return body.data;
+  return json.data;
 
 }
+
 
 
 
