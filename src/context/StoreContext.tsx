@@ -36,8 +36,29 @@ const WISHLIST_KEY = 'twww-wishlist';
 
 function mapCart(raw: RawCart): CartItem[] {
   return raw.lines.nodes.map((line) => {
-    const options = Object.fromEntries(line.merchandise.selectedOptions.map((option) => [option.name.toLowerCase(), option.value]));
-    return { id: line.id, merchandiseId: line.merchandise.id, name: line.merchandise.product.title, handle: line.merchandise.product.handle, price: Number(line.merchandise.price.amount), currencyCode: line.merchandise.price.currencyCode, image: line.merchandise.image?.url || line.merchandise.product.featuredImage?.url || '', quantity: line.quantity, color: options.color || options.kolor, size: options.size || options.rozmiar };
+    const options = Object.fromEntries(
+      line.merchandise.selectedOptions.map((option) => [
+        option.name.toLowerCase(),
+        option.value,
+      ])
+    );
+
+    return {
+      id: line.id,
+      merchandiseId: line.merchandise.id,
+      name: line.merchandise.product.title,
+      handle: line.merchandise.product.handle,
+      price: Number(line.merchandise.price.amount),
+      currencyCode: line.merchandise.price.currencyCode,
+      image:
+        line.merchandise.image?.url ||
+        line.merchandise.product.featuredImage?.url ||
+        '',
+      quantity: line.quantity,
+      color: options.color || options.kolor,
+      size: options.size || options.rozmiar,
+    };
+  });
 }
 
 export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
