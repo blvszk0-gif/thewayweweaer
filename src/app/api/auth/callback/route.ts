@@ -14,28 +14,14 @@ export async function GET(request: NextRequest) {
   console.log("🔥 CALLBACK HIT");
 
   console.log(
-    "URL:",
-    request.url
-  );
-
-  console.log(
     "CALLBACK URL:",
     request.url
   );
 
+
   console.log(
     "CALLBACK COOKIES:",
     request.cookies.getAll()
-  );
-
-  console.log(
-    "CALLBACK CODE:",
-    request.nextUrl.searchParams.get("code")
-  );
-
-  console.log(
-    "CALLBACK STATE:",
-    request.nextUrl.searchParams.get("state")
   );
 
 
@@ -46,12 +32,23 @@ export async function GET(request: NextRequest) {
     request.nextUrl.searchParams.get("state");
 
 
+  console.log(
+    "CALLBACK CODE EXISTS:",
+    !!code
+  );
+
+  console.log(
+    "CALLBACK STATE EXISTS:",
+    !!state
+  );
+
+
   const pkceValue =
     request.cookies.get(PKCE_COOKIE)?.value;
 
 
   console.log(
-    "PKCE COOKIE VALUE:",
+    "PKCE COOKIE:",
     pkceValue
   );
 
@@ -59,13 +56,14 @@ export async function GET(request: NextRequest) {
   if (!code || !state || !pkceValue) {
 
     console.log(
-      "MISSING DATA:",
+      "MISSING DATA",
       {
-        hasCode: !!code,
-        hasState: !!state,
-        hasPkce: !!pkceValue,
+        code: !!code,
+        state: !!state,
+        pkce: !!pkceValue,
       }
     );
+
 
     return NextResponse.redirect(
       new URL(
@@ -78,6 +76,7 @@ export async function GET(request: NextRequest) {
 
   let pkce;
 
+
   try {
 
     pkce = JSON.parse(pkceValue);
@@ -85,9 +84,10 @@ export async function GET(request: NextRequest) {
   } catch(error) {
 
     console.log(
-      "PKCE JSON ERROR:",
+      "PKCE PARSE ERROR",
       error
     );
+
 
     return NextResponse.redirect(
       new URL(
@@ -98,15 +98,17 @@ export async function GET(request: NextRequest) {
   }
 
 
+
   if (pkce.state !== state) {
 
     console.log(
-      "STATE MISMATCH:",
+      "STATE ERROR",
       {
         cookieState: pkce.state,
-        requestState: state,
+        urlState: state,
       }
     );
+
 
     return NextResponse.redirect(
       new URL(
@@ -117,15 +119,18 @@ export async function GET(request: NextRequest) {
   }
 
 
+
   const configuration =
     await customerOpenIdConfiguration();
 
 
-  const callbackUrl =
+
+  const redirectUri =
     process.env.SHOPIFY_REDIRECT_URI;
 
 
-  if (!callbackUrl) {
+
+  if (!redirectUri) {
 
     throw new Error(
       "Missing SHOPIFY_REDIRECT_URI"
@@ -133,16 +138,25 @@ export async function GET(request: NextRequest) {
   }
 
 
+
+  console.log(
+    "TOKEN ENDPOINT:",
+    configuration.token_endpoint
+  );
+
+
   const tokenResponse =
     await fetch(
       configuration.token_endpoint,
       {
+
         method: "POST",
 
         headers: {
           "Content-Type":
             "application/x-www-form-urlencoded",
         },
+
 
         body:
           new URLSearchParams({
@@ -156,18 +170,21 @@ export async function GET(request: NextRequest) {
             code,
 
             redirect_uri:
-              callbackUrl,
+              redirectUri,
 
             code_verifier:
               pkce.verifier,
 
           }),
+
       }
     );
 
 
-  const token =
-    await tokenResponse.json();
+
+  const rawToken =
+    await tokenResponse.text();
+
 
 
   console.log(
@@ -177,15 +194,52 @@ export async function GET(request: NextRequest) {
 
 
   console.log(
-    "TOKEN RESPONSE FULL:",
-    token
+    "TOKEN CONTENT TYPE:",
+    tokenResponse.headers.get(
+      "content-type"
+    )
   );
 
 
   console.log(
-    "ACCESS TOKEN EXISTS:",
-    !!token.access_token
+    "TOKEN RAW RESPONSE:",
+    rawToken.slice(0,500)
   );
+
+
+
+  let token;
+
+
+  try {
+
+    token =
+      JSON.parse(rawToken);
+
+  } catch(error) {
+
+
+    console.log(
+      "TOKEN JSON ERROR",
+      error
+    );
+
+
+    return NextResponse.redirect(
+      new URL(
+        "/login?error=token-json",
+        request.url
+      )
+    );
+  }
+
+
+
+  console.log(
+    "TOKEN OBJECT:",
+    token
+  );
+
 
 
   if (
@@ -193,10 +247,12 @@ export async function GET(request: NextRequest) {
     !token.access_token
   ) {
 
+
     console.log(
-      "TOKEN ERROR:",
+      "TOKEN FAILED",
       token
     );
+
 
     return NextResponse.redirect(
       new URL(
@@ -205,6 +261,8 @@ export async function GET(request: NextRequest) {
       )
     );
   }
+
+
 
 
   const response =
@@ -216,34 +274,36 @@ export async function GET(request: NextRequest) {
     );
 
 
+
   response.cookies.set(
     CUSTOMER_TOKEN_COOKIE,
     token.access_token,
     {
+
       httpOnly: true,
 
       secure:
         process.env.NODE_ENV === "production",
 
-      sameSite: "lax",
+      sameSite:
+        "lax",
 
-      path: "/",
+      path:
+        "/",
 
-      maxAge: 3600,
+      maxAge:
+        60 * 60,
+
     }
   );
 
 
+
   console.log(
-    "COOKIE SET:",
+    "CUSTOMER TOKEN COOKIE SET:",
     CUSTOMER_TOKEN_COOKIE
   );
 
-
-  console.log(
-    "SET COOKIE HEADER:",
-    response.headers.get("set-cookie")
-  );
 
 
   response.cookies.delete(
@@ -256,5 +316,16 @@ export async function GET(request: NextRequest) {
   );
 
 
+
+  console.log(
+    "SET COOKIE HEADER:",
+    response.headers.get(
+      "set-cookie"
+    )
+  );
+
+
+
   return response;
+
 }
