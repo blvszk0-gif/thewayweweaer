@@ -9,6 +9,13 @@ type GraphQLResponse<T> = {
 
 const apiVersion = process.env.SHOPIFY_API_VERSION || '2026-07';
 
+console.log('[Shopify CONFIG]', {
+  hasStoreDomain: Boolean(process.env.SHOPIFY_STORE_DOMAIN),
+  hasPrivateStorefrontToken: Boolean(process.env.SHOPIFY_PRIVATE_STOREFRONT_ACCESS_TOKEN),
+  hasStorefrontToken: Boolean(process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN),
+  apiVersion,
+});
+
 function storeDomain() {
   const domain = process.env.SHOPIFY_STORE_DOMAIN
     ?.replace(/^https?:\/\//, '')
