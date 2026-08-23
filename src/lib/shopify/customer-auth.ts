@@ -12,6 +12,7 @@ type OpenIdConfiguration = {
 
 
 
+// SHOPIFY STORE DOMAIN
 function shopDomain() {
 
   const domain =
@@ -33,7 +34,7 @@ function shopDomain() {
 
 
 
-
+// OPENID CONFIGURATION
 export async function customerOpenIdConfiguration(): Promise<OpenIdConfiguration> {
 
   const response =
@@ -60,7 +61,7 @@ export async function customerOpenIdConfiguration(): Promise<OpenIdConfiguration
 
 
 
-
+// PKCE
 export function generatePkce() {
 
   const verifier =
@@ -89,7 +90,7 @@ export function generatePkce() {
 
 
 
-
+// CLIENT ID
 export function customerClientId() {
 
   const clientId =
@@ -111,7 +112,7 @@ export function customerClientId() {
 
 
 
-
+// CUSTOMER ACCOUNT API
 export async function customerApiFetch<T>(
   accessToken: string,
   query: string,
@@ -120,7 +121,7 @@ export async function customerApiFetch<T>(
 
 
   const endpoint =
-    "https://shopify.com/customer-account/api/2025-07/graphql.json";
+    "https://shopify.com/customer-account/api/2025-07/graphql";
 
 
 
@@ -142,8 +143,13 @@ export async function customerApiFetch<T>(
           "Content-Type":
             "application/json",
 
-          Authorization:
+
+          "Authorization":
             `Bearer ${accessToken}`,
+
+
+          "X-Shopify-Storefront-Access-Token":
+            accessToken,
 
         },
 
@@ -169,7 +175,6 @@ export async function customerApiFetch<T>(
     );
 
 
-
   const text =
     await response.text();
 
@@ -188,27 +193,28 @@ export async function customerApiFetch<T>(
 
 
   console.log(
-    "CUSTOMER API RAW RESPONSE:",
-    text.slice(0,500)
+    "CUSTOMER API RAW:",
+    text.substring(0,500)
   );
 
 
 
-  if (
-    !contentType ||
-    !contentType.includes("application/json")
-  ) {
+  let body;
+
+
+  try {
+
+    body =
+      JSON.parse(text);
+
+  } catch {
+
 
     throw new Error(
-      `Customer API returned non JSON response: ${text.slice(0,200)}`
+      `Customer API returned non JSON: ${text.substring(0,200)}`
     );
 
   }
-
-
-
-  const body =
-    JSON.parse(text);
 
 
 
@@ -230,6 +236,7 @@ export async function customerApiFetch<T>(
 
 
 
+// COOKIES
 
 export const CUSTOMER_TOKEN_COOKIE =
   "twww_customer_access_token";
