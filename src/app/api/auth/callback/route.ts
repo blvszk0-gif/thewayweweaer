@@ -11,6 +11,13 @@ import {
 
 export async function GET(request: NextRequest) {
 
+  console.log("🔥 CALLBACK HIT");
+
+  console.log(
+    "URL:",
+    request.url
+  );
+
   console.log(
     "CALLBACK URL:",
     request.url
