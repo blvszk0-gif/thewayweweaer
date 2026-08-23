@@ -1,7 +1,6 @@
 'use client';
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { useStore } from '@/context/StoreContext';
 
 export type CartItem = { id: string; merchandiseId: string; name: string; handle: string; price: number; currencyCode: string; image: string; quantity: number; color?: string; size?: string };
 export type WishlistItem = { id: string; name: string; price: number; image: string; category: string };
