@@ -7,6 +7,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
+import Script from 'next/script';
 import "../globals.css";
 
 const antonio = Antonio({
@@ -60,6 +61,7 @@ export default async function LocaleLayout({
   }
 
   const messages = await getMessages();
+  const klaviyoCompanyId = process.env.NEXT_PUBLIC_KLAVIYO_COMPANY_ID;
 
   return (
     <html lang={locale} className={`${antonio.variable}`}>
@@ -71,6 +73,13 @@ export default async function LocaleLayout({
           </StoreProvider>
         </NextIntlClientProvider>
         <SpeedInsights />
+        {klaviyoCompanyId && (
+          <Script
+            id="klaviyo-onsite"
+            strategy="afterInteractive"
+            src={`https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=${encodeURIComponent(klaviyoCompanyId)}`}
+          />
+        )}
       </body>
     </html>
   );
