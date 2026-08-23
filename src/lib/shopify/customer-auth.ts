@@ -11,6 +11,7 @@ type OpenIdConfiguration = {
 };
 
 
+
 function shopDomain() {
 
   const domain =
@@ -27,7 +28,9 @@ function shopDomain() {
 
 
   return domain;
+
 }
+
 
 
 
@@ -43,9 +46,11 @@ export async function customerOpenIdConfiguration(): Promise<OpenIdConfiguration
 
 
   if (!response.ok) {
+
     throw new Error(
       "Unable to load Shopify Customer Account configuration."
     );
+
   }
 
 
@@ -92,9 +97,11 @@ export function customerClientId() {
 
 
   if (!clientId) {
+
     throw new Error(
       "Missing SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID."
     );
+
   }
 
 
@@ -112,12 +119,16 @@ export async function customerApiFetch<T>(
 ): Promise<T> {
 
 
-  const shopId =
-    "107560632651";
-
-
   const endpoint =
     "https://shopify.com/customer-account/api/2025-07/graphql.json";
+
+
+
+  console.log(
+    "CUSTOMER API ENDPOINT:",
+    endpoint
+  );
+
 
 
   const response =
@@ -127,21 +138,34 @@ export async function customerApiFetch<T>(
         method: "POST",
 
         headers: {
-          "Content-Type": "application/json",
+
+          "Content-Type":
+            "application/json",
 
           Authorization:
             `Bearer ${accessToken}`,
+
         },
 
 
-        body: JSON.stringify({
-          query,
-          variables,
-        }),
+        body:
+          JSON.stringify({
+            query,
+            variables,
+          }),
 
 
-        cache: "no-store",
+        cache:
+          "no-store",
+
       }
+    );
+
+
+
+  const contentType =
+    response.headers.get(
+      "content-type"
     );
 
 
@@ -152,44 +176,43 @@ export async function customerApiFetch<T>(
 
 
   console.log(
-    "CUSTOMER API ENDPOINT:",
-    endpoint
-  );
-
-
-  console.log(
     "CUSTOMER API STATUS:",
     response.status
   );
 
 
   console.log(
-    "CUSTOMER API RAW:",
-    text.slice(0,300)
+    "CUSTOMER API CONTENT TYPE:",
+    contentType
+  );
+
+
+  console.log(
+    "CUSTOMER API RAW RESPONSE:",
+    text.slice(0,500)
   );
 
 
 
-  let body;
-
-
-  try {
-
-    body =
-      JSON.parse(text);
-
-  } catch {
+  if (
+    !contentType ||
+    !contentType.includes("application/json")
+  ) {
 
     throw new Error(
-      "Customer API returned non JSON response"
+      `Customer API returned non JSON response: ${text.slice(0,200)}`
     );
 
   }
 
 
 
+  const body =
+    JSON.parse(text);
+
+
+
   if (
-    !response.ok ||
     body.errors
   ) {
 
@@ -204,7 +227,6 @@ export async function customerApiFetch<T>(
   return body.data;
 
 }
-
 
 
 
