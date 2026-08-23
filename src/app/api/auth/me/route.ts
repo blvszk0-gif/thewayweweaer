@@ -39,12 +39,31 @@ export async function GET(request: NextRequest) {
         `
         query Customer {
           customer {
-            id
-            firstName
-            lastName
-            emailAddress {
-              emailAddress
-            }
+ id
+
+ firstName
+ lastName
+
+ emailAddress {
+   emailAddress
+ }
+
+ defaultAddress {
+   id
+
+   address1
+   address2
+
+   city
+   zip
+
+   zoneCode
+   territoryCode
+
+   province
+ }
+}
+              
           }
         }
         `
@@ -54,7 +73,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data);
 
 
-  } catch(error) {
+  } catch (error) {
 
     console.log(
       "CUSTOMER API ERROR",
@@ -65,10 +84,10 @@ export async function GET(request: NextRequest) {
     const response =
       NextResponse.json(
         {
-          customer:null
+          customer: null
         },
         {
-          status:401
+          status: 401
         }
       );
 
