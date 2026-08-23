@@ -11,26 +11,101 @@ import {
 
 export async function GET(request: NextRequest) {
 
-  const code = request.nextUrl.searchParams.get("code");
-  const state = request.nextUrl.searchParams.get("state");
+  console.log(
+    "CALLBACK URL:",
+    request.url
+  );
+
+  console.log(
+    "CALLBACK COOKIES:",
+    request.cookies.getAll()
+  );
+
+  console.log(
+    "CALLBACK CODE:",
+    request.nextUrl.searchParams.get("code")
+  );
+
+  console.log(
+    "CALLBACK STATE:",
+    request.nextUrl.searchParams.get("state")
+  );
+
+
+  const code =
+    request.nextUrl.searchParams.get("code");
+
+  const state =
+    request.nextUrl.searchParams.get("state");
+
 
   const pkceValue =
     request.cookies.get(PKCE_COOKIE)?.value;
 
 
+  console.log(
+    "PKCE COOKIE VALUE:",
+    pkceValue
+  );
+
+
   if (!code || !state || !pkceValue) {
+
+    console.log(
+      "MISSING DATA:",
+      {
+        hasCode: !!code,
+        hasState: !!state,
+        hasPkce: !!pkceValue,
+      }
+    );
+
     return NextResponse.redirect(
-      new URL("/login?error=missing", request.url)
+      new URL(
+        "/login?error=missing",
+        request.url
+      )
     );
   }
 
 
-  const pkce = JSON.parse(pkceValue);
+  let pkce;
+
+  try {
+
+    pkce = JSON.parse(pkceValue);
+
+  } catch(error) {
+
+    console.log(
+      "PKCE JSON ERROR:",
+      error
+    );
+
+    return NextResponse.redirect(
+      new URL(
+        "/login?error=pkce",
+        request.url
+      )
+    );
+  }
 
 
   if (pkce.state !== state) {
+
+    console.log(
+      "STATE MISMATCH:",
+      {
+        cookieState: pkce.state,
+        requestState: state,
+      }
+    );
+
     return NextResponse.redirect(
-      new URL("/login?error=state", request.url)
+      new URL(
+        "/login?error=state",
+        request.url
+      )
     );
   }
 
@@ -40,13 +115,16 @@ export async function GET(request: NextRequest) {
 
 
   const callbackUrl =
-  process.env.SHOPIFY_REDIRECT_URI;
+    process.env.SHOPIFY_REDIRECT_URI;
 
-if (!callbackUrl) {
-  throw new Error(
-    "Missing SHOPIFY_REDIRECT_URI"
-  );
-}
+
+  if (!callbackUrl) {
+
+    throw new Error(
+      "Missing SHOPIFY_REDIRECT_URI"
+    );
+
+  }
 
 
   const tokenResponse =
@@ -55,19 +133,30 @@ if (!callbackUrl) {
       {
         method: "POST",
 
-        headers:{
+        headers: {
           "Content-Type":
             "application/x-www-form-urlencoded",
         },
 
         body:
           new URLSearchParams({
-            grant_type:"authorization_code",
-            client_id:customerClientId(),
+
+            grant_type:
+              "authorization_code",
+
+            client_id:
+              customerClientId(),
+
             code,
-            redirect_uri:callbackUrl,
-            code_verifier:pkce.verifier,
+
+            redirect_uri:
+              callbackUrl,
+
+            code_verifier:
+              pkce.verifier,
+
           }),
+
       }
     );
 
@@ -77,51 +166,67 @@ if (!callbackUrl) {
 
 
   console.log(
-    "TOKEN STATUS",
+    "TOKEN STATUS:",
     tokenResponse.status
   );
 
 
-  if(
+  console.log(
+    "TOKEN RESPONSE:",
+    token
+  );
+
+
+  if (
     !tokenResponse.ok ||
     !token.access_token
-  ){
-
-    console.log(
-      "TOKEN ERROR",
-      token
-    );
+  ) {
 
     return NextResponse.redirect(
-      new URL("/login?error=token",request.url)
+      new URL(
+        "/login?error=token",
+        request.url
+      )
     );
-  }
 
+  }
 
 
   const response =
     NextResponse.redirect(
-      new URL("/pl/account", request.url)
+      new URL(
+        "/pl/account",
+        request.url
+      )
     );
-
 
 
   response.cookies.set(
     CUSTOMER_TOKEN_COOKIE,
     token.access_token,
     {
-      httpOnly:true,
-      secure:false,
-      sameSite:"lax",
-      path:"/",
-      maxAge:3600,
+      httpOnly: true,
+
+      secure:
+        process.env.NODE_ENV === "production",
+
+      sameSite: "lax",
+
+      path: "/",
+
+      maxAge: 3600,
     }
   );
 
 
-  response.cookies.delete(PKCE_COOKIE);
-  response.cookies.delete(RETURN_TO_COOKIE);
+  response.cookies.delete(
+    PKCE_COOKIE
+  );
 
+
+  response.cookies.delete(
+    RETURN_TO_COOKIE
+  );
 
 
   console.log(
@@ -131,4 +236,5 @@ if (!callbackUrl) {
 
 
   return response;
+
 }

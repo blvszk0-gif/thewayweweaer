@@ -20,10 +20,8 @@ export async function GET(request: NextRequest) {
     } = generatePkce();
 
 
-
     const configuration =
       await customerOpenIdConfiguration();
-
 
 
     console.log(
@@ -32,16 +30,21 @@ export async function GET(request: NextRequest) {
     );
 
 
-
     const callbackUrl =
-  process.env.SHOPIFY_REDIRECT_URI;
+      process.env.SHOPIFY_REDIRECT_URI;
 
-if (!callbackUrl) {
-  throw new Error(
-    "Missing SHOPIFY_REDIRECT_URI"
-  );
-}
 
+    console.log(
+      "REDIRECT URI FROM ENV:",
+      callbackUrl
+    );
+
+
+    if (!callbackUrl) {
+      throw new Error(
+        "Missing SHOPIFY_REDIRECT_URI"
+      );
+    }
 
 
     const authorizationUrl =
@@ -50,12 +53,10 @@ if (!callbackUrl) {
       );
 
 
-
     console.log(
       "CLIENT ID USED:",
       customerClientId()
     );
-
 
 
     authorizationUrl.searchParams.set(
@@ -76,7 +77,6 @@ if (!callbackUrl) {
     );
 
 
-    // TUTAJ ZMIANA
     authorizationUrl.searchParams.set(
       "scope",
       "openid email customer-account-api:full"
@@ -101,6 +101,11 @@ if (!callbackUrl) {
     );
 
 
+    console.log(
+      "FINAL AUTH URL:",
+      authorizationUrl.toString()
+    );
+
 
     const returnTo =
       request.nextUrl.searchParams.get(
@@ -108,12 +113,10 @@ if (!callbackUrl) {
       ) || "/account";
 
 
-
     const response =
       NextResponse.redirect(
         authorizationUrl
       );
-
 
 
     response.cookies.set(
@@ -123,15 +126,14 @@ if (!callbackUrl) {
         state,
       }),
       {
-        httpOnly:true,
+        httpOnly: true,
         secure:
           process.env.NODE_ENV === "production",
-        sameSite:"lax",
-        path:"/",
-        maxAge:600,
+        sameSite: "lax",
+        path: "/",
+        maxAge: 600,
       }
     );
-
 
 
     response.cookies.set(
@@ -141,15 +143,14 @@ if (!callbackUrl) {
         ? returnTo
         : "/account",
       {
-        httpOnly:true,
+        httpOnly: true,
         secure:
           process.env.NODE_ENV === "production",
-        sameSite:"lax",
-        path:"/",
-        maxAge:600,
+        sameSite: "lax",
+        path: "/",
+        maxAge: 600,
       }
     );
-
 
 
     return response;
@@ -158,16 +159,22 @@ if (!callbackUrl) {
   } catch(error) {
 
     console.error(
-      "CUSTOMER LOGIN ERROR:",
+      "CUSTOMER LOGIN ERROR FULL:",
       error
     );
 
 
-    return NextResponse.redirect(
-      new URL(
-        "/login?error=configuration",
-        request.nextUrl.origin
-      )
+    return NextResponse.json(
+      {
+        error: String(error),
+        stack:
+          error instanceof Error
+            ? error.stack
+            : null,
+      },
+      {
+        status: 500,
+      }
     );
 
   }
