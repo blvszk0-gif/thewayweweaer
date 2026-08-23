@@ -44,7 +44,7 @@ export const ProductCard = ({ id, variantId, name, price, image, category }: Pro
           whileHover={{ scale: 1.05 }}
           className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
         />
-        <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
            <button
             onClick={handleWishlist}
             className={`backdrop-blur-md p-3 rounded-full transition-all shadow-xl ${liked ? 'bg-red-500 text-white' : 'bg-white/80 text-black hover:bg-black hover:text-white'}`}
