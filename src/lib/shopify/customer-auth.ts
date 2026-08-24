@@ -109,6 +109,16 @@ export function customerClientId() {
 
 }
 
+export function customerRedirectUri() {
+  const redirectUri = process.env.SHOPIFY_REDIRECT_URI;
+
+  if (!redirectUri) {
+    throw new Error("Missing SHOPIFY_REDIRECT_URI.");
+  }
+
+  return redirectUri;
+}
+
 
 
 
@@ -165,13 +175,6 @@ export async function customerApiFetch<T>(
 
 
 
-  console.log(
-    "CUSTOMER GRAPHQL ENDPOINT:",
-    endpoint
-  );
-
-
-
   const response =
     await fetch(
       endpoint,
@@ -203,19 +206,6 @@ export async function customerApiFetch<T>(
 
   const text =
     await response.text();
-
-
-
-  console.log(
-    "CUSTOMER API STATUS:",
-    response.status
-  );
-
-
-  console.log(
-    "CUSTOMER API RAW:",
-    text.substring(0,500)
-  );
 
 
 
