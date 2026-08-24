@@ -31,6 +31,13 @@ type FormData = {
   zoneCode: string;
 };
 
+const VOIVODESHIPS = [
+  "dolnośląskie", "kujawsko-pomorskie", "lubelskie", "lubuskie",
+  "łódzkie", "małopolskie", "mazowieckie", "opolskie", "podkarpackie",
+  "podlaskie", "pomorskie", "śląskie", "świętokrzyskie",
+  "warmińsko-mazurskie", "wielkopolskie", "zachodniopomorskie",
+];
+
 const emptyForm: FormData = {
   firstName: "",
   lastName: "",
@@ -166,7 +173,7 @@ export default function ProfilePage() {
             <fieldset className="grid gap-5 md:grid-cols-2">
               <legend className="mb-4 text-lg font-black uppercase italic md:col-span-2">Adres zamieszkania</legend>
               <Field label="Miasto" value={form.city} onChange={(value) => updateField("city", value)} />
-              <Field label="Województwo" value={form.zoneCode} onChange={(value) => updateField("zoneCode", value)} />
+              <SelectField label="Województwo" value={form.zoneCode} onChange={(value) => updateField("zoneCode", value)} />
               <div className="md:col-span-2"><Field label="Ulica i numer bloku / domu" value={form.address1} onChange={(value) => updateField("address1", value)} /></div>
               <Field label="Numer mieszkania (opcjonalnie)" value={form.address2} required={false} onChange={(value) => updateField("address2", value)} />
               <Field label="Kod pocztowy" value={form.zip} inputMode="numeric" pattern="[0-9]{2}-[0-9]{3}" onChange={(value) => updateField("zip", value)} />
@@ -208,5 +215,15 @@ function Field({ label, value, onChange, required = true, inputMode, pattern }: 
   return <label className="block">
     <span className="mb-2 block text-sm font-bold uppercase tracking-wider">{label}</span>
     <input required={required} value={value} inputMode={inputMode} pattern={pattern} onChange={(event) => onChange(event.target.value)} className="w-full rounded-full border border-[color:var(--border)] bg-transparent px-5 py-4 outline-none transition-colors focus:border-[color:var(--foreground)]" />
+  </label>;
+}
+
+function SelectField({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
+  return <label className="block">
+    <span className="mb-2 block text-sm font-bold uppercase tracking-wider">{label}</span>
+    <select required value={value} onChange={(event) => onChange(event.target.value)} className="w-full rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-5 py-4 outline-none transition-colors focus:border-[color:var(--foreground)]">
+      <option value="" disabled>Wybierz województwo</option>
+      {VOIVODESHIPS.map((voivodeship) => <option key={voivodeship} value={voivodeship}>{voivodeship}</option>)}
+    </select>
   </label>;
 }
