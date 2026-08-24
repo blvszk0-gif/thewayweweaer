@@ -1,13 +1,50 @@
-'use client';
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import { getJournalArticle } from "@/lib/shopify/journal";
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+const BLOG_HANDLE = "journal"; // TODO: musi być zgodny z page.tsx wyżej
 
-type Article = { title: string; contentHtml: string; publishedAt: string; image: { url: string; altText: string | null } | null };
-export default function ArticlePage() {
-  const { handle } = useParams<{ handle: string }>(); const [article, setArticle] = useState<Article | null>(null); const [error, setError] = useState(false);
-  useEffect(() => { fetch(`/api/shopify/articles?handle=${encodeURIComponent(handle)}`).then(async (response) => { if (!response.ok) throw new Error(); return response.json() as Promise<{ article: Article }>; }).then((data) => setArticle(data.article)).catch(() => setError(true)); }, [handle]);
-  return <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio"><Header /><article className="container max-w-3xl mx-auto px-6 pt-36 pb-24">{!article && !error && <p>Ładowanie…</p>}{error && <p className="text-red-500">Nie znaleziono artykułu.</p>}{article && <><p className="font-black opacity-40">{new Date(article.publishedAt).toLocaleDateString('pl-PL')}</p><h1 className="mt-4 text-5xl font-black uppercase italic">{article.title}</h1>{article.image && <img src={article.image.url} alt={article.image.altText || article.title} className="mt-10 rounded-3xl w-full" />}<div className="prose prose-invert max-w-none mt-10" dangerouslySetInnerHTML={{ __html: article.contentHtml }} /></>}</article><Footer /></main>;
+export const revalidate = 60;
+
+export default async function JournalArticlePage({
+  params,
+}: {
+  params: { locale: string; handle: string };
+}) {
+  const article = await getJournalArticle({
+    blogHandle: BLOG_HANDLE,
+    articleHandle: params.handle,
+  });
+
+  if (!article) {
+    notFound();
+  }
+
+  return (
+    <article className="mx-auto max-w-3xl px-4 py-16">
+      <p className="text-xs uppercase tracking-wide text-neutral-500">
+        {new Date(article.publishedAt).toLocaleDateString(params.locale)}
+        {article.authorName ? ` · ${article.authorName}` : ""}
+      </p>
+      <h1 className="mt-2 text-3xl font-semibold">{article.title}</h1>
+
+      {article.image && (
+        <div className="relative my-8 aspect-[16/9] overflow-hidden">
+          <Image
+            src={article.image.url}
+            alt={article.image.altText ?? article.title}
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
+          />
+        </div>
+      )}
+
+      <div
+        className="prose prose-neutral max-w-none"
+        dangerouslySetInnerHTML={{ __html: article.contentHtml }}
+      />
+    </article>
+  );
 }
