@@ -2,18 +2,20 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { getJournalArticle } from "@/lib/shopify/journal";
 
-const BLOG_HANDLE = "journal"; // TODO: musi być zgodny z page.tsx wyżej
+const BLOG_HANDLE = "journal";
 
 export const revalidate = 60;
 
 export default async function JournalArticlePage({
   params,
 }: {
-  params: { locale: string; handle: string };
+  params: Promise<{ locale: string; handle: string }>;
 }) {
+  const { locale, handle } = await params;
+
   const article = await getJournalArticle({
     blogHandle: BLOG_HANDLE,
-    articleHandle: params.handle,
+    articleHandle: handle,
   });
 
   if (!article) {
@@ -23,7 +25,7 @@ export default async function JournalArticlePage({
   return (
     <article className="mx-auto max-w-3xl px-4 py-16">
       <p className="text-xs uppercase tracking-wide text-neutral-500">
-        {new Date(article.publishedAt).toLocaleDateString(params.locale)}
+        {new Date(article.publishedAt).toLocaleDateString(locale)}
         {article.authorName ? ` · ${article.authorName}` : ""}
       </p>
       <h1 className="mt-2 text-3xl font-semibold">{article.title}</h1>

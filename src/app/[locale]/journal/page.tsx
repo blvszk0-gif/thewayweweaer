@@ -2,16 +2,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { getJournalArticles } from "@/lib/shopify/journal";
 
-const BLOG_HANDLE = "journal"; // TODO: potwierdź handle bloga w Shopify Admin
+const BLOG_HANDLE = "journal";
 
 export const revalidate = 60;
 
 export default async function JournalPage({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = params;
+  const { locale } = await params;
   const { articles } = await getJournalArticles({ blogHandle: BLOG_HANDLE });
 
   return (
