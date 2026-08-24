@@ -10,9 +10,8 @@ import { AccountHeader } from '@/components/account/AccountHeader';
 import { AccountNavigation } from '@/components/account/AccountNavigation';
 import { OrderHistory } from '@/components/account/OrderHistory';
 import { ProfileDetails } from '@/components/account/ProfileDetails';
-import { Wishlist } from '@/components/account/Wishlist';
 import { Addresses } from '@/components/account/Addresses';
-import { useStore } from '@/context/StoreContext';
+import { AccountDeletionRequest } from '@/components/account/AccountDeletionRequest';
 
 type Customer = {
   firstName?: string;
@@ -45,7 +44,7 @@ type Customer = {
       address2?: string;
       city?: string;
       zip?: string;
-      country?: string;
+      territoryCode?: string;
     }>;
   };
 
@@ -57,7 +56,7 @@ type Customer = {
     address2?: string;
     city?: string;
     zip?: string;
-    country?: string;
+    territoryCode?: string;
   };
 };
 
@@ -67,25 +66,16 @@ export default function AccountPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('orders');
 
-  const {
-    wishlist,
-    removeFromWishlist,
-  } = useStore();
-
-
   useEffect(() => {
-    fetch('/api/auth/me')
-      .then((response) =>
-        response.ok
-          ? response.json()
-          : { customer: null }
-      )
-      .then((data) =>
-        setCustomer(data.customer)
-      )
-      .finally(() =>
-        setLoading(false)
-      );
+    Promise.all([fetch('/api/auth/me'), fetch('/api/account/adresses')])
+      .then(async ([customerResponse, addressesResponse]) => {
+        if (!customerResponse.ok) return { customer: null };
+        const data = await customerResponse.json() as { customer: Customer };
+        const addresses = addressesResponse.ok ? await addressesResponse.json() : [];
+        return { customer: data.customer ? { ...data.customer, addresses: { nodes: addresses } } : null };
+      })
+      .then((data) => setCustomer(data.customer))
+      .finally(() => setLoading(false));
   }, []);
 
 
@@ -156,21 +146,14 @@ export default function AccountPage() {
 
 
 
-            {activeTab === 'wishlist' && (
-              <Wishlist
-                items={wishlist}
-                removeFromWishlist={removeFromWishlist}
-              />
-            )}
-
-
-
             {activeTab === 'addresses' && (
               <Addresses
                 defaultAddress={customer.defaultAddress}
                 addresses={customer.addresses?.nodes || []}
               />
             )}
+
+            <AccountDeletionRequest email={customer.emailAddress?.emailAddress} />
 
 
           </>

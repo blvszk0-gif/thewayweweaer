@@ -1,5 +1,7 @@
 'use client';
 
+import { Link } from '@/i18n/routing';
+
 type ProfileDetailsProps = {
   firstName?: string;
   lastName?: string;
@@ -48,6 +50,13 @@ export function ProfileDetails({
           </p>
         </div>
       </div>
+
+      <Link
+        href="/account/profile"
+        className="inline-flex mt-8 rounded-full bg-[color:var(--foreground)] px-7 py-4 font-black uppercase tracking-widest text-[color:var(--surface)]"
+      >
+        Edytuj dane
+      </Link>
     </section>
   );
 }

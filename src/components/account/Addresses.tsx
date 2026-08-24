@@ -12,7 +12,7 @@ type Address = {
   address2?: string;
   city?: string;
   zip?: string;
-  country?: string;
+  territoryCode?: string;
 };
 
 
@@ -116,7 +116,7 @@ export function Addresses({
 
 
               <p className="opacity-70">
-                {address.country}
+                {address.territoryCode === 'PL' ? 'Polska' : address.territoryCode}
               </p>
 
 

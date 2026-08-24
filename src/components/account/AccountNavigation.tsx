@@ -19,10 +19,6 @@ export function AccountNavigation({
       label: 'Zamówienia',
     },
     {
-      id: 'wishlist',
-      label: 'Lista życzeń',
-    },
-    {
       id: 'addresses',
       label: 'Adresy',
     },
