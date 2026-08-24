@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -41,6 +42,8 @@ const emptyForm: FormData = {
 };
 
 export default function ProfilePage() {
+  const router = useRouter();
+  const { locale = "pl" } = useParams<{ locale: string }>();
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [address, setAddress] = useState<Address | null>(null);
   const [form, setForm] = useState<FormData>(emptyForm);
@@ -48,6 +51,7 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
     async function loadProfile() {
@@ -121,6 +125,8 @@ export default function ProfilePage() {
       if (!addressResponse.ok) throw new Error("address");
 
       setMessage("Dane zostały zapisane.");
+      setShowSuccessModal(true);
+      window.setTimeout(() => router.push(`/${locale}`), 1800);
       if (!address) {
         const saved = await addressResponse.json();
         const id = saved.customerAddressCreate?.customerAddress?.id;
@@ -159,11 +165,11 @@ export default function ProfilePage() {
 
             <fieldset className="grid gap-5 md:grid-cols-2">
               <legend className="mb-4 text-lg font-black uppercase italic md:col-span-2">Adres zamieszkania</legend>
+              <Field label="Miasto" value={form.city} onChange={(value) => updateField("city", value)} />
+              <Field label="Województwo" value={form.zoneCode} onChange={(value) => updateField("zoneCode", value)} />
               <div className="md:col-span-2"><Field label="Ulica i numer bloku / domu" value={form.address1} onChange={(value) => updateField("address1", value)} /></div>
               <Field label="Numer mieszkania (opcjonalnie)" value={form.address2} required={false} onChange={(value) => updateField("address2", value)} />
               <Field label="Kod pocztowy" value={form.zip} inputMode="numeric" pattern="[0-9]{2}-[0-9]{3}" onChange={(value) => updateField("zip", value)} />
-              <Field label="Miasto" value={form.city} onChange={(value) => updateField("city", value)} />
-              <Field label="Województwo" value={form.zoneCode} onChange={(value) => updateField("zoneCode", value)} />
             </fieldset>
 
             {error && <p role="alert" className="font-bold text-red-600">{error}</p>}
@@ -175,6 +181,18 @@ export default function ProfilePage() {
         )}
       </section>
       <Footer />
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/45 p-6 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="saved-title">
+          <div className="w-full max-w-md rounded-[32px] border border-[color:var(--border)] bg-[color:var(--surface)] p-9 text-center shadow-2xl">
+            <p className="text-xs font-black uppercase tracking-[0.2em] opacity-50">Konto gotowe</p>
+            <h2 id="saved-title" className="mt-3 text-3xl font-black uppercase italic">Dane zostały zapisane</h2>
+            <p className="mt-4 leading-relaxed opacity-70">Za chwilę przeniesiemy Cię na stronę główną.</p>
+            <button type="button" onClick={() => router.push(`/${locale}`)} className="mt-8 rounded-full bg-[color:var(--foreground)] px-7 py-4 font-black uppercase tracking-widest text-[color:var(--surface)]">
+              Przejdź teraz
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
