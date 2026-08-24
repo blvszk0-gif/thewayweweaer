@@ -1,853 +1,194 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
+import { FormEvent, useEffect, useState } from "react";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 
 type Address = {
-
-    id: string;
-
-    firstName: string | null;
-
-    lastName: string | null;
-
-    address1: string | null;
-
-    address2: string | null;
-
-    city: string | null;
-
-    zip: string | null;
-
-    zoneCode: string | null;
-
-    territoryCode: string | null;
-
-    province: string | null;
-
-    phoneNumber: string | null;
-
+  id: string;
+  address1: string | null;
+  address2: string | null;
+  city: string | null;
+  zip: string | null;
+  zoneCode: string | null;
+  territoryCode: string | null;
 };
-
-
 
 type Customer = {
-
-    firstName: string | null;
-
-    lastName: string | null;
-
-    emailAddress: {
-
-        emailAddress: string;
-
-    } | null;
-
+  firstName: string | null;
+  lastName: string | null;
+  emailAddress: { emailAddress: string } | null;
 };
 
+type FormData = {
+  firstName: string;
+  lastName: string;
+  address1: string;
+  address2: string;
+  zip: string;
+  city: string;
+  zoneCode: string;
+};
 
+const emptyForm: FormData = {
+  firstName: "",
+  lastName: "",
+  address1: "",
+  address2: "",
+  zip: "",
+  city: "",
+  zoneCode: "",
+};
 
 export default function ProfilePage() {
+  const [customer, setCustomer] = useState<Customer | null>(null);
+  const [address, setAddress] = useState<Address | null>(null);
+  const [form, setForm] = useState<FormData>(emptyForm);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
+  useEffect(() => {
+    async function loadProfile() {
+      try {
+        const [profileResponse, addressesResponse] = await Promise.all([
+          fetch("/api/account/profile", { cache: "no-store" }),
+          fetch("/api/account/adresses", { cache: "no-store" }),
+        ]);
+        if (!profileResponse.ok || !addressesResponse.ok) {
+          throw new Error("Unable to load profile");
+        }
 
-    const [customer, setCustomer] =
-        useState<Customer | null>(null);
+        const profile = await profileResponse.json();
+        const addresses = (await addressesResponse.json()) as Address[];
+        const currentAddress = addresses[0] ?? null;
 
-
-    const [address, setAddress] =
-        useState<Address | null>(null);
-
-
-
-    const [loading, setLoading] =
-        useState(true);
-
-
-    const [saving, setSaving] =
-        useState(false);
-
-
-
-    const [form, setForm] =
-        useState({
-
-            firstName: "",
-
-            lastName: "",
-
-            address1: "",
-
-            address2: "",
-
-            city: "",
-
-            zip: "",
-
-            zoneCode: "",
-
-            territoryCode: "PL",
-
-            phoneNumber: "",
-
+        setCustomer(profile.customer);
+        setAddress(currentAddress);
+        setForm({
+          firstName: profile.customer?.firstName ?? "",
+          lastName: profile.customer?.lastName ?? "",
+          address1: currentAddress?.address1 ?? "",
+          address2: currentAddress?.address2 ?? "",
+          zip: currentAddress?.zip ?? "",
+          city: currentAddress?.city ?? "",
+          zoneCode: currentAddress?.zoneCode ?? "",
         });
-
-
-
-
-
-    useEffect(() => {
-
-        loadData();
-
-    }, []);
-
-
-
-
-
-
-    async function loadData() {
-
-
-        try {
-
-
-            const [
-                profileResponse,
-                addressesResponse,
-            ] = await Promise.all([
-
-
-                fetch(
-                    "/api/account/profile"
-                ),
-
-
-                fetch(
-                    "/api/account/adresses"
-                ),
-
-            ]);
-
-
-
-            const profile =
-                await profileResponse.json();
-
-
-            const addresses =
-                await addressesResponse.json();
-
-
-
-
-            setCustomer(
-                profile.customer
-            );
-
-
-
-            const currentAddress =
-                addresses?.[0] ?? null;
-
-
-
-            setAddress(
-                currentAddress
-            );
-
-
-
-            setForm({
-
-                firstName:
-                    profile.customer?.firstName ?? "",
-
-
-                lastName:
-                    profile.customer?.lastName ?? "",
-
-
-                address1:
-                    currentAddress?.address1 ?? "",
-
-
-                address2:
-                    currentAddress?.address2 ?? "",
-
-
-                city:
-                    currentAddress?.city ?? "",
-
-
-                zip:
-                    currentAddress?.zip ?? "",
-
-
-                zoneCode:
-                    currentAddress?.zoneCode ?? "",
-
-
-                territoryCode:
-                    currentAddress?.territoryCode ?? "PL",
-
-
-                phoneNumber:
-                    currentAddress?.phoneNumber ?? "",
-
-            });
-
-
-
-        } catch (error) {
-
-
-            console.error(
-                "PROFILE LOAD ERROR:",
-                error
-            );
-
-
-        } finally {
-
-
-            setLoading(false);
-
-
-        }
-
+      } catch {
+        setError("Nie udało się pobrać danych konta. Zaloguj się ponownie.");
+      } finally {
+        setLoading(false);
+      }
     }
 
+    void loadProfile();
+  }, []);
 
+  function updateField(field: keyof FormData, value: string) {
+    setForm((previous) => ({ ...previous, [field]: value }));
+  }
 
+  async function saveProfile(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSaving(true);
+    setError("");
+    setMessage("");
 
+    try {
+      const profileResponse = await fetch("/api/account/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firstName: form.firstName.trim(), lastName: form.lastName.trim() }),
+      });
+      if (!profileResponse.ok) throw new Error("profile");
 
+      const addressPayload = {
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        address1: form.address1.trim(),
+        address2: form.address2.trim() || null,
+        zip: form.zip.trim(),
+        city: form.city.trim(),
+        zoneCode: form.zoneCode.trim(),
+        territoryCode: "PL",
+      };
+      const addressResponse = await fetch("/api/account/adresses", {
+        method: address ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(address ? { addressId: address.id, ...addressPayload } : addressPayload),
+      });
+      if (!addressResponse.ok) throw new Error("address");
 
-
-    function updateField(
-        field: string,
-        value: string
-    ) {
-
-
-        setForm(
-            previous => ({
-
-                ...previous,
-
-                [field]: value,
-
-            })
-        );
-
-
+      setMessage("Dane zostały zapisane.");
+      if (!address) {
+        const saved = await addressResponse.json();
+        const id = saved.customerAddressCreate?.customerAddress?.id;
+        if (id) setAddress({ id, ...addressPayload });
+      }
+    } catch {
+      setError("Nie udało się zapisać danych. Spróbuj ponownie.");
+    } finally {
+      setSaving(false);
     }
-
-
-
-
-
-
-
-
-    async function saveProfile() {
-
-
-        setSaving(true);
-
-
-
-        try {
-
-
-
-            const profileResponse =
-                await fetch(
-                    "/api/account/profile",
-                    {
-
-
-                        method: "PUT",
-
-
-                        headers: {
-
-                            "Content-Type":
-                                "application/json",
-
-                        },
-
-
-                        body: JSON.stringify({
-
-                            firstName:
-                                form.firstName,
-
-
-                            lastName:
-                                form.lastName,
-
-                        }),
-
-
-                    }
-                );
-
-
-
-            if (!profileResponse.ok) {
-
-
-                throw new Error(
-                    "Profile update failed"
-                );
-
-
-            }
-
-
-
-
-
-
-
-            const addressPayload = {
-
-
-                firstName:
-                    form.firstName,
-
-
-                lastName:
-                    form.lastName,
-
-
-                address1:
-                    form.address1,
-
-
-                address2:
-                    form.address2,
-
-
-                city:
-                    form.city,
-
-
-                zip:
-                    form.zip,
-
-
-                zoneCode:
-                    form.zoneCode,
-
-
-                territoryCode:
-                    form.territoryCode,
-
-
-                phoneNumber:
-                    form.phoneNumber,
-
-            };
-
-
-
-
-
-
-            let addressResponse;
-
-
-
-            if (address?.id) {
-
-
-
-                addressResponse =
-                    await fetch(
-                        "/api/account/adresses",
-                        {
-
-                            method: "PUT",
-
-                            headers: {
-
-                                "Content-Type":
-                                    "application/json",
-
-                            },
-
-
-                            body: JSON.stringify({
-
-                                addressId:
-                                    address.id,
-
-
-                                ...addressPayload,
-
-                            }),
-
-
-                        }
-                    );
-
-
-
-            } else {
-
-
-
-                addressResponse =
-                    await fetch(
-                        "/api/account/adresses",
-                        {
-
-                            method: "POST",
-
-                            headers: {
-
-                                "Content-Type":
-                                    "application/json",
-
-                            },
-
-
-                            body: JSON.stringify(
-                                addressPayload
-                            ),
-
-                        }
-                    );
-
-
-
-            }
-
-
-
-
-
-
-
-            if (!addressResponse.ok) {
-
-
-                throw new Error(
-                    "Address update failed"
-                );
-
-
-            }
-
-
-
-
-            alert(
-                "Dane zostały zapisane"
-            );
-
-
-
-            await loadData();
-
-
-
-
-        } catch (error) {
-
-
-
-            console.error(
-                "SAVE ERROR:",
-                error
-            );
-
-
-
-            alert(
-                "Nie udało się zapisać danych"
-            );
-
-
-
-        } finally {
-
-
-
-            setSaving(false);
-
-
-
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-    if (loading) {
-
-
-        return (
-
-            <main>
-
-                Ładowanie profilu...
-
-            </main>
-
-        );
-
-
-    }
-
-
-
-
-
-
-
-
-    return (
-
-        <main
-            style={{
-
-                maxWidth: "700px",
-
-                margin: "40px auto",
-
-            }}
-        >
-
-
-            <h1>
-                Profil
-            </h1>
-
-
-
-
-
-            <section>
-
-
-                <h2>
-                    Dane konta
-                </h2>
-
-
-
-                <label>
-
-                    Email
-
-                    <input
-
-                        disabled
-
-                        value={
-                            customer
-                                ?.emailAddress
-                                ?.emailAddress ?? ""
-                        }
-
-                    />
-
-                </label>
-
-
-
-
-
-                <label>
-
-                    Imię
-
-                    <input
-
-                        value={
-                            form.firstName
-                        }
-
-                        onChange={
-                            e =>
-                                updateField(
-                                    "firstName",
-                                    e.target.value
-                                )
-                        }
-
-                    />
-
-                </label>
-
-
-
-
-
-                <label>
-
-                    Nazwisko
-
-                    <input
-
-                        value={
-                            form.lastName
-                        }
-
-                        onChange={
-                            e =>
-                                updateField(
-                                    "lastName",
-                                    e.target.value
-                                )
-                        }
-
-                    />
-
-                </label>
-
-
-            </section>
-
-
-
-
-
-
-
-            <section>
-
-
-                <h2>
-                    Adres
-                </h2>
-
-
-
-                <label>
-
-                    Ulica i numer
-
-                    <input
-
-                        value={
-                            form.address1
-                        }
-
-                        onChange={
-                            e =>
-                                updateField(
-                                    "address1",
-                                    e.target.value
-                                )
-                        }
-
-                    />
-
-                </label>
-
-
-
-
-
-                <label>
-
-                    Numer mieszkania / dodatkowe informacje
-
-                    <input
-
-                        value={
-                            form.address2
-                        }
-
-                        onChange={
-                            e =>
-                                updateField(
-                                    "address2",
-                                    e.target.value
-                                )
-                        }
-
-                    />
-
-                </label>
-
-
-
-
-
-                <label>
-
-                    Miasto
-
-                    <input
-
-                        value={
-                            form.city
-                        }
-
-                        onChange={
-                            e =>
-                                updateField(
-                                    "city",
-                                    e.target.value
-                                )
-                        }
-
-                    />
-
-                </label>
-
-
-
-
-
-                <label>
-
-                    Kod pocztowy
-
-                    <input
-
-                        value={
-                            form.zip
-                        }
-
-                        onChange={
-                            e =>
-                                updateField(
-                                    "zip",
-                                    e.target.value
-                                )
-                        }
-
-                    />
-
-                </label>
-
-
-
-
-
-                <label>
-
-                    Województwo
-
-                    <input
-
-                        value={
-                            form.zoneCode
-                        }
-
-                        onChange={
-                            e =>
-                                updateField(
-                                    "zoneCode",
-                                    e.target.value
-                                )
-                        }
-
-                    />
-
-                </label>
-
-
-
-
-
-                <label>
-
-                    Kraj
-
-                    <input
-
-                        value={
-                            form.territoryCode
-                        }
-
-                        onChange={
-                            e =>
-                                updateField(
-                                    "territoryCode",
-                                    e.target.value
-                                )
-                        }
-
-                    />
-
-                </label>
-
-
-
-
-
-                <label>
-
-                    Telefon
-
-                    <input
-
-                        value={
-                            form.phoneNumber
-                        }
-
-                        onChange={
-                            e =>
-                                updateField(
-                                    "phoneNumber",
-                                    e.target.value
-                                )
-                        }
-
-                    />
-
-                </label>
-
-
-
-            </section>
-
-
-
-
-
-
-
-            <button
-
-                disabled={
-                    saving
-                }
-
-                onClick={
-                    saveProfile
-                }
-
-            >
-
-                {
-                    saving
-                        ? "Zapisywanie..."
-                        : "Zapisz zmiany"
-                }
-
-
+  }
+
+  return (
+    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio">
+      <Header />
+      <section className="mx-auto max-w-2xl px-6 pb-24 pt-36">
+        <p className="text-xs font-black uppercase tracking-[0.2em] opacity-50">Twoje konto</p>
+        <h1 className="mt-3 text-4xl font-black uppercase italic">Uzupełnij dane</h1>
+        <p className="mt-4 max-w-xl leading-relaxed opacity-70">
+          Zapisz dane do zamówień i dostawy. Możesz je później zmienić w swoim koncie.
+        </p>
+
+        {loading ? (
+          <p className="mt-10 font-bold opacity-60">Ładowanie formularza…</p>
+        ) : (
+          <form onSubmit={saveProfile} className="mt-10 space-y-8">
+            <fieldset className="grid gap-5 md:grid-cols-2">
+              <legend className="mb-4 text-lg font-black uppercase italic md:col-span-2">Dane osobowe</legend>
+              <Field label="Imię" value={form.firstName} onChange={(value) => updateField("firstName", value)} />
+              <Field label="Nazwisko" value={form.lastName} onChange={(value) => updateField("lastName", value)} />
+              <label className="md:col-span-2">
+                <span className="mb-2 block text-sm font-bold uppercase tracking-wider">E-mail</span>
+                <input disabled value={customer?.emailAddress?.emailAddress ?? ""} className="w-full rounded-full border border-[color:var(--border)] bg-[color:var(--surface-muted)] px-5 py-4 opacity-60" />
+              </label>
+            </fieldset>
+
+            <fieldset className="grid gap-5 md:grid-cols-2">
+              <legend className="mb-4 text-lg font-black uppercase italic md:col-span-2">Adres zamieszkania</legend>
+              <div className="md:col-span-2"><Field label="Ulica i numer bloku / domu" value={form.address1} onChange={(value) => updateField("address1", value)} /></div>
+              <Field label="Numer mieszkania (opcjonalnie)" value={form.address2} required={false} onChange={(value) => updateField("address2", value)} />
+              <Field label="Kod pocztowy" value={form.zip} inputMode="numeric" pattern="[0-9]{2}-[0-9]{3}" onChange={(value) => updateField("zip", value)} />
+              <Field label="Miasto" value={form.city} onChange={(value) => updateField("city", value)} />
+              <Field label="Województwo" value={form.zoneCode} onChange={(value) => updateField("zoneCode", value)} />
+            </fieldset>
+
+            {error && <p role="alert" className="font-bold text-red-600">{error}</p>}
+            {message && <p role="status" className="font-bold text-emerald-600">{message}</p>}
+            <button disabled={saving} className="rounded-full bg-[color:var(--foreground)] px-8 py-4 font-black uppercase tracking-widest text-[color:var(--surface)] disabled:opacity-50">
+              {saving ? "Zapisywanie…" : "Zapisz dane"}
             </button>
+          </form>
+        )}
+      </section>
+      <Footer />
+    </main>
+  );
+}
 
-
-
-
-
-        </main>
-
-    );
-
+function Field({ label, value, onChange, required = true, inputMode, pattern }: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  required?: boolean;
+  inputMode?: "numeric";
+  pattern?: string;
+}) {
+  return <label className="block">
+    <span className="mb-2 block text-sm font-bold uppercase tracking-wider">{label}</span>
+    <input required={required} value={value} inputMode={inputMode} pattern={pattern} onChange={(event) => onChange(event.target.value)} className="w-full rounded-full border border-[color:var(--border)] bg-transparent px-5 py-4 outline-none transition-colors focus:border-[color:var(--foreground)]" />
+  </label>;
 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import {
   customerClientId,
+  customerApiFetch,
   customerOpenIdConfiguration,
   customerRedirectUri,
   CUSTOMER_TOKEN_COOKIE,
@@ -60,7 +61,41 @@ export async function GET(request: NextRequest) {
     const safeReturnTo = returnTo?.startsWith("/") && !returnTo.startsWith("//")
       ? returnTo
       : "/pl/account";
-    const response = NextResponse.redirect(new URL(safeReturnTo, request.url));
+    const locale = safeReturnTo.match(/^\/(pl|en|uk)(?:\/|$)/)?.[1] ?? "pl";
+    const account = await customerApiFetch<{
+      customer: {
+        firstName: string | null;
+        lastName: string | null;
+        defaultAddress: {
+          address1: string | null;
+          city: string | null;
+          zip: string | null;
+          zoneCode: string | null;
+        } | null;
+      } | null;
+    }>(
+      token.access_token,
+      `query CustomerSetupStatus {
+        customer {
+          firstName
+          lastName
+          defaultAddress {
+            address1
+            city
+            zip
+            zoneCode
+          }
+        }
+      }`
+    );
+    const customer = account.customer;
+    const profileIncomplete = !customer?.firstName || !customer.lastName ||
+      !customer.defaultAddress?.address1 || !customer.defaultAddress?.city ||
+      !customer.defaultAddress?.zip || !customer.defaultAddress?.zoneCode;
+    const destination = profileIncomplete
+      ? `/${locale}/account/profile?setup=1`
+      : safeReturnTo;
+    const response = NextResponse.redirect(new URL(destination, request.url));
 
     response.cookies.set(CUSTOMER_TOKEN_COOKIE, token.access_token, {
       httpOnly: true,
