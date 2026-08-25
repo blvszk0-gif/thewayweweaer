@@ -5,6 +5,7 @@ import { pl, enUS } from "date-fns/locale";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getJournalArticle } from "@/lib/shopify/journal";
+import { sanitizeArticleHtml } from "@/lib/shopify/sanitizeHtml";
 
 const BLOG_HANDLE = "journal";
 
@@ -27,6 +28,7 @@ export default async function JournalArticlePage({
   }
 
   const dateLocale = locale === "pl" ? pl : enUS;
+  const safeContentHtml = sanitizeArticleHtml(article.contentHtml);
 
   return (
     <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio">
@@ -61,6 +63,13 @@ export default async function JournalArticlePage({
               <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-neutral-200">
                 {article.excerpt}
               </p>
+            )}
+
+            {safeContentHtml && (
+              <div
+                className="mt-6 border-t border-neutral-800 pt-6 text-sm leading-relaxed text-neutral-200 [&_a]:underline [&_a]:text-white [&_h2]:mt-4 [&_h2]:text-base [&_h2]:font-black [&_h2]:uppercase [&_h2]:italic [&_p]:mt-3 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-5"
+                dangerouslySetInnerHTML={{ __html: safeContentHtml }}
+              />
             )}
           </div>
         </article>
