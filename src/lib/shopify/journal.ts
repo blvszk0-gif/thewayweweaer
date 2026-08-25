@@ -1,19 +1,19 @@
 import { storefrontFetch } from "./storefront";
 
 export interface JournalArticle {
-    id: string;
-    handle: string;
-    title: string;
-    excerpt: string | null;
-    publishedAt: string;
-    contentHtml: string;
-    authorName: string | null;
-    image: {
-        url: string;
-        altText: string | null;
-        width: number;
-        height: number;
-    } | null;
+  id: string;
+  handle: string;
+  title: string;
+  excerpt: string | null;
+  publishedAt: string;
+  contentHtml: string;
+  authorName: string | null;
+  image: {
+    url: string;
+    altText: string | null;
+    width: number;
+    height: number;
+  } | null;
 }
 
 const ARTICLE_FIELDS = `
@@ -32,15 +32,18 @@ const ARTICLE_FIELDS = `
   authorV2 {
     name
   }
+  displayAuthor: metafield(namespace: "custom", key: "display_author") {
+    value
+  }
 `;
 
 export async function getJournalArticles(params: {
-    blogHandle: string;
-    first?: number;
+  blogHandle: string;
+  first?: number;
 }) {
-    const { blogHandle, first = 12 } = params;
+  const { blogHandle, first = 12 } = params;
 
-    const query = `
+  const query = `
     query JournalArticles($blogHandle: String!, $first: Int!) {
       blog(handle: $blogHandle) {
         title
@@ -53,27 +56,27 @@ export async function getJournalArticles(params: {
     }
   `;
 
-    const data = await storefrontFetch<{
-        blog: { title: string; articles: { nodes: RawArticle[] } } | null;
-    }>(query, { blogHandle, first });
+  const data = await storefrontFetch<{
+    blog: { title: string; articles: { nodes: RawArticle[] } } | null;
+  }>(query, { blogHandle, first });
 
-    if (!data.blog) {
-        return { title: null as string | null, articles: [] as JournalArticle[] };
-    }
+  if (!data.blog) {
+    return { title: null as string | null, articles: [] as JournalArticle[] };
+  }
 
-    return {
-        title: data.blog.title,
-        articles: data.blog.articles.nodes.map(mapArticle),
-    };
+  return {
+    title: data.blog.title,
+    articles: data.blog.articles.nodes.map(mapArticle),
+  };
 }
 
 export async function getJournalArticle(params: {
-    blogHandle: string;
-    articleHandle: string;
+  blogHandle: string;
+  articleHandle: string;
 }) {
-    const { blogHandle, articleHandle } = params;
+  const { blogHandle, articleHandle } = params;
 
-    const query = `
+  const query = `
     query JournalArticle($blogHandle: String!, $articleHandle: String!) {
       blog(handle: $blogHandle) {
         articleByHandle(handle: $articleHandle) {
@@ -83,36 +86,37 @@ export async function getJournalArticle(params: {
     }
   `;
 
-    const data = await storefrontFetch<{
-        blog: { articleByHandle: RawArticle | null } | null;
-    }>(query, { blogHandle, articleHandle });
+  const data = await storefrontFetch<{
+    blog: { articleByHandle: RawArticle | null } | null;
+  }>(query, { blogHandle, articleHandle });
 
-    const raw = data.blog?.articleByHandle;
-    return raw ? mapArticle(raw) : null;
+  const raw = data.blog?.articleByHandle;
+  return raw ? mapArticle(raw) : null;
 }
 
 // --- helpers ---
 
 interface RawArticle {
-    id: string;
-    handle: string;
-    title: string;
-    excerpt: string | null;
-    publishedAt: string;
-    contentHtml: string;
-    image: JournalArticle["image"];
-    authorV2: { name: string } | null;
+  id: string;
+  handle: string;
+  title: string;
+  excerpt: string | null;
+  publishedAt: string;
+  contentHtml: string;
+  image: JournalArticle["image"];
+  authorV2: { name: string } | null;
+  displayAuthor: { value: string } | null;
 }
 
 function mapArticle(raw: RawArticle): JournalArticle {
-    return {
-        id: raw.id,
-        handle: raw.handle,
-        title: raw.title,
-        excerpt: raw.excerpt,
-        publishedAt: raw.publishedAt,
-        contentHtml: raw.contentHtml,
-        image: raw.image,
-        authorName: raw.authorV2?.name ?? null,
-    };
+  return {
+    id: raw.id,
+    handle: raw.handle,
+    title: raw.title,
+    excerpt: raw.excerpt,
+    publishedAt: raw.publishedAt,
+    contentHtml: raw.contentHtml,
+    image: raw.image,
+    authorName: raw.displayAuthor?.value ?? raw.authorV2?.name ?? null,
+  };
 }
