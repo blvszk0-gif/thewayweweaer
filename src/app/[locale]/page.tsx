@@ -1,16 +1,24 @@
-'use client';
-
-import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSlider } from '@/components/home/HeroSlider';
 import { LandingSections } from '@/components/home/LandingSections';
+import { getHomepageLookbook } from '@/lib/shopify/lookbook';
 
-export default function Home() {
+export const revalidate = 300;
+
+export default async function Home() {
+  const lookbook = await getHomepageLookbook();
+
   return (
     <main className="min-h-screen">
       <Header />
-      <HeroSlider />
+      {lookbook && lookbook.slides.length > 0 && (
+        <HeroSlider
+          collectionTitle={lookbook.collectionTitle}
+          collectionHandle={lookbook.collectionHandle}
+          slides={lookbook.slides}
+        />
+      )}
       <LandingSections />
       <Footer />
     </main>
