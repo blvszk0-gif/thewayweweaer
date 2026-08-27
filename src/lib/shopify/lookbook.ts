@@ -1,3 +1,5 @@
+import { storefrontFetch } from './storefront';
+
 const QUERY = `
   query HomepageLookbook($settingsHandle: String!) {
     metaobject(handle: { type: "ustawienia_strony", handle: $settingsHandle }) {
@@ -11,15 +13,17 @@ const QUERY = `
                 nodes {
                   ... on Metaobject {
                     id
-                    imageField: field(key: "image") {
-                      reference {
-                        ... on MediaImage {
-                          image { url altText width height }
+                    imageField: field(key: "zdjecie") {
+                      references(first: 1) {
+                        nodes {
+                          ... on MediaImage {
+                            image { url altText width height }
+                          }
                         }
                       }
                     }
-                    captionField: field(key: "caption") { value }
-                    productField: field(key: "product") {
+                    captionField: field(key: "podpis") { value }
+                    productField: field(key: "produkt") {
                       reference {
                         ... on Product {
                           id
@@ -60,8 +64,6 @@ export interface HomepageLookbook {
   slides: LookbookSlide[];
 }
 
-import { storefrontFetch } from './storefront';
-
 export async function getHomepageLookbook(
   settingsHandle: string = "main"
 ): Promise<HomepageLookbook | null> {
@@ -88,7 +90,7 @@ export async function getHomepageLookbook(
     slides: nodes.map((n) => ({
       id: n.id,
       caption: n.captionField?.value ?? null,
-      image: n.imageField?.reference?.image ?? null,
+      image: n.imageField?.references?.nodes?.[0]?.image ?? null,
       product: n.productField?.reference
         ? {
           id: n.productField.reference.id,
@@ -104,7 +106,9 @@ export async function getHomepageLookbook(
 
 interface RawSlide {
   id: string;
-  imageField: { reference: { image: LookbookSlide["image"] } | null } | null;
+  imageField: {
+    references: { nodes: Array<{ image: LookbookSlide["image"] }> } | null;
+  } | null;
   captionField: { value: string } | null;
   productField: {
     reference: {
