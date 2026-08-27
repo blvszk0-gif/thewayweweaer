@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
-import { User, ShoppingBag, Heart, Moon, ChevronRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Heart, Moon, ShoppingBag, User, X } from 'lucide-react';
 import { LoginForm } from '../auth/LoginForm';
 import { useStore } from '@/context/StoreContext';
 import { SearchBar } from './SearchBar';
@@ -16,18 +16,10 @@ export const Header = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [expandedKolekcje, setExpandedKolekcje] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [collections, setCollections] = useState<{ handle: string; title: string }[]>([]);
-
-  useEffect(() => {
-    fetch('/api/shopify/collections')
-      .then((res) => res.json())
-      .then((data) => setCollections(data.collections ?? []))
-      .catch(() => setCollections([]));
-  }, []);
 
   useEffect(() => {
     fetch('/api/auth/me').then((response) => setIsLoggedIn(response.ok)).catch(() => setIsLoggedIn(false));
@@ -171,35 +163,9 @@ export const Header = () => {
                 <Link href="/shop/akcesoria" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('akcesoria')}</Link>
                 <Link href="/lookbook" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">Lookbook</Link>
 
-                <div>
-                  <button
-                    onClick={() => setExpandedKolekcje(!expandedKolekcje)}
-                    className="flex items-center gap-2 hover:pl-4 transition-all italic uppercase font-black"
-                  >
-                    {tNav('kolekcje')} <ChevronRight size={24} className={`transition-transform ${expandedKolekcje ? 'rotate-90' : 'rotate-0'}`} />
-                  </button>
-                  <AnimatePresence>
-                    {expandedKolekcje && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden flex flex-col gap-4 pl-6 pt-6 text-lg font-bold text-[color:var(--foreground)]/65"
-                      >
-                        {collections.map((col) => (
-                          <Link
-                            key={col.handle}
-                            href={`/shop/${col.handle}`}
-                            onClick={() => setIsMenuOpen(false)}
-                            className="hover:text-[color:var(--foreground)] transition-colors"
-                          >
-                            {col.title}
-                          </Link>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+                <Link href="/subjects?view=collections" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">
+                  {tNav('kolekcje')}
+                </Link>
               </div>
 
               <div className="mt-auto pt-12 text-[13px] font-bold text-[color:var(--foreground)]/50 tracking-widest uppercase">
