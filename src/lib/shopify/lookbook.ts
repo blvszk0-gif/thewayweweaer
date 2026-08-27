@@ -29,6 +29,9 @@ const QUERY = `
                           title
                           productType
                           priceRange { minVariantPrice { amount currencyCode } }
+                          variants(first: 1) {
+                            nodes { id availableForSale }
+                          }
                         }
                       }
                     }
@@ -53,6 +56,8 @@ export interface LookbookSlide {
     title: string;
     category: string | null;
     price: number;
+    variantId: string | null;
+    availableForSale: boolean;
   } | null;
 }
 
@@ -96,6 +101,8 @@ export async function getHomepageLookbook(
           title: n.productField.reference.title,
           category: n.productField.reference.productType || null,
           price: Number(n.productField.reference.priceRange.minVariantPrice.amount),
+          variantId: n.productField.reference.variants.nodes[0]?.id ?? null,
+          availableForSale: n.productField.reference.variants.nodes[0]?.availableForSale ?? false,
         }
         : null,
     })),
@@ -115,6 +122,7 @@ interface RawSlide {
       title: string;
       productType: string | null;
       priceRange: { minVariantPrice: { amount: string; currencyCode: string } };
+      variants: { nodes: Array<{ id: string; availableForSale: boolean }> };
     } | null;
   } | null;
 }

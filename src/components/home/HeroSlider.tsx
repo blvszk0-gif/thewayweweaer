@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Heart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart, ShoppingBag } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useStore } from '@/context/StoreContext';
 import type { LookbookSlide } from '@/lib/shopify/lookbook';
@@ -14,7 +14,8 @@ interface HeroSliderProps {
 
 export const HeroSlider = ({ collectionTitle, collectionHandle, slides }: HeroSliderProps) => {
   const [current, setCurrent] = useState(0);
-  const { addToWishlist, isInWishlist, removeFromWishlist } = useStore();
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const { addToCart, isCartLoading, addToWishlist, isInWishlist, removeFromWishlist } = useStore();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -32,7 +33,8 @@ export const HeroSlider = ({ collectionTitle, collectionHandle, slides }: HeroSl
 
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!slide.product) return; // slajd bez przypiętego produktu - nic do polubienia
+    e.stopPropagation();
+    if (!slide.product) return;
     if (isLiked) {
       removeFromWishlist(wishlistId);
     } else {
@@ -43,6 +45,14 @@ export const HeroSlider = ({ collectionTitle, collectionHandle, slides }: HeroSl
         image: slide.image?.url ?? '',
         category: slide.product.category ?? '',
       });
+    }
+  };
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (slide.product?.variantId) {
+      await addToCart({ merchandiseId: slide.product.variantId, quantity: 1 });
     }
   };
 
@@ -60,15 +70,23 @@ export const HeroSlider = ({ collectionTitle, collectionHandle, slides }: HeroSl
         <div className="relative w-full max-w-6xl mx-auto overflow-hidden rounded-3xl bg-[color:var(--surface-muted)] aspect-video sm:aspect-video lg:flex-1 group/slider shadow-2xl border border-[color:var(--border)]">
           <AnimatePresence mode="wait">
             {slide.image && (
-              <motion.img
+              <motion.button
                 key={slide.id}
-                src={slide.image.url}
+                type="button"
+                onClick={() => setLightboxOpen(true)}
+                aria-label="Powiększ zdjęcie"
                 initial={{ opacity: 0, scale: 1.1 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-              />
+                className="absolute inset-0 w-full h-full cursor-zoom-in"
+              >
+                <img
+                  src={slide.image.url}
+                  alt={slide.caption ?? collectionTitle}
+                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                />
+              </motion.button>
             )}
           </AnimatePresence>
 
@@ -80,6 +98,16 @@ export const HeroSlider = ({ collectionTitle, collectionHandle, slides }: HeroSl
               >
                 <Heart size={20} className="sm:w-6 sm:h-6" strokeWidth={2} fill={isLiked ? "currentColor" : "none"} />
               </button>
+              {slide.product.variantId && (
+                <button
+                  onClick={handleAddToCart}
+                  disabled={isCartLoading || !slide.product.availableForSale}
+                  className="p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-md bg-[color:var(--foreground)] text-[color:var(--surface)] disabled:opacity-30"
+                  aria-label="Dodaj do koszyka"
+                >
+                  <ShoppingBag size={20} className="sm:w-6 sm:h-6" strokeWidth={2} />
+                </button>
+              )}
             </div>
           )}
 
@@ -90,13 +118,22 @@ export const HeroSlider = ({ collectionTitle, collectionHandle, slides }: HeroSl
             <ChevronRight size={32} strokeWidth={1} />
           </button>
 
-          <div className="absolute top-4 left-4 sm:top-auto sm:bottom-10 sm:left-10 transition-all duration-500 p-3 sm:p-6 rounded-2xl sm:rounded-[2rem] backdrop-blur-xl border border-white/10 z-10 bg-white/40 text-black shadow-[0_0_50px_rgba(255,255,255,0.3)]">
+          <div className="absolute top-4 left-4 sm:top-auto sm:bottom-10 sm:left-10 transition-all duration-500 p-3 sm:p-6 rounded-2xl sm:rounded-[2rem] backdrop-blur-xl border border-white/10 z-20 bg-white/40 text-black shadow-[0_0_50px_rgba(255,255,255,0.3)]">
             <p className="text-[10px] sm:text-[13px] font-black uppercase tracking-[0.4em] mb-1 sm:mb-2 text-black/40">
               Slide 0{current + 1} / 0{slides.length}
             </p>
-            <h3 className="text-xs sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-antonio">
-              {slide.caption}
-            </h3>
+            {slide.product ? (
+              <Link
+                href={`/product/${slide.product.handle}`}
+                className="text-xs sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-antonio hover:underline"
+              >
+                {slide.caption}
+              </Link>
+            ) : (
+              <h3 className="text-xs sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-antonio">
+                {slide.caption}
+              </h3>
+            )}
           </div>
         </div>
 
@@ -112,6 +149,31 @@ export const HeroSlider = ({ collectionTitle, collectionHandle, slides }: HeroSl
           ))}
         </div>
       </div>
+
+      {lightboxOpen && slide.image && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 md:p-8"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Podgląd zdjęcia"
+          onClick={() => setLightboxOpen(false)}
+        >
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(false)}
+            aria-label="Zamknij podgląd"
+            className="absolute top-5 right-5 z-20 w-12 h-12 rounded-full bg-white/90 text-black text-2xl flex items-center justify-center hover:bg-white transition"
+          >
+            ×
+          </button>
+          <img
+            src={slide.image.url}
+            alt={slide.caption ?? collectionTitle}
+            className="max-w-full max-h-[85vh] object-contain select-none"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </section>
   );
 };
