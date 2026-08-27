@@ -14,11 +14,9 @@ const QUERY = `
                   ... on Metaobject {
                     id
                     imageField: field(key: "zdjecie") {
-                      references(first: 1) {
-                        nodes {
-                          ... on MediaImage {
-                            image { url altText width height }
-                          }
+                      reference {
+                        ... on MediaImage {
+                          image { url altText width height }
                         }
                       }
                     }
@@ -90,7 +88,7 @@ export async function getHomepageLookbook(
     slides: nodes.map((n) => ({
       id: n.id,
       caption: n.captionField?.value ?? null,
-      image: n.imageField?.references?.nodes?.[0]?.image ?? null,
+      image: n.imageField?.reference?.image ?? null,
       product: n.productField?.reference
         ? {
           id: n.productField.reference.id,
@@ -107,7 +105,7 @@ export async function getHomepageLookbook(
 interface RawSlide {
   id: string;
   imageField: {
-    references: { nodes: Array<{ image: LookbookSlide["image"] }> } | null;
+    reference: { image: LookbookSlide["image"] } | null;
   } | null;
   captionField: { value: string } | null;
   productField: {
