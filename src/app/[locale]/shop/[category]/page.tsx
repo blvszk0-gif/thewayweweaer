@@ -29,7 +29,7 @@ export default function CategoryPage() {
 
   const colors = useMemo(() => Array.from(new Set(products.flatMap((product) => product.variants.nodes.flatMap((variant) => variant.selectedOptions.filter((option) => /color|kolor/i.test(option.name)).map((option) => option.value))))), [products]);
   const sizes = useMemo(() => Array.from(new Set(products.flatMap((product) => product.variants.nodes.flatMap((variant) => variant.selectedOptions.filter((option) => /size|rozmiar/i.test(option.name)).map((option) => option.value))))), [products]);
-  const filtered = products.filter((product) => product.variants.nodes.some((variant) => variant.availableForSale && (!activeColor || variant.selectedOptions.some((option) => /color|kolor/i.test(option.name) && option.value === activeColor)) && (!activeSize || variant.selectedOptions.some((option) => /size|rozmiar/i.test(option.name) && option.value === activeSize))));
+  const filtered = products.filter((product) => product.variants.nodes.some((variant) => (!activeColor || variant.selectedOptions.some((option) => /color|kolor/i.test(option.name) && option.value === activeColor)) && (!activeSize || variant.selectedOptions.some((option) => /size|rozmiar/i.test(option.name) && option.value === activeSize))));
 
   return <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio"><Header />
     <div className="pt-32 pb-20 container mx-auto px-6">
@@ -45,7 +45,7 @@ export default function CategoryPage() {
       {!loading && !error && filtered.length === 0 && <p className="text-center py-20 font-black uppercase tracking-widest opacity-50">Brak produktów w tej kolekcji.</p>}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">{filtered.map((product) => {
         const variant = product.variants.nodes.find((item) => item.availableForSale) || product.variants.nodes[0];
-        return <ProductCard key={product.id} id={product.handle} variantId={variant?.id} name={product.title} price={Number(product.priceRange.minVariantPrice.amount)} image={product.featuredImage?.url || ''} category={category} />;
+        return <ProductCard key={product.id} id={product.handle} variantId={variant?.id} name={product.title} price={Number(product.priceRange.minVariantPrice.amount)} image={product.featuredImage?.url || ''} category={category} isAvailable={variant?.availableForSale ?? false} />;
       })}</div>
     </div><Footer />
   </main>;

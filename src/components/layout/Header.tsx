@@ -20,6 +20,14 @@ export const Header = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [collections, setCollections] = useState<{ handle: string; title: string }[]>([]);
+
+  useEffect(() => {
+    fetch('/api/shopify/collections')
+      .then((res) => res.json())
+      .then((data) => setCollections(data.collections ?? []))
+      .catch(() => setCollections([]));
+  }, []);
 
   useEffect(() => {
     fetch('/api/auth/me').then((response) => setIsLoggedIn(response.ok)).catch(() => setIsLoggedIn(false));
@@ -78,9 +86,9 @@ export const Header = () => {
 
           {/* Center: Logo with background for contrast */}
           <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-center flex items-center justify-center group z-[80]">
-             <div className="bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-black/5 group-hover:scale-105 transition-transform">
-               <img src="/logo.png" alt="TWWW Logo" className="h-6 md:h-8 w-auto object-contain" />
-             </div>
+            <div className="bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-black/5 group-hover:scale-105 transition-transform">
+              <img src="/logo.png" alt="TWWW Logo" className="h-6 md:h-8 w-auto object-contain" />
+            </div>
           </Link>
 
           {/* Right: Actions */}
@@ -164,13 +172,13 @@ export const Header = () => {
                 <Link href="/lookbook" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">Lookbook</Link>
 
                 <div>
-                   <button
+                  <button
                     onClick={() => setExpandedKolekcje(!expandedKolekcje)}
                     className="flex items-center gap-2 hover:pl-4 transition-all italic uppercase font-black"
-                   >
-                     {tNav('kolekcje')} <ChevronRight size={24} className={`transition-transform ${expandedKolekcje ? 'rotate-90' : 'rotate-0'}`} />
-                   </button>
-                   <AnimatePresence>
+                  >
+                    {tNav('kolekcje')} <ChevronRight size={24} className={`transition-transform ${expandedKolekcje ? 'rotate-90' : 'rotate-0'}`} />
+                  </button>
+                  <AnimatePresence>
                     {expandedKolekcje && (
                       <motion.div
                         initial={{ height: 0, opacity: 0 }}
@@ -178,13 +186,19 @@ export const Header = () => {
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden flex flex-col gap-4 pl-6 pt-6 text-lg font-bold text-[color:var(--foreground)]/65"
                       >
-                        <Link href="/shop/stare" onClick={() => setIsMenuOpen(false)} className="hover:text-[color:var(--foreground)] transition-colors">The Way WE Stare</Link>
-                        <Link href="/shop/roll" onClick={() => setIsMenuOpen(false)} className="hover:text-[color:var(--foreground)] transition-colors">The Way WE Roll</Link>
-                        <Link href="/shop/bloom" onClick={() => setIsMenuOpen(false)} className="hover:text-[color:var(--foreground)] transition-colors">The Way WE Bloom</Link>
-                        <Link href="/shop/fly" onClick={() => setIsMenuOpen(false)} className="hover:text-[color:var(--foreground)] transition-colors">The Way WE Fly</Link>
+                        {collections.map((col) => (
+                          <Link
+                            key={col.handle}
+                            href={`/shop/${col.handle}`}
+                            onClick={() => setIsMenuOpen(false)}
+                            className="hover:text-[color:var(--foreground)] transition-colors"
+                          >
+                            {col.title}
+                          </Link>
+                        ))}
                       </motion.div>
                     )}
-                   </AnimatePresence>
+                  </AnimatePresence>
                 </div>
               </div>
 

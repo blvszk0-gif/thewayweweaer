@@ -14,9 +14,10 @@ interface ProductCardProps {
   price: number;
   image: string;
   category: string;
+  isAvailable?: boolean;
 }
 
-export const ProductCard = ({ id, variantId, name, price, image, category }: ProductCardProps) => {
+export const ProductCard = ({ id, variantId, name, price, image, category, isAvailable = true }: ProductCardProps) => {
   const tCartWishlist = useTranslations('cart_wishlist');
   const { addToCart, addToWishlist, isInWishlist, removeFromWishlist, isCartLoading } = useStore();
   const liked = isInWishlist(id);
@@ -32,7 +33,9 @@ export const ProductCard = ({ id, variantId, name, price, image, category }: Pro
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
-    await addToCart({ merchandiseId: variantId, quantity: 1 });
+    if (variantId) {
+      await addToCart({ merchandiseId: variantId, quantity: 1 });
+    }
   };
 
   return (
@@ -44,13 +47,18 @@ export const ProductCard = ({ id, variantId, name, price, image, category }: Pro
           whileHover={{ scale: 1.05 }}
           className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
         />
+        {!isAvailable && (
+          <div className="absolute top-4 left-4 bg-black/80 text-white text-xs font-black uppercase tracking-widest px-3 py-2 rounded-full backdrop-blur-md">
+            Towar niedostępny
+          </div>
+        )}
         <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-           <button
+          <button
             onClick={handleWishlist}
             className={`backdrop-blur-md p-3 rounded-full transition-all shadow-xl ${liked ? 'bg-red-500 text-white' : 'bg-white/80 text-black hover:bg-black hover:text-white'}`}
-           >
-             <Heart size={18} fill={liked ? "currentColor" : "none"} />
-           </button>
+          >
+            <Heart size={18} fill={liked ? "currentColor" : "none"} />
+          </button>
         </div>
       </Link>
 
@@ -64,10 +72,10 @@ export const ProductCard = ({ id, variantId, name, price, image, category }: Pro
         <div className="mt-auto space-y-4 pt-6">
           <button
             onClick={handleAddToCart}
-            disabled={!variantId || isCartLoading}
-            className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-full font-black uppercase tracking-widest text-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg"
+            disabled={!variantId || isCartLoading || !isAvailable}
+            className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-full font-black uppercase tracking-widest text-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg disabled:opacity-30"
           >
-            <ShoppingBag size={20} /> {isCartLoading ? '...' : tCartWishlist('dodaj_do_koszyka')}
+            <ShoppingBag size={20} /> {!isAvailable ? 'Niedostępne' : isCartLoading ? '...' : tCartWishlist('dodaj_do_koszyka')}
           </button>
 
           <div className="flex items-center justify-center gap-4 opacity-20 py-2 text-[color:var(--foreground)]">
