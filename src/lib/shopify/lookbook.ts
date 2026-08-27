@@ -1,6 +1,6 @@
 const QUERY = `
   query HomepageLookbook($settingsHandle: String!) {
-    metaobject(handle: { type: "site_settings", handle: $settingsHandle }) {
+    metaobject(handle: { type: "ustawienia_strony", handle: $settingsHandle }) {
       field(key: "homepage_lookbook_collection") {
         reference {
           ... on Collection {
@@ -42,77 +42,77 @@ const QUERY = `
 `;
 
 export interface LookbookSlide {
+  id: string;
+  caption: string | null;
+  image: { url: string; altText: string | null; width: number; height: number } | null;
+  product: {
     id: string;
-    caption: string | null;
-    image: { url: string; altText: string | null; width: number; height: number } | null;
-    product: {
-        id: string;
-        handle: string;
-        title: string;
-        category: string | null;
-        price: number;
-    } | null;
+    handle: string;
+    title: string;
+    category: string | null;
+    price: number;
+  } | null;
 }
 
 export interface HomepageLookbook {
-    collectionHandle: string;
-    collectionTitle: string;
-    slides: LookbookSlide[];
+  collectionHandle: string;
+  collectionTitle: string;
+  slides: LookbookSlide[];
 }
 
 import { storefrontFetch } from './storefront';
 
 export async function getHomepageLookbook(
-    settingsHandle: string = "main"
+  settingsHandle: string = "main"
 ): Promise<HomepageLookbook | null> {
-    const data = await storefrontFetch<{
-        metaobject: {
-            field: {
-                reference: {
-                    handle: string;
-                    title: string;
-                    slidesField: { references: { nodes: RawSlide[] } } | null;
-                } | null;
-            } | null;
+  const data = await storefrontFetch<{
+    metaobject: {
+      field: {
+        reference: {
+          handle: string;
+          title: string;
+          slidesField: { references: { nodes: RawSlide[] } } | null;
         } | null;
-    }>(QUERY, { settingsHandle });
+      } | null;
+    } | null;
+  }>(QUERY, { settingsHandle });
 
-    const collection = data.metaobject?.field?.reference;
-    if (!collection) return null;
+  const collection = data.metaobject?.field?.reference;
+  if (!collection) return null;
 
-    const nodes = collection.slidesField?.references?.nodes ?? [];
+  const nodes = collection.slidesField?.references?.nodes ?? [];
 
-    return {
-        collectionHandle: collection.handle,
-        collectionTitle: collection.title,
-        slides: nodes.map((n) => ({
-            id: n.id,
-            caption: n.captionField?.value ?? null,
-            image: n.imageField?.reference?.image ?? null,
-            product: n.productField?.reference
-                ? {
-                    id: n.productField.reference.id,
-                    handle: n.productField.reference.handle,
-                    title: n.productField.reference.title,
-                    category: n.productField.reference.productType || null,
-                    price: Number(n.productField.reference.priceRange.minVariantPrice.amount),
-                }
-                : null,
-        })),
-    };
+  return {
+    collectionHandle: collection.handle,
+    collectionTitle: collection.title,
+    slides: nodes.map((n) => ({
+      id: n.id,
+      caption: n.captionField?.value ?? null,
+      image: n.imageField?.reference?.image ?? null,
+      product: n.productField?.reference
+        ? {
+          id: n.productField.reference.id,
+          handle: n.productField.reference.handle,
+          title: n.productField.reference.title,
+          category: n.productField.reference.productType || null,
+          price: Number(n.productField.reference.priceRange.minVariantPrice.amount),
+        }
+        : null,
+    })),
+  };
 }
 
 interface RawSlide {
-    id: string;
-    imageField: { reference: { image: LookbookSlide["image"] } | null } | null;
-    captionField: { value: string } | null;
-    productField: {
-        reference: {
-            id: string;
-            handle: string;
-            title: string;
-            productType: string | null;
-            priceRange: { minVariantPrice: { amount: string; currencyCode: string } };
-        } | null;
+  id: string;
+  imageField: { reference: { image: LookbookSlide["image"] } | null } | null;
+  captionField: { value: string } | null;
+  productField: {
+    reference: {
+      id: string;
+      handle: string;
+      title: string;
+      productType: string | null;
+      priceRange: { minVariantPrice: { amount: string; currencyCode: string } };
     } | null;
+  } | null;
 }
