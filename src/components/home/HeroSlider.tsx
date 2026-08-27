@@ -27,6 +27,18 @@ export const HeroSlider = ({ collectionTitle, collectionHandle, slides }: HeroSl
   const prevSlide = () => setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
   const nextSlide = () => setCurrent((prev) => (prev + 1) % slides.length);
 
+  // Nawigacja klawiaturą i Escape, gdy lightbox jest otwarty
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxOpen(false);
+      if (e.key === 'ArrowLeft') prevSlide();
+      if (e.key === 'ArrowRight') nextSlide();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxOpen, slides.length]);
+
   const slide = slides[current];
   const wishlistId = slide.product?.id ?? slide.id;
   const isLiked = isInWishlist(wishlistId);
@@ -166,6 +178,32 @@ export const HeroSlider = ({ collectionTitle, collectionHandle, slides }: HeroSl
           >
             ×
           </button>
+
+          <div className="absolute top-6 left-6 z-20 text-white font-black tracking-widest">
+            {current + 1} / {slides.length}
+          </div>
+
+          {slides.length > 1 && (
+            <>
+              <button
+                type="button"
+                aria-label="Poprzednie zdjęcie"
+                onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/80 text-black hover:bg-white transition"
+              >
+                <ChevronLeft size={28} />
+              </button>
+              <button
+                type="button"
+                aria-label="Następne zdjęcie"
+                onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/80 text-black hover:bg-white transition"
+              >
+                <ChevronRight size={28} />
+              </button>
+            </>
+          )}
+
           <img
             src={slide.image.url}
             alt={slide.caption ?? collectionTitle}
