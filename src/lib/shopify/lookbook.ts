@@ -1,7 +1,7 @@
 const QUERY = `
   query HomepageLookbook($settingsHandle: String!) {
     metaobject(handle: { type: "ustawienia_strony", handle: $settingsHandle }) {
-      field(key: "homepage_lookbook_collection") {
+      field(key: "kolekcja_lookbooka_na_stronie_glownej") {
         reference {
           ... on Collection {
             handle
