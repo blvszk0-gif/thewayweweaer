@@ -69,7 +69,6 @@ export const LandingSections = () => {
     { q: tHome('czy_mogę_zwrócić_towar'), a: tHome('tak_masz_14_dni_na_zwrot_nieużywanego_to') },
     { q: tHome('jak_dbać_o_ubrania_twww'), a: tHome('zalecamy_pranie_w_30_stopniach_na_lewej') },
     { q: tHome('czy_wysyłacie_za_granicę'), a: tHome('obecnie_wysyłamy_na_terenie_całej_unii_e') },
-    { q: tHome('co_to_jest_twww_club'), a: tHome('to_nasz_system_lojalnościowy_za_każde_za') },
   ];
 
   return (

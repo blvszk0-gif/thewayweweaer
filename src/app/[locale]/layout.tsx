@@ -9,6 +9,8 @@ import { routing } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 import "../globals.css";
+import { CookieConsent } from '@/components/layout/CookieConsent';
+import { KlaviyoScript } from "@/components/layout/KlaviyoScript";
 
 const antonio = Antonio({
   weight: ["400", "700"],
@@ -70,16 +72,11 @@ export default async function LocaleLayout({
           <StoreProvider>
             {children}
             <BackToTop />
+            <CookieConsent />
           </StoreProvider>
         </NextIntlClientProvider>
         <SpeedInsights />
-        {klaviyoCompanyId && (
-          <Script
-            id="klaviyo-onsite"
-            strategy="afterInteractive"
-            src={`https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=${encodeURIComponent(klaviyoCompanyId)}`}
-          />
-        )}
+        {klaviyoCompanyId && <KlaviyoScript companyId={klaviyoCompanyId} />}
       </body>
     </html>
   );
