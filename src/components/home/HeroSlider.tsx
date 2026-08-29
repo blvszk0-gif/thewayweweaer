@@ -69,94 +69,99 @@ export const HeroSlider = ({ collectionTitle, collectionHandle, slides }: HeroSl
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-[color:var(--surface)] pt-24 pb-12 font-antonio">
-      <div className="container mx-auto px-6 mb-8">
-        <Link href={`/shop/${collectionHandle}`} className="group inline-flex flex-col">
-          <span className="text-[13px] font-black text-[color:var(--foreground)]/30 tracking-[0.3em] uppercase mb-1">Project: TWWW // Subject:</span>
-          <span className="text-3xl md:text-5xl font-black uppercase tracking-tighter group-hover:pl-4 transition-all duration-500 italic font-antonio text-[color:var(--foreground)]">
+    <section className="relative w-full overflow-hidden bg-[color:var(--surface)] pt-20 font-antonio">
+      <div className="relative w-full h-[calc(100vh-5rem)] min-h-[480px] group/slider">
+        <AnimatePresence mode="wait">
+          {slide.image && (
+            <motion.button
+              key={slide.id}
+              type="button"
+              onClick={() => setLightboxOpen(true)}
+              aria-label="Powiększ zdjęcie"
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-0 w-full h-full cursor-zoom-in"
+            >
+              <img
+                src={slide.image.url}
+                alt={slide.caption ?? collectionTitle}
+                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              />
+            </motion.button>
+          )}
+        </AnimatePresence>
+
+        {/* Collection title, now a button overlaid on the slides */}
+        <Link
+          href={`/shop/${collectionHandle}`}
+          onClick={(e) => e.stopPropagation()}
+          className="group absolute top-6 left-4 sm:top-8 sm:left-8 z-30 inline-flex flex-col items-start p-3 sm:p-5 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/40 text-black shadow-[0_0_50px_rgba(255,255,255,0.3)] hover:bg-white/60 transition-all duration-500 max-w-[80%]"
+        >
+          <span className="text-[10px] sm:text-[13px] font-black tracking-[0.3em] uppercase mb-1 text-black/40">Project: TWWW // Subject:</span>
+          <span className="text-xl sm:text-3xl md:text-5xl font-black uppercase tracking-tighter italic font-antonio group-hover:pl-2 transition-all duration-500">
             {collectionTitle}
           </span>
         </Link>
-      </div>
-      <div className="container mx-auto px-6 flex flex-col lg:flex-row gap-8 items-center max-w-6xl">
-        <div className="relative w-full max-w-6xl mx-auto overflow-hidden rounded-3xl bg-[color:var(--surface-muted)] aspect-video sm:aspect-video lg:flex-1 group/slider shadow-2xl border border-[color:var(--border)]">
-          <AnimatePresence mode="wait">
-            {slide.image && (
-              <motion.button
-                key={slide.id}
-                type="button"
-                onClick={() => setLightboxOpen(true)}
-                aria-label="Powiększ zdjęcie"
-                initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute inset-0 w-full h-full cursor-zoom-in"
-              >
-                <img
-                  src={slide.image.url}
-                  alt={slide.caption ?? collectionTitle}
-                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                />
-              </motion.button>
-            )}
-          </AnimatePresence>
 
-          {slide.product && (
-            <div className="absolute top-4 right-4 sm:top-8 sm:right-8 flex flex-col gap-3 opacity-0 group-hover/slider:opacity-100 transition-all duration-500 z-30 lg:flex md:flex">
+        {slide.product && (
+          <div className="absolute top-6 right-4 sm:top-8 sm:right-8 flex flex-col gap-3 opacity-0 group-hover/slider:opacity-100 transition-all duration-500 z-30">
+            <button
+              onClick={handleWishlist}
+              className="p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-md bg-[color:var(--foreground)] text-[color:var(--surface)]"
+            >
+              <Heart size={20} className="sm:w-6 sm:h-6" strokeWidth={2} fill={isLiked ? "currentColor" : "none"} />
+            </button>
+            {slide.product.variantId && (
               <button
-                onClick={handleWishlist}
-                className="p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-md bg-[color:var(--foreground)] text-[color:var(--surface)]"
+                onClick={handleAddToCart}
+                disabled={isCartLoading || !slide.product.availableForSale}
+                className="p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-md bg-[color:var(--foreground)] text-[color:var(--surface)] disabled:opacity-30"
+                aria-label="Dodaj do koszyka"
               >
-                <Heart size={20} className="sm:w-6 sm:h-6" strokeWidth={2} fill={isLiked ? "currentColor" : "none"} />
+                <ShoppingBag size={20} className="sm:w-6 sm:h-6" strokeWidth={2} />
               </button>
-              {slide.product.variantId && (
-                <button
-                  onClick={handleAddToCart}
-                  disabled={isCartLoading || !slide.product.availableForSale}
-                  className="p-3 sm:p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border border-[color:var(--border)] backdrop-blur-md bg-[color:var(--foreground)] text-[color:var(--surface)] disabled:opacity-30"
-                  aria-label="Dodaj do koszyka"
-                >
-                  <ShoppingBag size={20} className="sm:w-6 sm:h-6" strokeWidth={2} />
-                </button>
-              )}
-            </div>
-          )}
-
-          <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 transition-all p-2 rounded-full backdrop-blur-md border border-white/10 z-30 hidden sm:flex text-black bg-white/20 hover:bg-white/40">
-            <ChevronLeft size={32} strokeWidth={1} />
-          </button>
-          <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 transition-all p-2 rounded-full backdrop-blur-md border border-white/10 z-30 hidden sm:flex text-black bg-white/20 hover:bg-white/40">
-            <ChevronRight size={32} strokeWidth={1} />
-          </button>
-
-          <div className="absolute top-4 left-4 sm:top-auto sm:bottom-10 sm:left-10 transition-all duration-500 p-3 sm:p-6 rounded-2xl sm:rounded-[2rem] backdrop-blur-xl border border-white/10 z-20 bg-white/40 text-black shadow-[0_0_50px_rgba(255,255,255,0.3)]">
-            {slide.product ? (
-              <Link
-                href={`/product/${slide.product.handle}`}
-                className="text-xs sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-antonio hover:underline"
-              >
-                {slide.caption}
-              </Link>
-            ) : (
-              <h3 className="text-xs sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-antonio">
-                {slide.caption}
-              </h3>
             )}
           </div>
+        )}
+
+        <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 transition-all p-2 rounded-full backdrop-blur-md border border-white/10 z-30 hidden sm:flex text-black bg-white/20 hover:bg-white/40">
+          <ChevronLeft size={32} strokeWidth={1} />
+        </button>
+        <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 transition-all p-2 rounded-full backdrop-blur-md border border-white/10 z-30 hidden sm:flex text-black bg-white/20 hover:bg-white/40">
+          <ChevronRight size={32} strokeWidth={1} />
+        </button>
+
+        <div className="absolute bottom-6 left-4 sm:bottom-10 sm:left-10 transition-all duration-500 p-3 sm:p-6 rounded-2xl sm:rounded-[2rem] backdrop-blur-xl border border-white/10 z-20 bg-white/40 text-black shadow-[0_0_50px_rgba(255,255,255,0.3)] max-w-[70%] sm:max-w-sm">
+          {slide.product ? (
+            <Link
+              href={`/product/${slide.product.handle}`}
+              className="text-xs sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-antonio hover:underline"
+            >
+              {slide.caption}
+            </Link>
+          ) : (
+            <h3 className="text-xs sm:text-lg md:text-2xl font-black uppercase tracking-tighter italic leading-tight break-words font-antonio">
+              {slide.caption}
+            </h3>
+          )}
         </div>
 
-        <div className="w-full lg:w-24 flex lg:flex-col gap-3 overflow-x-auto lg:overflow-y-auto no-scrollbar py-2">
-          {slides.map((item, i) => (
-            <button
-              key={item.id}
-              onClick={() => setCurrent(i)}
-              className={`relative flex-shrink-0 w-20 lg:w-full aspect-video lg:aspect-[16/9] rounded-xl overflow-hidden transition-all duration-500 border-2 ${current === i ? 'border-[color:var(--foreground)] scale-105 shadow-xl' : 'border-transparent opacity-30 hover:opacity-100'}`}
-            >
-              {item.image && <img src={item.image.url} alt={item.caption ?? ''} className="w-full h-full object-cover grayscale" />}
-            </button>
-          ))}
-        </div>
+        {slides.length > 1 && (
+          <div className="absolute bottom-6 right-4 sm:bottom-10 sm:right-10 z-30 flex gap-2 sm:gap-3 p-2 rounded-2xl backdrop-blur-xl border border-white/10 bg-white/20">
+            {slides.map((item, i) => (
+              <button
+                key={item.id}
+                onClick={() => setCurrent(i)}
+                aria-label={`Slajd ${i + 1}`}
+                className={`relative flex-shrink-0 w-8 h-8 sm:w-14 sm:h-14 rounded-lg overflow-hidden transition-all duration-500 border-2 ${current === i ? 'border-white scale-105 shadow-xl' : 'border-transparent opacity-50 hover:opacity-100'}`}
+              >
+                {item.image && <img src={item.image.url} alt={item.caption ?? ''} className="w-full h-full object-cover grayscale" />}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {lightboxOpen && slide.image && (
