@@ -6,6 +6,7 @@ import { ShoppingBag, Heart, CreditCard } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { useStore } from '@/context/StoreContext';
+import { BackInStockForm } from '@/components/shop/BackInStockForm';
 
 interface ProductCardProps {
   id: string;
@@ -70,13 +71,21 @@ export const ProductCard = ({ id, variantId, name, price, image, category, isAva
         </Link>
 
         <div className="mt-auto space-y-4 pt-6">
-          <button
-            onClick={handleAddToCart}
-            disabled={!variantId || isCartLoading || !isAvailable}
-            className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-full font-black uppercase tracking-widest text-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg disabled:opacity-30"
-          >
-            <ShoppingBag size={20} /> {!isAvailable ? 'Niedostępne' : isCartLoading ? '...' : tCartWishlist('dodaj_do_koszyka')}
-          </button>
+          {isAvailable ? (
+            <button
+              onClick={handleAddToCart}
+              disabled={!variantId || isCartLoading}
+              className="w-full bg-[color:var(--foreground)] text-[color:var(--surface)] py-4 rounded-full font-black uppercase tracking-widest text-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg disabled:opacity-30"
+            >
+              <ShoppingBag size={20} /> {isCartLoading ? '...' : tCartWishlist('dodaj_do_koszyka')}
+            </button>
+          ) : variantId ? (
+            <BackInStockForm variantId={variantId} />
+          ) : (
+            <p className="text-center text-xs font-black uppercase tracking-widest opacity-40 py-4">
+              Towar niedostępny
+            </p>
+          )}
 
           <div className="flex items-center justify-center gap-4 opacity-20 py-2 text-[color:var(--foreground)]">
             <CreditCard size={16} />
