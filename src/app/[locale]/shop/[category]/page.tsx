@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { ProductCard } from '@/components/shop/ProductCard';
+import { DividedProductGrid } from '@/components/shop/DividedProductGrid';
 
 type Product = { id: string; handle: string; title: string; featuredImage: { url: string } | null; priceRange: { minVariantPrice: { amount: string } }; variants: { nodes: Array<{ id: string; availableForSale: boolean; selectedOptions: Array<{ name: string; value: string }> }> } };
 
@@ -43,10 +43,7 @@ export default function CategoryPage() {
       {loading && <p className="text-center py-20 font-black uppercase tracking-widest opacity-50">Ładowanie kolekcji…</p>}
       {error && <p className="text-center py-20 font-black uppercase tracking-widest text-red-500">Nie udało się pobrać kolekcji. Spróbuj ponownie później.</p>}
       {!loading && !error && filtered.length === 0 && <p className="text-center py-20 font-black uppercase tracking-widest opacity-50">Brak produktów w tej kolekcji.</p>}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">{filtered.map((product) => {
-        const variant = product.variants.nodes.find((item) => item.availableForSale) || product.variants.nodes[0];
-        return <ProductCard key={product.id} id={product.handle} variantId={variant?.id} name={product.title} price={Number(product.priceRange.minVariantPrice.amount)} image={product.featuredImage?.url || ''} category={category} isAvailable={variant?.availableForSale ?? false} />;
-      })}</div>
+      {!loading && !error && filtered.length > 0 && <DividedProductGrid products={filtered} category={category} />}
     </div><Footer />
   </main>;
 }
