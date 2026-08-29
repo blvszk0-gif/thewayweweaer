@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import * as Sentry from "@sentry/nextjs";
+import { createProductRedirect } from "@/lib/shopify/admin";
+
 const WEBHOOK_SECRET = process.env.SHOPIFY_WEBHOOK_SECRET!;
 
 function verifyHmac(rawBody: string, hmacHeader: string | null): boolean {
@@ -34,6 +36,17 @@ export async function POST(request: NextRequest) {
     console.log(`Webhook GDPR: ${topic}`, { shopDomain, payload });
 
     switch (topic) {
+        case "products/create":
+            try {
+                if (payload.handle) {
+                    await createProductRedirect(payload.handle);
+                    console.log(`Utworzono przekierowanie dla produktu: ${payload.handle}`);
+                }
+            } catch (err) {
+                console.error("Nie udało się utworzyć przekierowania produktu", err);
+                Sentry.captureException(err);
+            }
+            break;
         case "customers/data_request":
             // Nie przechowujemy własnej kopii danych klienta - wszystko żyje w Shopify.
             // TODO: opcjonalnie wyślij sobie e-mail/powiadomienie, żeby ręcznie
