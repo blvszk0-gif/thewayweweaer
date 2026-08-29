@@ -18,7 +18,7 @@ export default function Error({
     }, [error]);
 
     return (
-        <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio flex flex-col">
+        <main className="min-h-screen text-[color:var(--foreground)] font-antonio flex flex-col">
             <Header />
             <div className="flex-1 flex flex-col items-center justify-center px-6 text-center py-32">
                 <p className="font-black uppercase tracking-[.35em] opacity-40">The Way We Wear</p>

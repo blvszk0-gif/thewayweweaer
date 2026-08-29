@@ -81,7 +81,7 @@ function SubjectsContent() {
   }, [isCollections]);
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio relative overflow-hidden">
+    <main className="min-h-screen text-[color:var(--foreground)] font-antonio relative overflow-hidden">
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-repeat" />
       <Header />
 
@@ -134,7 +134,7 @@ function SubjectsContent() {
 
 export default function SubjectsPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[color:var(--surface)]" />}>
+    <Suspense fallback={<div className="min-h-screen " />}>
       <SubjectsContent />
     </Suspense>
   );

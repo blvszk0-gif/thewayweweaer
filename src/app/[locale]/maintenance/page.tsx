@@ -9,7 +9,7 @@ export default function MaintenancePage() {
   const tEditorial = useTranslations('editorial');
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] font-antonio flex items-center justify-center p-6 overflow-hidden">
+    <main className="min-h-screen font-antonio flex items-center justify-center p-6 overflow-hidden">
       <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-repeat" />
 
       <motion.div

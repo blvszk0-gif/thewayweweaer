@@ -30,9 +30,9 @@ export default function ProductPage() {
   const variant = useMemo(() => product?.variants.nodes.find((item) => item.selectedOptions.every((option) => selected[option.name] === option.value)) || product?.variants.nodes[0], [product, selected]);
   const options = useMemo(() => product ? Array.from(new Set(product.variants.nodes.flatMap((item) => item.selectedOptions.map((option) => option.name)))).map((name) => [name, Array.from(new Set(product.variants.nodes.flatMap((item) => item.selectedOptions.filter((option) => option.name === name).map((option) => option.value))))] as const) : [], [product]);
   const images = product ? (product.images.nodes.length ? product.images.nodes : product.featuredImage ? [product.featuredImage] : []) : [];
-  if (loading) return <main className="min-h-screen bg-[color:var(--surface)]"><Header /><p className="pt-40 text-center font-black uppercase tracking-widest">Ładowanie produktu…</p></main>;
-  if (error || !product || !variant) return <main className="min-h-screen bg-[color:var(--surface)]"><Header /><p className="pt-40 text-center font-black uppercase tracking-widest">Nie znaleziono produktu.</p><Footer /></main>;
-  return <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio"><Header /><div className="container mx-auto px-6 pt-32 pb-24"><div className="grid lg:grid-cols-2 gap-16">
+  if (loading) return <main className="min-h-screen "><Header /><p className="pt-40 text-center font-black uppercase tracking-widest">Ładowanie produktu…</p></main>;
+  if (error || !product || !variant) return <main className="min-h-screen "><Header /><p className="pt-40 text-center font-black uppercase tracking-widest">Nie znaleziono produktu.</p><Footer /></main>;
+  return <main className="min-h-screen text-[color:var(--foreground)] font-antonio"><Header /><div className="container mx-auto px-6 pt-32 pb-24"><div className="grid lg:grid-cols-2 gap-16">
     <section>
       <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-[color:var(--surface-muted)] relative">
         {images[imageIndex] ? (

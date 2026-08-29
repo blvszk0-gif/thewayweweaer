@@ -40,7 +40,7 @@ export default function SuccessPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] font-antonio overflow-hidden">
+    <main className="min-h-screen font-antonio overflow-hidden">
       <Header />
 
       <div className="container mx-auto px-6 pt-40 pb-20 max-w-4xl">

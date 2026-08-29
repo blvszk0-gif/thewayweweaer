@@ -31,7 +31,7 @@ export default function BlogPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] font-antonio">
+    <main className="min-h-screen font-antonio">
       <Header />
 
       <div className="container mx-auto px-4 pt-40 pb-40 max-w-2xl">

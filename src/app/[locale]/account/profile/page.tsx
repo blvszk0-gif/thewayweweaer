@@ -78,7 +78,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio">
+    <main className="min-h-screen text-[color:var(--foreground)] font-antonio">
       <Header />
       <section className="mx-auto max-w-2xl px-6 pb-24 pt-36">
         <p className="text-xs font-black uppercase tracking-[0.2em] opacity-50">Twoje konto</p>

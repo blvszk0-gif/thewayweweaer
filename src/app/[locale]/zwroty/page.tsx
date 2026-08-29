@@ -12,7 +12,7 @@ export default function ReturnsPage() {
   const tNav = useTranslations('nav');
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio relative overflow-hidden">
+    <main className="min-h-screen text-[color:var(--foreground)] font-antonio relative overflow-hidden">
       <Header />
       <div className="container mx-auto px-6 pt-40 pb-20 relative z-10">
         <header className="mb-20 text-center lg:text-left">

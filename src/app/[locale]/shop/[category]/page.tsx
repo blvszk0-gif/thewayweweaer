@@ -31,7 +31,7 @@ export default function CategoryPage() {
   const sizes = useMemo(() => Array.from(new Set(products.flatMap((product) => product.variants.nodes.flatMap((variant) => variant.selectedOptions.filter((option) => /size|rozmiar/i.test(option.name)).map((option) => option.value))))), [products]);
   const filtered = products.filter((product) => product.variants.nodes.some((variant) => (!activeColor || variant.selectedOptions.some((option) => /color|kolor/i.test(option.name) && option.value === activeColor)) && (!activeSize || variant.selectedOptions.some((option) => /size|rozmiar/i.test(option.name) && option.value === activeSize))));
 
-  return <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio"><Header />
+  return <main className="min-h-screen text-[color:var(--foreground)] font-antonio"><Header />
     <div className="pt-32 pb-20 container mx-auto px-6">
       <header className="mb-16"><p className="text-[17px] font-black uppercase tracking-[0.4em] text-[color:var(--foreground)]/45 mb-2">Project: TWWW // Subject:</p><h1 className="text-6xl font-black uppercase tracking-tighter italic">{title}</h1></header>
       <div className="flex flex-wrap justify-between items-center gap-6 py-6 border-y border-[color:var(--border)] mb-12">

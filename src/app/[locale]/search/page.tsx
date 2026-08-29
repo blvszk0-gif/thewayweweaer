@@ -38,7 +38,7 @@ function SearchResults() {
     }, [q]);
 
     return (
-        <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio">
+        <main className="min-h-screen text-[color:var(--foreground)] font-antonio">
             <Header />
             <div className="pt-32 pb-20 container mx-auto px-6">
                 <header className="mb-16">
@@ -91,7 +91,7 @@ export default function SearchPage() {
     return (
         <Suspense
             fallback={
-                <main className="min-h-screen bg-[color:var(--surface)]">
+                <main className="min-h-screen ">
                     <Header />
                     <p className="pt-40 text-center font-black uppercase tracking-widest opacity-50">Ładowanie…</p>
                 </main>

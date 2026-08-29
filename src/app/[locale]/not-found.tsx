@@ -10,7 +10,7 @@ export default function NotFound() {
   const tEditorial = useTranslations('editorial');
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio flex flex-col">
+    <main className="min-h-screen text-[color:var(--foreground)] font-antonio flex flex-col">
       <Header />
       <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
         <h1 className="text-9xl font-black italic tracking-tighter opacity-10">404</h1>

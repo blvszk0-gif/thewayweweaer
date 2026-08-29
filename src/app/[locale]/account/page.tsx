@@ -94,7 +94,7 @@ export default function AccountPage() {
 
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--foreground)] font-antonio">
+    <main className="min-h-screen text-[color:var(--foreground)] font-antonio">
 
       <Header />
 
