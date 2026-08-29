@@ -1,7 +1,7 @@
 const SHOP_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN!;
 const CLIENT_ID = process.env.SHOPIFY_ADMIN_CLIENT_ID!;
 const CLIENT_SECRET = process.env.SHOPIFY_WEBHOOK_SECRET!;
-const ADMIN_API_VERSION = "2025-07";
+const ADMIN_API_VERSION = "2026-07";
 const SITE_URL = process.env.SITE_URL || "https://www.thewaywewear.pl";
 
 let cachedToken: { value: string; expiresAt: number } | null = null;
@@ -17,9 +17,9 @@ async function safeJson(res: Response, context: string): Promise<any> {
     }
 }
 
-async function getAdminAccessToken(): Promise<string> {
+async function getAdminAccessToken(forceRefresh = false): Promise<string> {
     const now = Date.now();
-    if (cachedToken && cachedToken.expiresAt > now + 60_000) {
+    if (!forceRefresh && cachedToken && cachedToken.expiresAt > now + 60_000) {
         return cachedToken.value;
     }
 
@@ -53,9 +53,21 @@ async function getAdminAccessToken(): Promise<string> {
     return cachedToken.value;
 }
 
-export async function createProductRedirect(handle: string): Promise<void> {
-    const token = await getAdminAccessToken();
+function isAuthError(json: any): boolean {
+    if (typeof json.errors === "string") {
+        return /invalid api key|access token|unrecognized login/i.test(json.errors);
+    }
+    if (Array.isArray(json.errors)) {
+        return json.errors.some(
+            (e: any) =>
+                e.extensions?.code === "ACCESS_DENIED" ||
+                /invalid api key|access token/i.test(e.message ?? "")
+        );
+    }
+    return false;
+}
 
+async function callUrlRedirectCreate(handle: string, token: string): Promise<any> {
     const mutation = `
     mutation CreateRedirect($path: String!, $target: String!) {
       urlRedirectCreate(urlRedirect: { path: $path, target: $target }) {
@@ -80,9 +92,21 @@ export async function createProductRedirect(handle: string): Promise<void> {
         }),
     });
 
-    const json = await safeJson(res, "createProductRedirect");
+    return safeJson(res, "createProductRedirect");
+}
 
-    if (json.errors?.length) {
+export async function createProductRedirect(handle: string): Promise<void> {
+    let token = await getAdminAccessToken();
+    let json = await callUrlRedirectCreate(handle, token);
+
+    // Jeśli token okazał się nieważny (np. po reinstalacji aplikacji) - odśwież i spróbuj raz jeszcze
+    if (isAuthError(json)) {
+        console.warn("Token Admin API odrzucony, odświeżam i ponawiam próbę...");
+        token = await getAdminAccessToken(true);
+        json = await callUrlRedirectCreate(handle, token);
+    }
+
+    if (json.errors) {
         throw new Error(`[createProductRedirect] Błąd GraphQL: ${JSON.stringify(json.errors)}`);
     }
 
