@@ -50,7 +50,7 @@
       "@next/next/no-img-element": "off",
       "react/no-unescaped-entities": "off",
       "react/jsx-no-comment-textnodes": "off",
-      "jsx-a11y/alt-text": "off"
+      "jsx-a11y/alt-text": "warn"
     }
   }
 }
