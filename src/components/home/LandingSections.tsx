@@ -80,9 +80,12 @@ export const LandingSections = () => {
             <div>
               <h2 className="text-5xl font-black uppercase tracking-tighter italic">{tHome('pochwal_się_tym_co_kupiłeś')}</h2>
             </div>
-            <button className="w-full md:w-auto flex items-center justify-center gap-2 text-base font-black uppercase tracking-widest border border-[color:var(--border)] px-6 py-3 rounded-full hover:bg-[color:var(--surface-muted)] hover:text-[color:var(--foreground)] transition-all">
+            <a
+              href="mailto:zamowienia@thewaywewear.pl?subject=Moja%20opinia%20o%20TWWW&body=Cze%C5%9B%C4%87%2C%0A%0AChcia%C5%82(a)bym%20podzieli%C4%87%20si%C4%99%20opini%C4%85%20o%20zakupionym%20produkcie%20TWWW.%20W%20za%C5%82%C4%85czniku%20wysy%C5%82am%20zdj%C4%99cie.%0A%0AProdukt%3A%20%0AOcena%20(1-5)%3A%20%0AOpinia%3A%20"
+              className="w-full md:w-auto flex items-center justify-center gap-2 text-base font-black uppercase tracking-widest border border-[color:var(--border)] px-6 py-3 rounded-full hover:bg-[color:var(--surface-muted)] hover:text-[color:var(--foreground)] transition-all"
+            >
               <Camera size={16} /> {tHome('dodaj_swoją_opinię')}
-            </button>
+            </a>
           </div>
 
           {!loadingReviews && reviews.length === 0 && (
