@@ -11,6 +11,7 @@ import Script from 'next/script';
 import "../globals.css";
 import { CookieConsent } from '@/components/layout/CookieConsent';
 import { KlaviyoScript } from "@/components/layout/KlaviyoScript";
+import "flag-icons/css/flag-icons.min.css";
 
 const antonio = Antonio({
   weight: ["400", "700"],

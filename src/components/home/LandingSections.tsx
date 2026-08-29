@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Star, Camera, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { FAQSection } from '@/components/home/FAQSection';
 interface StoreReview {
   id: number;
   rating: number;
@@ -117,18 +117,7 @@ export const LandingSections = () => {
           </div>
         </div>
 
-        {/* FAQ Section */}
-        <div className="mb-48 max-w-4xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl font-black uppercase tracking-tighter italic mb-4">FAQ</h2>
-            <p className="text-[color:var(--foreground)]/40 font-bold uppercase tracking-widest text-base">{tHome('najczęściej_zadawane_pytania')}</p>
-          </div>
-          <div className="space-y-6">
-            {faqItems.map((item, i) => (
-              <FAQItem key={i} q={item.q} a={item.a} i={i} />
-            ))}
-          </div>
-        </div>
+        <FAQSection />
       </div>
     </section>
   );

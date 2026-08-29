@@ -58,33 +58,30 @@ export const Footer = () => {
               onClick={() => handleLanguageChange('pl')}
               aria-pressed={locale === 'pl'}
               aria-current={locale === 'pl' ? 'true' : undefined}
-              className={`px-4 py-2 rounded-full border border-[color:var(--border)] font-black flex items-center gap-2 transition-all ${
-                locale === 'pl' ? 'bg-[color:var(--foreground)] text-[color:var(--surface)]' : 'text-[color:var(--foreground)] hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)]'
-              }`}
+              className={`px-4 py-2 rounded-full border border-[color:var(--border)] font-black flex items-center gap-2 transition-all ${locale === 'pl' ? 'bg-[color:var(--foreground)] text-[color:var(--surface)]' : 'text-[color:var(--foreground)] hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)]'
+                }`}
             >
-              PL <span className="text-xl">🇵🇱</span>
+              PL <span className="fi fi-pl rounded-sm" style={{ width: '1.3em', height: '1.3em' }} />
             </button>
             <button
               type="button"
               onClick={() => handleLanguageChange('en')}
               aria-pressed={locale === 'en'}
               aria-current={locale === 'en' ? 'true' : undefined}
-              className={`px-4 py-2 rounded-full border border-[color:var(--border)] font-black flex items-center gap-2 transition-all ${
-                locale === 'en' ? 'bg-[color:var(--foreground)] text-[color:var(--surface)]' : 'text-[color:var(--foreground)] hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)]'
-              }`}
+              className={`px-4 py-2 rounded-full border border-[color:var(--border)] font-black flex items-center gap-2 transition-all ${locale === 'en' ? 'bg-[color:var(--foreground)] text-[color:var(--surface)]' : 'text-[color:var(--foreground)] hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)]'
+                }`}
             >
-              ENG <span className="text-xl">🇬🇧</span>
+              ENG <span className="fi fi-gb rounded-sm" style={{ width: '1.3em', height: '1.3em' }} />
             </button>
             <button
               type="button"
               onClick={() => handleLanguageChange('uk')}
               aria-pressed={locale === 'uk'}
               aria-current={locale === 'uk' ? 'true' : undefined}
-              className={`px-4 py-2 rounded-full border border-[color:var(--border)] font-black flex items-center gap-2 transition-all ${
-                locale === 'uk' ? 'bg-[color:var(--foreground)] text-[color:var(--surface)]' : 'text-[color:var(--foreground)] hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)]'
-              }`}
+              className={`px-4 py-2 rounded-full border border-[color:var(--border)] font-black flex items-center gap-2 transition-all ${locale === 'uk' ? 'bg-[color:var(--foreground)] text-[color:var(--surface)]' : 'text-[color:var(--foreground)] hover:bg-[color:var(--foreground)] hover:text-[color:var(--surface)]'
+                }`}
             >
-              UKR <span className="text-xl">🇺🇦</span>
+              UKR <span className="fi fi-ua rounded-sm" style={{ width: '1.3em', height: '1.3em' }} />
             </button>
           </div>
         </div>

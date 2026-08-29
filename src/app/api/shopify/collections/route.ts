@@ -5,12 +5,15 @@ export const revalidate = 300;
 
 export async function GET() {
   const query = `
-    query NavCollections {
-      collections(first: 20, sortKey: TITLE) {
-        nodes { id handle title }
-      }
+  query NavCollections {
+    collections(first: 20, sortKey: TITLE) {
+      nodes { id handle title image { url altText } }
     }
-  `;
-  const data = await storefrontFetch<{ collections: { nodes: { id: string; handle: string; title: string }[] } }>(query);
-  return NextResponse.json({ collections: data.collections.nodes });
+  }
+`;
+  const data = await storefrontFetch<{
+    collections: { nodes: { id: string; handle: string; title: string; image: { url: string; altText: string | null } | null }[] };
+  }>(query);
+
+  return NextResponse.json(data.collections.nodes);
 }
