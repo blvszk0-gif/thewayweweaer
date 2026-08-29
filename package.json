@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sentry/nextjs": "^10.72.0",
     "@vercel/speed-insights": "^1.1.0",
     "canvas-confetti": "^1.9.4",
     "date-fns": "^4.4.0",
