@@ -76,25 +76,25 @@ export function BackInStockForm({ variantId }: BackInStockFormProps) {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="flex-1 flex flex-col sm:flex-row gap-3">
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-3 min-w-0">
             <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Twój adres e-mail"
-                className="flex-1 border border-[color:var(--border)] rounded-full px-6 py-4 bg-transparent font-bold focus:outline-none"
+                className="w-full min-w-0 border border-[color:var(--border)] rounded-full px-6 py-4 bg-transparent font-bold focus:outline-none"
             />
             <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="flex items-center justify-center gap-2 bg-[color:var(--foreground)] text-[color:var(--surface)] px-6 py-4 rounded-full font-black uppercase tracking-widest text-sm disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 bg-[color:var(--foreground)] text-[color:var(--surface)] px-6 py-4 rounded-full font-black uppercase tracking-widest text-sm disabled:opacity-50"
             >
                 <Bell size={16} />
                 {status === 'loading' ? '...' : 'Powiadom mnie'}
             </button>
             {status === 'error' && (
-                <p role="alert" className="text-red-500 text-sm font-bold sm:hidden">
+                <p role="alert" className="text-red-500 text-sm font-bold">
                     Coś poszło nie tak, spróbuj ponownie.
                 </p>
             )}

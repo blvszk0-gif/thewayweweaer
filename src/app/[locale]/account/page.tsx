@@ -24,13 +24,18 @@ type Customer = {
   orders?: {
     nodes: Array<{
       id: string;
-      number?: string;
+      number?: number;
       processedAt?: string;
       financialStatus?: string;
       fulfillmentStatus?: string;
       totalPrice?: {
         amount: string;
         currencyCode: string;
+      };
+      fulfillments?: {
+        nodes: Array<{
+          latestShipmentStatus: string | null;
+        }>;
       };
     }>;
   };

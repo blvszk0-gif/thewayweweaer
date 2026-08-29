@@ -1,14 +1,20 @@
 'use client';
 
+import { Link } from '@/i18n/routing';
+import { ORDER_STAGES, extractNumericId, orderStageIndex } from '@/lib/orderStatus';
+
 type Order = {
   id: string;
-  number?: string;
+  number?: number;
   processedAt?: string;
   financialStatus?: string;
   fulfillmentStatus?: string;
   totalPrice?: {
     amount: string;
     currencyCode: string;
+  };
+  fulfillments?: {
+    nodes: Array<{ latestShipmentStatus: string | null }>;
   };
 };
 
@@ -26,13 +32,14 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
       {orders.length ? (
         <div className="space-y-4">
           {orders.map((order) => (
-            <article
+            <Link
               key={order.id}
-              className="border border-[color:var(--border)] rounded-2xl p-6 flex flex-wrap justify-between gap-4"
+              href={`/status/${extractNumericId(order.id)}`}
+              className="block border border-[color:var(--border)] rounded-2xl p-6 flex flex-wrap justify-between gap-4 hover:bg-[color:var(--surface-muted)] transition-colors"
             >
               <div>
                 <p className="font-black">
-                  Zamówienie #{order.number || order.id}
+                  Zamówienie #{order.number ?? order.id}
                 </p>
 
                 <p className="opacity-50 text-sm">
@@ -50,12 +57,10 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
                 </p>
 
                 <p className="opacity-50 text-sm">
-                  {order.fulfillmentStatus ||
-                    order.financialStatus ||
-                    'W realizacji'}
+                  {ORDER_STAGES[orderStageIndex(order)].label}
                 </p>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       ) : (

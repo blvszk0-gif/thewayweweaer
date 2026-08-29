@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShoppingBag, Heart, CreditCard } from 'lucide-react';
+import { ShoppingBag, Heart } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { useStore } from '@/context/StoreContext';
@@ -86,13 +86,6 @@ export const ProductCard = ({ id, variantId, name, price, image, category, isAva
               Towar niedostępny
             </p>
           )}
-
-          <div className="flex items-center justify-center gap-4 opacity-20 py-2 text-[color:var(--foreground)]">
-            <CreditCard size={16} />
-            <span className="text-[17px] font-black italic">BLIK</span>
-            <span className="text-[17px] font-black italic">VISA</span>
-            <span className="text-[17px] font-black italic">APPLE PAY</span>
-          </div>
         </div>
       </div>
     </div>

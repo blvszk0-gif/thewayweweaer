@@ -23,6 +23,33 @@ type CustomerResponse = {
       territoryCode: string | null;
       province: string | null;
     } | null;
+    orders: {
+      nodes: Array<{
+        id: string;
+        name: string;
+        number: number;
+        processedAt: string;
+        financialStatus: string | null;
+        fulfillmentStatus: string;
+        totalPrice: { amount: string; currencyCode: string };
+        shippingAddress: {
+          name: string | null;
+          address1: string | null;
+          address2: string | null;
+          city: string | null;
+          zip: string | null;
+          territoryCode: string | null;
+        } | null;
+        fulfillments: {
+          nodes: Array<{
+            status: string | null;
+            latestShipmentStatus: string | null;
+            estimatedDeliveryAt: string | null;
+            trackingInformation: Array<{ company: string | null; number: string | null; url: string | null }>;
+          }>;
+        };
+      }>;
+    };
   } | null;
 };
 
@@ -55,6 +82,40 @@ export async function GET(request: NextRequest) {
             zoneCode
             territoryCode
             province
+          }
+          orders(first: 20, sortKey: PROCESSED_AT, reverse: true) {
+            nodes {
+              id
+              name
+              number
+              processedAt
+              financialStatus
+              fulfillmentStatus
+              totalPrice {
+                amount
+                currencyCode
+              }
+              shippingAddress {
+                name
+                address1
+                address2
+                city
+                zip
+                territoryCode
+              }
+              fulfillments(first: 5) {
+                nodes {
+                  status
+                  latestShipmentStatus
+                  estimatedDeliveryAt
+                  trackingInformation {
+                    company
+                    number
+                    url
+                  }
+                }
+              }
+            }
           }
         }
       }`
