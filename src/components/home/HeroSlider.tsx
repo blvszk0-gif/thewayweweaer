@@ -70,7 +70,7 @@ export const HeroSlider = ({ collectionTitle, collectionHandle, slides }: HeroSl
 
   return (
     <section className="relative w-full overflow-hidden bg-[color:var(--surface)] pt-20 font-antonio">
-      <div className="relative w-full h-[calc(100vh-5rem)] min-h-[480px] group/slider">
+      <div className="relative w-full h-[calc((100vh-5rem)*0.75)] min-h-[360px] sm:h-[calc(100vh-5rem)] sm:min-h-[480px] group/slider">
         <AnimatePresence mode="wait">
           {slide.image && (
             <motion.button
