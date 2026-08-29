@@ -127,7 +127,7 @@ export default function SuccessPage() {
         </div>
 
         <div className="mt-12 text-center">
-          <Link href="/subjects" className="text-[13px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity underline underline-offset-4">
+          <Link href="/" className="text-[13px] font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity underline underline-offset-4">
             {tForms('wróć_do_bazy_produktów')}
           </Link>
         </div>

@@ -19,10 +19,17 @@ export const Header = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [collections, setCollections] = useState<{ handle: string; title: string }[]>([]);
+  const [currentCollection, setCurrentCollection] = useState<{ handle: string; title: string } | null>(null);
 
   useEffect(() => {
     fetch('/api/auth/me').then((response) => setIsLoggedIn(response.ok)).catch(() => setIsLoggedIn(false));
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/shopify/current-collection')
+      .then((res) => res.json())
+      .then((data) => setCurrentCollection(data.collection))
+      .catch(() => setCurrentCollection(null));
   }, []);
 
   useEffect(() => {
@@ -158,14 +165,13 @@ export const Header = () => {
               <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-tighter overflow-y-auto no-scrollbar font-antonio text-[color:var(--foreground)]">
                 <div className="text-base text-[color:var(--foreground)] font-bold opacity-70 mb-2 font-antonio">Project: TWWW // Subject:</div>
 
-                <Link href="/shop/bluzy" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('bluzy')}</Link>
                 <Link href="/shop/koszulki" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('koszulki')}</Link>
-                <Link href="/shop/akcesoria" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('akcesoria')}</Link>
-                <Link href="/lookbook" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">Lookbook</Link>
-
-                <Link href="/subjects?view=collections" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">
-                  {tNav('kolekcje')}
-                </Link>
+                <Link href="/shop/bluzy" onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">{tColorsCategories('bluzy')}</Link>
+                {currentCollection && (
+                  <Link href={`/shop/${currentCollection.handle}`} onClick={() => setIsMenuOpen(false)} className="hover:pl-4 transition-all italic uppercase">
+                    {currentCollection.title}
+                  </Link>
+                )}
               </div>
 
               <div className="mt-auto pt-12 text-[13px] font-bold text-[color:var(--foreground)]/50 tracking-widest uppercase">

@@ -77,7 +77,7 @@ export function FAQSection() {
             </div>
             <div className="space-y-6">
                 {sorted.map((item, i) => (
-                    <FAQItem key={item.id} q={fieldValue(item, 'pytanie')} a={fieldValue(item, 'odpowiedz')} i={i} />
+                    <FAQItem key={item.id} q={fieldValue(item, 'question')} a={fieldValue(item, 'odpowiedz')} i={i} />
                 ))}
             </div>
         </div>

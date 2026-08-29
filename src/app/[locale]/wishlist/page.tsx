@@ -110,7 +110,7 @@ export default function WishlistPage() {
              <h2 className="text-3xl font-black uppercase tracking-tighter italic mb-4">{tCartWishlist('pusto_tu')}</h2>
 
              <div className="flex justify-center mb-8">
-               <Link href="/subjects" className="inline-flex items-center justify-center gap-4 bg-[color:var(--foreground)] text-[color:var(--surface)] px-12 py-6 rounded-full font-black uppercase tracking-[0.3em] text-[18px] hover:scale-[1.05] transition-all shadow-2xl">
+               <Link href="/" className="inline-flex items-center justify-center gap-4 bg-[color:var(--foreground)] text-[color:var(--surface)] px-12 py-6 rounded-full font-black uppercase tracking-[0.3em] text-[18px] hover:scale-[1.05] transition-all shadow-2xl">
                  {tCartWishlist('wróć_do_sklepu')}
                </Link>
              </div>

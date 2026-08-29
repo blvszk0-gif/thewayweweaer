@@ -86,7 +86,7 @@ export default function CartPage() {
               <div className="py-20 text-center bg-[color:var(--surface-muted)] rounded-[40px] border border-dashed border-[color:var(--border)]">
                  <ShoppingBag size={48} className="mx-auto mb-6 opacity-10" />
                  <p className="text-xl font-black uppercase tracking-tighter opacity-40 italic">{tCartWishlist('koszyk_jest_pusty')}</p>
-                 <Link href="/subjects" className="inline-block mt-8 border-b-2 border-[color:var(--foreground)] pb-1 font-black uppercase tracking-widest text-base hover:pb-2 transition-all">{tCartWishlist('wróć_do_sklepu')}</Link>
+                 <Link href="/" className="inline-block mt-8 border-b-2 border-[color:var(--foreground)] pb-1 font-black uppercase tracking-widest text-base hover:pb-2 transition-all">{tCartWishlist('wróć_do_sklepu')}</Link>
               </div>
             )}
 
