@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { storefrontFetch } from '@/lib/shopify/server';
+import * as Sentry from '@sentry/nextjs';
 
 interface SearchProduct {
     id: string;
@@ -51,6 +52,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ products: result.predictiveSearch.products });
     } catch (error) {
         console.error('Search error', error);
+        Sentry.captureException(error);
         return NextResponse.json({ error: 'Wyszukiwanie nieudane.' }, { status: 502 });
     }
 }

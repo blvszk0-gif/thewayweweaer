@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-
+import * as Sentry from "@sentry/nextjs";
 const WEBHOOK_SECRET = process.env.SHOPIFY_WEBHOOK_SECRET!;
 
 function verifyHmac(rawBody: string, hmacHeader: string | null): boolean {
@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
 
     if (!verifyHmac(rawBody, hmacHeader)) {
         console.error("Nieprawidłowy podpis webhooka Shopify", { topic, shopDomain });
+        Sentry.captureMessage("Nieprawidłowy podpis webhooka Shopify", { level: "warning", extra: { topic, shopDomain } });
         return NextResponse.json({ error: "Invalid HMAC" }, { status: 401 });
     }
 

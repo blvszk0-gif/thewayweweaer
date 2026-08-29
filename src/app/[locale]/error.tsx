@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Link } from '@/i18n/routing';
+import * as Sentry from '@sentry/nextjs';
 
 export default function Error({
     error,
@@ -13,7 +14,7 @@ export default function Error({
 }) {
     useEffect(() => {
         console.error(error);
-        // Tu później podepniemy Sentry.captureException(error)
+        Sentry.captureException(error);
     }, [error]);
 
     return (
