@@ -28,7 +28,13 @@ async function getAdminAccessToken(): Promise<string> {
             `Brak wymaganej zmiennej środowiskowej: SHOPIFY_ADMIN_CLIENT_ID=${!!CLIENT_ID}, SHOPIFY_WEBHOOK_SECRET=${!!CLIENT_SECRET}, SHOPIFY_STORE_DOMAIN=${!!SHOP_DOMAIN}`
         );
     }
-
+    console.log("DIAGNOSTYKA (tymczasowa):", {
+        shopDomain: SHOP_DOMAIN,
+        clientIdLength: CLIENT_ID?.length,
+        clientIdPreview: CLIENT_ID ? `${CLIENT_ID.slice(0, 4)}...${CLIENT_ID.slice(-4)}` : null,
+        clientSecretLength: CLIENT_SECRET?.length,
+        clientSecretPreview: CLIENT_SECRET ? `${CLIENT_SECRET.slice(0, 4)}...${CLIENT_SECRET.slice(-4)}` : null,
+    });
     const res = await fetch(`https://${SHOP_DOMAIN}/admin/oauth/access_token`, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
