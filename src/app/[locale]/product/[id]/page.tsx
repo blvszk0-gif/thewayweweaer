@@ -7,9 +7,12 @@ import { Footer } from '@/components/layout/Footer';
 import { useStore } from '@/context/StoreContext';
 import { ChevronLeft, ChevronRight, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { BackInStockForm } from '@/components/shop/BackInStockForm';
+import { RecommendedProducts } from '@/components/shop/RecommendedProducts';
+
+
 
 type Variant = { id: string; title: string; availableForSale: boolean; price: { amount: string; currencyCode: string }; image: { url: string } | null; selectedOptions: Array<{ name: string; value: string }> };
-type Product = { handle: string; title: string; description: string; availableForSale: boolean; featuredImage: { url: string; altText: string | null } | null; images: { nodes: Array<{ url: string; altText: string | null }> }; variants: { nodes: Variant[] } };
+type Product = { id: string; handle: string; title: string; description: string; availableForSale: boolean; featuredImage: { url: string; altText: string | null } | null; images: { nodes: Array<{ url: string; altText: string | null }> }; variants: { nodes: Variant[] } };
 
 export default function ProductPage() {
   const params = useParams<{ id: string }>();
@@ -208,5 +211,5 @@ export default function ProductPage() {
         </div>
       )}
     </div>
-  )}<Footer /></main>;
+  )}<RecommendedProducts productId={product.id} /><Footer /></main>;
 }
