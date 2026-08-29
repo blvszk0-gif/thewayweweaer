@@ -66,32 +66,18 @@ export async function GET(request: NextRequest) {
       customer: {
         firstName: string | null;
         lastName: string | null;
-        defaultAddress: {
-          address1: string | null;
-          city: string | null;
-          zip: string | null;
-          zoneCode: string | null;
-        } | null;
       } | null;
     }>(
       token.access_token,
       `query CustomerSetupStatus {
-        customer {
-          firstName
-          lastName
-          defaultAddress {
-            address1
-            city
-            zip
-            zoneCode
-          }
-        }
-      }`
+    customer {
+      firstName
+      lastName
+    }
+  }`
     );
     const customer = account.customer;
-    const profileIncomplete = !customer?.firstName || !customer.lastName ||
-      !customer.defaultAddress?.address1 || !customer.defaultAddress?.city ||
-      !customer.defaultAddress?.zip || !customer.defaultAddress?.zoneCode;
+    const profileIncomplete = !customer?.firstName || !customer.lastName;
     const destination = profileIncomplete
       ? `/${locale}/account/profile?setup=1`
       : safeReturnTo;

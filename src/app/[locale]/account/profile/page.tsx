@@ -5,16 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
-type Address = {
-  id: string;
-  address1: string | null;
-  address2: string | null;
-  city: string | null;
-  zip: string | null;
-  zoneCode: string | null;
-  territoryCode: string | null;
-};
-
 type Customer = {
   firstName: string | null;
   lastName: string | null;
@@ -24,35 +14,14 @@ type Customer = {
 type FormData = {
   firstName: string;
   lastName: string;
-  address1: string;
-  address2: string;
-  zip: string;
-  city: string;
-  zoneCode: string;
 };
 
-const VOIVODESHIPS = [
-  "dolnośląskie", "kujawsko-pomorskie", "lubelskie", "lubuskie",
-  "łódzkie", "małopolskie", "mazowieckie", "opolskie", "podkarpackie",
-  "podlaskie", "pomorskie", "śląskie", "świętokrzyskie",
-  "warmińsko-mazurskie", "wielkopolskie", "zachodniopomorskie",
-];
-
-const emptyForm: FormData = {
-  firstName: "",
-  lastName: "",
-  address1: "",
-  address2: "",
-  zip: "",
-  city: "",
-  zoneCode: "",
-};
+const emptyForm: FormData = { firstName: "", lastName: "" };
 
 export default function ProfilePage() {
   const router = useRouter();
   const { locale = "pl" } = useParams<{ locale: string }>();
   const [customer, setCustomer] = useState<Customer | null>(null);
-  const [address, setAddress] = useState<Address | null>(null);
   const [form, setForm] = useState<FormData>(emptyForm);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -63,28 +32,13 @@ export default function ProfilePage() {
   useEffect(() => {
     async function loadProfile() {
       try {
-        const [profileResponse, addressesResponse] = await Promise.all([
-          fetch("/api/account/profile", { cache: "no-store" }),
-          fetch("/api/account/adresses", { cache: "no-store" }),
-        ]);
-        if (!profileResponse.ok || !addressesResponse.ok) {
-          throw new Error("Unable to load profile");
-        }
-
-        const profile = await profileResponse.json();
-        const addresses = (await addressesResponse.json()) as Address[];
-        const currentAddress = addresses[0] ?? null;
-
+        const response = await fetch("/api/account/profile", { cache: "no-store" });
+        if (!response.ok) throw new Error("Unable to load profile");
+        const profile = await response.json();
         setCustomer(profile.customer);
-        setAddress(currentAddress);
         setForm({
           firstName: profile.customer?.firstName ?? "",
           lastName: profile.customer?.lastName ?? "",
-          address1: currentAddress?.address1 ?? "",
-          address2: currentAddress?.address2 ?? "",
-          zip: currentAddress?.zip ?? "",
-          city: currentAddress?.city ?? "",
-          zoneCode: currentAddress?.zoneCode ?? "",
         });
       } catch {
         setError("Nie udało się pobrać danych konta. Zaloguj się ponownie.");
@@ -92,7 +46,6 @@ export default function ProfilePage() {
         setLoading(false);
       }
     }
-
     void loadProfile();
   }, []);
 
@@ -107,38 +60,16 @@ export default function ProfilePage() {
     setMessage("");
 
     try {
-      const profileResponse = await fetch("/api/account/profile", {
+      const response = await fetch("/api/account/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ firstName: form.firstName.trim(), lastName: form.lastName.trim() }),
       });
-      if (!profileResponse.ok) throw new Error("profile");
-
-      const addressPayload = {
-        firstName: form.firstName.trim(),
-        lastName: form.lastName.trim(),
-        address1: form.address1.trim(),
-        address2: form.address2.trim() || null,
-        zip: form.zip.trim(),
-        city: form.city.trim(),
-        zoneCode: form.zoneCode.trim(),
-        territoryCode: "PL",
-      };
-      const addressResponse = await fetch("/api/account/adresses", {
-        method: address ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(address ? { addressId: address.id, ...addressPayload } : addressPayload),
-      });
-      if (!addressResponse.ok) throw new Error("address");
+      if (!response.ok) throw new Error("profile");
 
       setMessage("Dane zostały zapisane.");
       setShowSuccessModal(true);
       window.setTimeout(() => router.push(`/${locale}`), 1800);
-      if (!address) {
-        const saved = await addressResponse.json();
-        const id = saved.customerAddressCreate?.customerAddress?.id;
-        if (id) setAddress({ id, ...addressPayload });
-      }
     } catch {
       setError("Nie udało się zapisać danych. Spróbuj ponownie.");
     } finally {
@@ -153,7 +84,7 @@ export default function ProfilePage() {
         <p className="text-xs font-black uppercase tracking-[0.2em] opacity-50">Twoje konto</p>
         <h1 className="mt-3 text-4xl font-black uppercase italic">Uzupełnij dane</h1>
         <p className="mt-4 max-w-xl leading-relaxed opacity-70">
-          Zapisz dane do zamówień i dostawy. Możesz je później zmienić w swoim koncie.
+          Wystarczą imię i nazwisko — adres podasz przy pierwszym zamówieniu w kasie.
         </p>
 
         {loading ? (
@@ -168,15 +99,6 @@ export default function ProfilePage() {
                 <span className="mb-2 block text-sm font-bold uppercase tracking-wider">E-mail</span>
                 <input disabled value={customer?.emailAddress?.emailAddress ?? ""} className="w-full rounded-full border border-[color:var(--border)] bg-[color:var(--surface-muted)] px-5 py-4 opacity-60" />
               </label>
-            </fieldset>
-
-            <fieldset className="grid gap-5 md:grid-cols-2">
-              <legend className="mb-4 text-lg font-black uppercase italic md:col-span-2">Adres zamieszkania</legend>
-              <Field label="Miasto" value={form.city} onChange={(value) => updateField("city", value)} />
-              <SelectField label="Województwo" value={form.zoneCode} onChange={(value) => updateField("zoneCode", value)} />
-              <div className="md:col-span-2"><Field label="Ulica i numer bloku / domu" value={form.address1} onChange={(value) => updateField("address1", value)} /></div>
-              <Field label="Numer mieszkania (opcjonalnie)" value={form.address2} required={false} onChange={(value) => updateField("address2", value)} />
-              <Field label="Kod pocztowy" value={form.zip} inputMode="numeric" pattern="[0-9]{2}-[0-9]{3}" onChange={(value) => updateField("zip", value)} />
             </fieldset>
 
             {error && <p role="alert" className="font-bold text-red-600">{error}</p>}
@@ -204,26 +126,9 @@ export default function ProfilePage() {
   );
 }
 
-function Field({ label, value, onChange, required = true, inputMode, pattern }: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  required?: boolean;
-  inputMode?: "numeric";
-  pattern?: string;
-}) {
+function Field({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
   return <label className="block">
     <span className="mb-2 block text-sm font-bold uppercase tracking-wider">{label}</span>
-    <input required={required} value={value} inputMode={inputMode} pattern={pattern} onChange={(event) => onChange(event.target.value)} className="w-full rounded-full border border-[color:var(--border)] bg-transparent px-5 py-4 outline-none transition-colors focus:border-[color:var(--foreground)]" />
-  </label>;
-}
-
-function SelectField({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
-  return <label className="block">
-    <span className="mb-2 block text-sm font-bold uppercase tracking-wider">{label}</span>
-    <select required value={value} onChange={(event) => onChange(event.target.value)} className="w-full rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-5 py-4 outline-none transition-colors focus:border-[color:var(--foreground)]">
-      <option value="" disabled>Wybierz województwo</option>
-      {VOIVODESHIPS.map((voivodeship) => <option key={voivodeship} value={voivodeship}>{voivodeship}</option>)}
-    </select>
+    <input required value={value} onChange={(event) => onChange(event.target.value)} className="w-full rounded-full border border-[color:var(--border)] bg-transparent px-5 py-4 outline-none transition-colors focus:border-[color:var(--foreground)]" />
   </label>;
 }
