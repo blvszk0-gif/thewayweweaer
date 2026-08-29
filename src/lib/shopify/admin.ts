@@ -95,6 +95,38 @@ async function callUrlRedirectCreate(handle: string, token: string): Promise<any
     return safeJson(res, "createProductRedirect");
 }
 
+export async function adminGraphqlFetch<T = any>(
+    query: string,
+    variables: Record<string, unknown> = {}
+): Promise<T> {
+    let token = await getAdminAccessToken();
+
+    async function run(t: string) {
+        const res = await fetch(`https://${SHOP_DOMAIN}/admin/api/${ADMIN_API_VERSION}/graphql.json`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Shopify-Access-Token": t,
+            },
+            body: JSON.stringify({ query, variables }),
+        });
+        return safeJson(res, "adminGraphqlFetch");
+    }
+
+    let json = await run(token);
+
+    if (isAuthError(json)) {
+        token = await getAdminAccessToken(true);
+        json = await run(token);
+    }
+
+    if (json.errors) {
+        throw new Error(`[adminGraphqlFetch] Błąd GraphQL: ${JSON.stringify(json.errors)}`);
+    }
+
+    return json.data as T;
+}
+
 export async function createProductRedirect(handle: string): Promise<void> {
     let token = await getAdminAccessToken();
     let json = await callUrlRedirectCreate(handle, token);
