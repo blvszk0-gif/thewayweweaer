@@ -74,13 +74,13 @@ export async function POST(request: NextRequest) {
       customerAddressCreate: { customerAddress: { id: string } | null; userErrors: { field: string[]; message: string }[] };
     }>(
       token,
-      `mutation CustomerAddressCreate($address: CustomerAddressInput!) {
-        customerAddressCreate(address: $address) {
-          customerAddress { id }
-          userErrors { field message }
-        }
-      }`,
-      { address: body }
+      `mutation CustomerAddressCreate($address: CustomerAddressInput!, $defaultAddress: Boolean) {
+    customerAddressCreate(address: $address, defaultAddress: $defaultAddress) {
+      customerAddress { id }
+      userErrors { field message }
+    }
+  }`,
+      { address: body, defaultAddress: true }
     );
     const errors = data.customerAddressCreate.userErrors;
     if (errors.length) return NextResponse.json({ errors }, { status: 400 });
@@ -104,13 +104,13 @@ export async function PUT(request: NextRequest) {
       customerAddressUpdate: { customerAddress: { id: string } | null; userErrors: { field: string[]; message: string }[] };
     }>(
       token,
-      `mutation CustomerAddressUpdate($addressId: ID!, $address: CustomerAddressInput!) {
-        customerAddressUpdate(addressId: $addressId, address: $address) {
-          customerAddress { id }
-          userErrors { field message }
-        }
-      }`,
-      { addressId: body.addressId, address: addressInput(body) }
+      `mutation CustomerAddressUpdate($addressId: ID!, $address: CustomerAddressInput!, $defaultAddress: Boolean) {
+    customerAddressUpdate(addressId: $addressId, address: $address, defaultAddress: $defaultAddress) {
+      customerAddress { id }
+      userErrors { field message }
+    }
+  }`,
+      { addressId: body.addressId, address: addressInput(body), defaultAddress: true }
     );
     const errors = data.customerAddressUpdate.userErrors;
     if (errors.length) return NextResponse.json({ errors }, { status: 400 });
