@@ -16,9 +16,11 @@ interface ProductCardProps {
   image: string;
   category: string;
   isAvailable?: boolean;
+  /** 'card' (default): rounded, bordered, own shadow. 'flush': no rounding/border/shadow — for grids that draw their own dividing lines between cells. */
+  variant?: 'card' | 'flush';
 }
 
-export const ProductCard = ({ id, variantId, name, price, image, category, isAvailable = true }: ProductCardProps) => {
+export const ProductCard = ({ id, variantId, name, price, image, category, isAvailable = true, variant = 'card' }: ProductCardProps) => {
   const tCartWishlist = useTranslations('cart_wishlist');
   const { addToCart, addToWishlist, isInWishlist, removeFromWishlist, isCartLoading } = useStore();
   const liked = isInWishlist(id);
@@ -40,7 +42,7 @@ export const ProductCard = ({ id, variantId, name, price, image, category, isAva
   };
 
   return (
-    <div className="group flex flex-col bg-[color:var(--surface)] rounded-3xl overflow-hidden border border-[color:var(--border)] hover:shadow-2xl transition-all duration-500 font-antonio">
+    <div className={`group flex flex-col h-full bg-[color:var(--surface)] transition-all duration-500 font-antonio ${variant === 'card' ? 'rounded-3xl overflow-hidden border border-[color:var(--border)] hover:shadow-2xl' : 'hover:bg-[color:var(--surface-muted)]'}`}>
       <Link href={`/product/${id}`} className="relative aspect-[3/4] overflow-hidden bg-[color:var(--surface-muted)]">
         <motion.img
           src={image}
