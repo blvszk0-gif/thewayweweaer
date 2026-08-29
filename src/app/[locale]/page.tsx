@@ -1,6 +1,7 @@
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSlider } from '@/components/home/HeroSlider';
+import { CollectionGrid } from '@/components/home/CollectionGrid';
 import { LookbookTeaser } from '@/components/home/LookbookTeaser';
 import { LandingSections } from '@/components/home/LandingSections';
 import { getHomepageLookbook } from '@/lib/shopify/lookbook';
@@ -19,6 +20,9 @@ export default async function Home() {
           collectionHandle={lookbook.collectionHandle}
           slides={lookbook.slides}
         />
+      )}
+      {lookbook && (
+        <CollectionGrid collectionHandle={lookbook.collectionHandle} collectionTitle={lookbook.collectionTitle} />
       )}
       <LookbookTeaser />
       <LandingSections />

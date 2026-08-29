@@ -29,6 +29,7 @@ type CustomerResponse = {
         name: string;
         number: number;
         processedAt: string;
+        cancelledAt: string | null;
         financialStatus: string | null;
         fulfillmentStatus: string;
         totalPrice: { amount: string; currencyCode: string };
@@ -89,6 +90,7 @@ export async function GET(request: NextRequest) {
               name
               number
               processedAt
+              cancelledAt
               financialStatus
               fulfillmentStatus
               totalPrice {

@@ -8,6 +8,7 @@ import { useStore } from '@/context/StoreContext';
 import { ChevronLeft, ChevronRight, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { BackInStockForm } from '@/components/shop/BackInStockForm';
 import { RecommendedProducts } from '@/components/shop/RecommendedProducts';
+import { ViewerCount } from '@/components/shop/ViewerCount';
 
 
 
@@ -105,7 +106,7 @@ export default function ProductPage() {
         </div>
       )}
     </section>
-    <section><p className="font-black uppercase tracking-[.3em] opacity-40">Project: TWWW</p><h1 className="mt-3 text-5xl font-black uppercase italic tracking-tighter">{product.title}</h1><p className="mt-6 text-3xl font-black">{variant.price.amount} {variant.price.currencyCode}</p><p className="mt-8 whitespace-pre-line leading-relaxed opacity-70">{product.description}</p>
+    <section><p className="font-black uppercase tracking-[.3em] opacity-40">Project: TWWW</p><h1 className="mt-3 text-5xl font-black uppercase italic tracking-tighter">{product.title}</h1><p className="mt-6 text-3xl font-black">{variant.price.amount} {variant.price.currencyCode}</p><div className="mt-4"><ViewerCount productId={product.id} /></div><p className="mt-8 whitespace-pre-line leading-relaxed opacity-70">{product.description}</p>
       <div className="mt-10 space-y-7">{options.map(([name, values]) => <fieldset key={name}><legend className="font-black uppercase tracking-widest text-sm mb-3">{name}</legend><div className="flex flex-wrap gap-3">{values.map((value) => <button key={value} onClick={() => setSelected((previous) => ({ ...previous, [name]: value }))} className={`border rounded-full px-5 py-3 font-black uppercase text-sm ${selected[name] === value ? 'bg-[color:var(--foreground)] text-[color:var(--surface)]' : 'border-[color:var(--border)]'}`}>{value}</button>)}</div></fieldset>)}</div>
       <div className="mt-10 flex gap-4">
         <div className="flex items-center border border-[color:var(--border)] rounded-full">

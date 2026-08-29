@@ -1,12 +1,13 @@
 'use client';
 
 import { Link } from '@/i18n/routing';
-import { ORDER_STAGES, extractNumericId, orderStageIndex } from '@/lib/orderStatus';
+import { CANCELLED_LABEL, ORDER_STAGES, extractNumericId, isOrderCancelled, orderStageIndex } from '@/lib/orderStatus';
 
 type Order = {
   id: string;
   number?: number;
   processedAt?: string;
+  cancelledAt?: string | null;
   financialStatus?: string;
   fulfillmentStatus?: string;
   totalPrice?: {
@@ -56,8 +57,8 @@ export function OrderHistory({ orders }: OrderHistoryProps) {
                     : ''}
                 </p>
 
-                <p className="opacity-50 text-sm">
-                  {ORDER_STAGES[orderStageIndex(order)].label}
+                <p className={`text-sm ${isOrderCancelled(order) ? 'font-black text-red-500' : 'opacity-50'}`}>
+                  {isOrderCancelled(order) ? CANCELLED_LABEL : ORDER_STAGES[orderStageIndex(order)].label}
                 </p>
               </div>
             </Link>

@@ -12,8 +12,9 @@ import { CatOrderConfirmed } from '@/components/animations/CatOrderConfirmed';
 import { CatPreparingOrder } from '@/components/animations/CatPreparingOrder';
 import { CatShippingOrder } from '@/components/animations/CatShippingOrder';
 import { CatDelivered } from '@/components/animations/CatDelivered';
+import { CatCancelled } from '@/components/animations/CatCancelled';
 import { PixelBackdrop } from '@/components/animations/PixelBackdrop';
-import { ORDER_STAGES, extractNumericId, orderStageIndex } from '@/lib/orderStatus';
+import { CANCELLED_LABEL, ORDER_STAGES, extractNumericId, isOrderCancelled, orderStageIndex } from '@/lib/orderStatus';
 
 const stageIcons = [CheckCircle2, Search, Truck, Package];
 const stageComponents = [CatOrderConfirmed, CatPreparingOrder, CatShippingOrder, CatDelivered];
@@ -21,6 +22,7 @@ const stageComponents = [CatOrderConfirmed, CatPreparingOrder, CatShippingOrder,
 type Order = {
   id: string;
   number?: number;
+  cancelledAt?: string | null;
   fulfillmentStatus?: string;
   shippingAddress?: {
     name: string | null;
@@ -65,6 +67,7 @@ export default function OrderStatusPage() {
       .catch(() => setState('guest'));
   }, [id]);
 
+  const cancelled = order ? isOrderCancelled(order) : false;
   const currentStatus = order ? orderStageIndex(order) : 0;
   const tracking = order?.fulfillments?.nodes.find((f) => f.trackingInformation.length > 0)?.trackingInformation[0];
   const recipient = order?.shippingAddress;
@@ -112,52 +115,63 @@ export default function OrderStatusPage() {
 
           {state === 'ready' && (
             <>
-              <div className="mb-20 flex flex-col items-center justify-center relative">
-                <PixelBackdrop statusLabel={ORDER_STAGES[currentStatus].label}>
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={currentStatus}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.4 }}
-                      className="relative z-10 w-full h-full flex items-center justify-center"
-                    >
-                      {React.createElement(stageComponents[currentStatus])}
-                    </motion.div>
-                  </AnimatePresence>
-                </PixelBackdrop>
-                <p className="mt-6 text-2xl font-black italic uppercase tracking-tighter text-center">{ORDER_STAGES[currentStatus].label}</p>
-              </div>
-
-              <div className="relative px-4">
-                <div className="absolute top-6 left-12 right-12 h-1 bg-[color:var(--border)]" />
-                <motion.div
-                  className="absolute top-6 left-12 h-1 bg-[color:var(--foreground)] origin-left"
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: (currentStatus / (ORDER_STAGES.length - 1)) }}
-                  transition={{ duration: 1, ease: "circOut" }}
-                />
-                <div className="relative flex justify-between">
-                  {ORDER_STAGES.map((step, i) => {
-                    const Icon = stageIcons[i];
-                    return (
-                      <div key={step.id} className="flex flex-col items-center relative z-10">
-                        <motion.div
-                          className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border-2 ${i <= currentStatus ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)] shadow-xl' : 'bg-[color:var(--surface)] text-[color:var(--foreground)]/40 border-[color:var(--border)]'}`}
-                          animate={i === currentStatus ? { scale: [1, 1.2, 1] } : {}}
-                          transition={{ repeat: Infinity, duration: 2 }}
-                        >
-                          <Icon size={20} />
-                        </motion.div>
-                        <p className={`mt-4 text-[17px] font-black uppercase tracking-widest text-center max-w-[100px] ${i <= currentStatus ? 'opacity-100' : 'opacity-20'}`}>
-                          {step.label}
-                        </p>
-                      </div>
-                    );
-                  })}
+              {cancelled ? (
+                <div className="mb-20 flex flex-col items-center justify-center relative">
+                  <PixelBackdrop statusLabel={CANCELLED_LABEL}>
+                    <CatCancelled />
+                  </PixelBackdrop>
+                  <p className="mt-6 text-2xl font-black italic uppercase tracking-tighter text-center text-red-500">{CANCELLED_LABEL}</p>
                 </div>
-              </div>
+              ) : (
+                <>
+                  <div className="mb-20 flex flex-col items-center justify-center relative">
+                    <PixelBackdrop statusLabel={ORDER_STAGES[currentStatus].label}>
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={currentStatus}
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.9 }}
+                          transition={{ duration: 0.4 }}
+                          className="relative z-10 w-full h-full flex items-center justify-center"
+                        >
+                          {React.createElement(stageComponents[currentStatus])}
+                        </motion.div>
+                      </AnimatePresence>
+                    </PixelBackdrop>
+                    <p className="mt-6 text-2xl font-black italic uppercase tracking-tighter text-center">{ORDER_STAGES[currentStatus].label}</p>
+                  </div>
+
+                  <div className="relative px-4">
+                    <div className="absolute top-6 left-12 right-12 h-1 bg-[color:var(--border)]" />
+                    <motion.div
+                      className="absolute top-6 left-12 h-1 bg-[color:var(--foreground)] origin-left"
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: (currentStatus / (ORDER_STAGES.length - 1)) }}
+                      transition={{ duration: 1, ease: "circOut" }}
+                    />
+                    <div className="relative flex justify-between">
+                      {ORDER_STAGES.map((step, i) => {
+                        const Icon = stageIcons[i];
+                        return (
+                          <div key={step.id} className="flex flex-col items-center relative z-10">
+                            <motion.div
+                              className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border-2 ${i <= currentStatus ? 'bg-[color:var(--foreground)] text-[color:var(--surface)] border-[color:var(--foreground)] shadow-xl' : 'bg-[color:var(--surface)] text-[color:var(--foreground)]/40 border-[color:var(--border)]'}`}
+                              animate={i === currentStatus ? { scale: [1, 1.2, 1] } : {}}
+                              transition={{ repeat: Infinity, duration: 2 }}
+                            >
+                              <Icon size={20} />
+                            </motion.div>
+                            <p className={`mt-4 text-[17px] font-black uppercase tracking-widest text-center max-w-[100px] ${i <= currentStatus ? 'opacity-100' : 'opacity-20'}`}>
+                              {step.label}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
+              )}
 
               <div className="mt-20 pt-12 border-t border-[color:var(--border)] flex flex-col md:flex-row gap-12">
                 <div className="flex-1">

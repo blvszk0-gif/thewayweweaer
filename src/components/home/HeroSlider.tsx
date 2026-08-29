@@ -131,9 +131,6 @@ export const HeroSlider = ({ collectionTitle, collectionHandle, slides }: HeroSl
           </button>
 
           <div className="absolute top-4 left-4 sm:top-auto sm:bottom-10 sm:left-10 transition-all duration-500 p-3 sm:p-6 rounded-2xl sm:rounded-[2rem] backdrop-blur-xl border border-white/10 z-20 bg-white/40 text-black shadow-[0_0_50px_rgba(255,255,255,0.3)]">
-            <p className="text-[10px] sm:text-[13px] font-black uppercase tracking-[0.4em] mb-1 sm:mb-2 text-black/40">
-              Slide 0{current + 1} / 0{slides.length}
-            </p>
             {slide.product ? (
               <Link
                 href={`/product/${slide.product.handle}`}

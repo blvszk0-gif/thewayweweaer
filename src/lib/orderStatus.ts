@@ -14,6 +14,13 @@ interface FulfillmentLike {
 interface OrderLike {
   fulfillmentStatus?: string | null;
   fulfillments?: { nodes: FulfillmentLike[] } | null;
+  cancelledAt?: string | null;
+}
+
+export const CANCELLED_LABEL = 'ZAMÓWIENIE ANULOWANE';
+
+export function isOrderCancelled(order: OrderLike): boolean {
+  return !!order.cancelledAt;
 }
 
 export function orderStageIndex(order: OrderLike): number {
