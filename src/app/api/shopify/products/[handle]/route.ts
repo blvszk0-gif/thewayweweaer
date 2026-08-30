@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { StorefrontProduct, storefrontFetch } from '@/lib/shopify/server';
 
 const PRODUCT_FIELDS = `
-  id handle title description availableForSale
+  id handle title description availableForSale productType
   featuredImage { url altText }
   images(first: 20) { nodes { url altText } }
   priceRange { minVariantPrice { amount currencyCode } }

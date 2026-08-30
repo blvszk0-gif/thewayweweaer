@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useStore } from '@/context/StoreContext';
-import { ChevronLeft, ChevronRight, Minus, Plus, ShoppingBag } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { BackInStockForm } from '@/components/shop/BackInStockForm';
 import { RecommendedProducts } from '@/components/shop/RecommendedProducts';
 import { ViewerCount } from '@/components/shop/ViewerCount';
@@ -13,11 +13,11 @@ import { ViewerCount } from '@/components/shop/ViewerCount';
 
 
 type Variant = { id: string; title: string; availableForSale: boolean; price: { amount: string; currencyCode: string }; image: { url: string } | null; selectedOptions: Array<{ name: string; value: string }> };
-type Product = { id: string; handle: string; title: string; description: string; availableForSale: boolean; featuredImage: { url: string; altText: string | null } | null; images: { nodes: Array<{ url: string; altText: string | null }> }; variants: { nodes: Variant[] } };
+type Product = { id: string; handle: string; title: string; description: string; availableForSale: boolean; productType: string | null; featuredImage: { url: string; altText: string | null } | null; images: { nodes: Array<{ url: string; altText: string | null }> }; variants: { nodes: Variant[] } };
 
 export default function ProductPage() {
   const params = useParams<{ id: string }>();
-  const { addToCart, isCartLoading, cartError } = useStore();
+  const { addToCart, isCartLoading, cartError, addToWishlist, removeFromWishlist, isInWishlist } = useStore();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -30,6 +30,21 @@ export default function ProductPage() {
   const variant = useMemo(() => product?.variants.nodes.find((item) => item.selectedOptions.every((option) => selected[option.name] === option.value)) || product?.variants.nodes[0], [product, selected]);
   const options = useMemo(() => product ? Array.from(new Set(product.variants.nodes.flatMap((item) => item.selectedOptions.map((option) => option.name)))).map((name) => [name, Array.from(new Set(product.variants.nodes.flatMap((item) => item.selectedOptions.filter((option) => option.name === name).map((option) => option.value))))] as const) : [], [product]);
   const images = product ? (product.images.nodes.length ? product.images.nodes : product.featuredImage ? [product.featuredImage] : []) : [];
+  const liked = product ? isInWishlist(product.handle) : false;
+  const handleWishlist = () => {
+    if (!product || !variant) return;
+    if (liked) {
+      removeFromWishlist(product.handle);
+    } else {
+      addToWishlist({
+        id: product.handle,
+        name: product.title,
+        price: Number(variant.price.amount),
+        image: product.featuredImage?.url ?? images[0]?.url ?? '',
+        category: product.productType ?? '',
+      });
+    }
+  };
   if (loading) return <main className="min-h-screen "><Header /><p className="pt-40 text-center font-black uppercase tracking-widest">Ładowanie produktu…</p></main>;
   if (error || !product || !variant) return <main className="min-h-screen "><Header /><p className="pt-40 text-center font-black uppercase tracking-widest">Nie znaleziono produktu.</p><Footer /></main>;
   return <main className="min-h-screen text-[color:var(--foreground)] font-antonio"><Header /><div className="container mx-auto px-6 pt-32 pb-24"><div className="grid lg:grid-cols-2 gap-16">
@@ -121,6 +136,14 @@ export default function ProductPage() {
         ) : (
           <BackInStockForm variantId={variant.id} />
         )}
+        <button
+          type="button"
+          onClick={handleWishlist}
+          aria-label={liked ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'}
+          className={`shrink-0 w-16 rounded-full border flex items-center justify-center transition-colors ${liked ? 'bg-red-500 border-red-500 text-white' : 'border-[color:var(--border)] hover:bg-[color:var(--surface-muted)]'}`}
+        >
+          <Heart size={22} fill={liked ? 'currentColor' : 'none'} />
+        </button>
       </div>
       {cartError && <p role="alert" className="mt-4 text-red-500 font-bold">{cartError}</p>}
     </section></div>
