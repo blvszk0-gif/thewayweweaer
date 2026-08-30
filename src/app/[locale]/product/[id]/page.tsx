@@ -42,6 +42,8 @@ export default function ProductPage() {
         price: Number(variant.price.amount),
         image: product.featuredImage?.url ?? images[0]?.url ?? '',
         category: product.productType ?? '',
+        variantId: variant.id,
+        availableForSale: variant.availableForSale,
       });
     }
   };

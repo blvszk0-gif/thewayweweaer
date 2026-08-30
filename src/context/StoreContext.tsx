@@ -3,7 +3,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 export type CartItem = { id: string; merchandiseId: string; name: string; handle: string; price: number; currencyCode: string; image: string; quantity: number; color?: string; size?: string };
-export type WishlistItem = { id: string; name: string; price: number; image: string; category: string };
+export type WishlistItem = { id: string; name: string; price: number; image: string; category: string; variantId?: string; availableForSale?: boolean };
 type RawCart = {
   id: string;
   checkoutUrl: string;

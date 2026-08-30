@@ -30,7 +30,7 @@ export const ProductCard = ({ id, variantId, name, price, image, category, isAva
     if (liked) {
       removeFromWishlist(id);
     } else {
-      addToWishlist({ id, name, price, image, category });
+      addToWishlist({ id, name, price, image, category, variantId, availableForSale: isAvailable });
     }
   };
 

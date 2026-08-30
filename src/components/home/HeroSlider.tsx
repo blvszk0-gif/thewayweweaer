@@ -56,6 +56,8 @@ export const HeroSlider = ({ collectionTitle, collectionHandle, slides }: HeroSl
         price: slide.product.price,
         image: slide.image?.url ?? '',
         category: slide.product.category ?? '',
+        variantId: slide.product.variantId ?? undefined,
+        availableForSale: slide.product.availableForSale,
       });
     }
   };
